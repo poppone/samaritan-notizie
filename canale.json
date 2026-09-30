@@ -1,0 +1,57 @@
+{
+  "nome_canale": "Notizie in 60 secondi",
+  "handle": "@Notiziein60secondioff",
+  "argomento": "di attualita'",
+  "soggetto": "tema",
+  "soggetto_plurale": "temi",
+  "genere": "m",
+  "telegiornale": true,
+  "materiale": "stock",
+  "ricerche": {
+    "it": [
+      "ultime notizie Italia",
+      "economia OR bollette OR pensioni OR tasse",
+      "tecnologia OR intelligenza artificiale",
+      "cinema OR musica OR Sanremo",
+      "Serie A OR Sinner OR Formula 1"
+    ],
+    "en": [
+      "top news",
+      "economy OR inflation OR stock market",
+      "technology OR artificial intelligence"
+    ]
+  },
+  "uscite": [
+    {
+      "orario": "14:00",
+      "lingua": "it"
+    },
+    {
+      "orario": "18:00",
+      "lingua": "it"
+    }
+  ],
+  "fuso": "Europe/Rome",
+  "categoria_youtube": "25",
+  "esempi_soggetto": [
+    "Banca d'Italia",
+    "Apple",
+    "Serie A"
+  ],
+  "query_stock_riserva": [
+    "city skyline aerial",
+    "newspaper printing press",
+    "stock market screen",
+    "world map globe"
+  ],
+  "nomi_grossi": [
+    "apple",
+    "google",
+    "sinner",
+    "serie a",
+    "sanremo",
+    "inps",
+    "bce"
+  ],
+  "hashtag_canale": "notizie"
+}
