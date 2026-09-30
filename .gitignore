@@ -1,0 +1,29 @@
+# === SEGRETI - non committare MAI ===
+.env
+client_secret.json
+token.pickle
+*.pickle
+
+# === Artefatti generati ===
+temp_assets/
+output_videos/
+*.mp4
+*.mp3
+*.wav
+
+# Le clip girate in casa NON sono un artefatto: sono materiale del progetto,
+# l'unico pezzo dei video che non arriva da uno store.
+!clip_mie/**/*.mp4
+!clip_mie/**/*.mov
+!clip_mie/**/*.webm
+
+# === Python ===
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# === Modelli Whisper scaricati ===
+.cache/

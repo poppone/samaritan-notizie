@@ -1,0 +1,321 @@
+name: Samaritan Auto-Poster
+
+on:
+  schedule:
+    # ATTENZIONE: queste NON sono le ore di pubblicazione. GitHub fa partire le
+    # run schedulate in ritardo e il ritardo non si puo' prevedere: il 28
+    # settembre 2026 e' stato di sei-otto ore e tutte e quattro le uscite sono
+    # arrivate tardi. Quindi la pipeline parte di notte, dieci-tredici ore
+    # prima, e il video esce all'ora giusta perche' YouTube lo pubblica da
+    # solo (publishAt, vedi orari.py). Il minuto 17 e' voluto: allo scoccare
+    # dell'ora GitHub e' piu' carico e ritarda di piu'.
+    #
+    # Sono quattro PARTENZE, non quattro uscite: gli orari e le lingue delle
+    # uscite stanno nel profilo del canale (canale.json, voce 'uscite') e
+    # profilo.abbina_cron decide quale uscita tocca a ciascuna partenza. Una
+    # partenza senza uscita si ferma in pochi secondi (job 'uscita' qui
+    # sotto). Questi cron sono copiati in profilo.CRON_USCITE, che li usa per
+    # controllare i margini: un test tiene allineate le due copie.
+    # Per Poppone TV, senza canale.json: 14:00, 18:00 in italiano e 20:00,
+    # 21:00 in inglese (fino al 27 settembre 2026 alle 20:00 usciva il video
+    # lungo 16:9, che ora si lancia solo a mano).
+    - cron: '17 1 * * *'          # partenza 1 (Poppone TV: 14:00 italiane)
+    - cron: '17 3 * * *'          # partenza 2 (Poppone TV: 18:00 italiane)
+    - cron: '17 5 * * *'          # partenza 3 (Poppone TV: 20:00, in inglese)
+    - cron: '17 6 * * *'          # partenza 4 (Poppone TV: 21:00, in inglese)
+    # La riserva di fine giornata. Non produce un video suo: guarda quali
+    # delle quattro uscite di oggi sono rimaste scoperte e rifa' la piu'
+    # vecchia, una sola, nel formato che quell'uscita voleva. Se sono tutte a
+    # posto termina subito senza fare niente.
+    - cron: '30 20 * * *'         # riserva, verso le 22:30 italiane
+  workflow_dispatch:
+    inputs:
+      tema:
+        description: 'Tema specifico (lascia vuoto per tema libero)'
+        required: false
+        default: ''
+      privacy:
+        description: 'Visibilita del video'
+        required: false
+        default: 'public'
+        type: choice
+        options: [public, private, unlisted]
+      lingua:
+        description: 'Lingua del video'
+        required: false
+        default: 'it'
+        type: choice
+        options: [it, en]
+      slot:
+        description: 'Copri un uscita del profilo, pubblicando all orario giusto: il suo numero (1-4) o il suo orario (es. 18:00). Vuoto = pubblica subito'
+        required: false
+        default: ''
+        type: string
+      recupero:
+        description: 'Recupera un video saltato invece di farne uno nuovo'
+        required: false
+        default: false
+        type: boolean
+      lungo:
+        description: 'Fai il video lungo (16:9, otto minuti) invece di uno Short'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+# La partenza 3 (per Poppone TV l'uscita delle 20:00) e il video lungo lanciato
+# a mano hanno una coda loro.
+# Non e' un capriccio: GitHub tiene UNA sola lavorazione in attesa per coda e
+# cancella la precedente, e con partenze in ritardo di ore le uscite delle
+# 18:00, 20:00 e 21:00 si ritrovano spesso in attesa insieme: in una coda sola
+# se ne perderebbe una. Il montaggio del lungo dura poi decine di minuti e
+# bloccherebbe gli Short dietro di se'. I due passi finali che
+# scrivono sul repository sopportano di girare in parallelo: il push viene
+# riprovato dopo un riallineo.
+# I video lanciati a mano (anche da Telegram, vedi GUIDA_TELEGRAM_COMANDI.md)
+# stanno ciascuno in una coda propria: in coda con gli altri, un comando
+# arrivato mentre un'uscita programmata aspetta il suo turno la cancellerebbe.
+concurrency:
+  group: ${{ (github.event_name == 'workflow_dispatch' && !inputs.recupero) && format('samaritan-manuale-{0}', github.run_id) || (((github.event.schedule == '17 5 * * *') || inputs.lungo) && 'samaritan-lungo' || 'samaritan-publish') }}
+  cancel-in-progress: false
+
+jobs:
+  # Decide in pochi secondi se questa partenza ha qualcosa da fare. Un canale
+  # con due uscite al giorno lascia libere due partenze notturne su quattro, e
+  # senza questo controllo ognuna installerebbe FFmpeg e le dipendenze per
+  # niente. Usa solo la libreria standard: niente setup-python, niente pip.
+  # Legge anche canale.json, quindi un profilo scritto male ferma tutto qui,
+  # con il messaggio in chiaro, invece che a meta' montaggio.
+  uscita:
+    # Il modello da vendere (samaritan-template) non ha un canale ne' chiavi:
+    # le sue partenze notturne fallirebbero tutte, ogni notte. Le copie dei
+    # clienti hanno un altro nome e partono normalmente.
+    if: github.repository != 'poppone/samaritan-template'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      attiva: ${{ steps.decidi.outputs.attiva }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Questa partenza ha un uscita da coprire?
+        id: decidi
+        env:
+          USCITA_CRON: ${{ (github.event.schedule == '17 1 * * *' && '1') || (github.event.schedule == '17 3 * * *' && '2') || (github.event.schedule == '17 5 * * *' && '3') || (github.event.schedule == '17 6 * * *' && '4') || '' }}
+        run: python3 profilo.py decidi >> "$GITHUB_OUTPUT"
+
+  produci-e-pubblica:
+    needs: uscita
+    if: needs.uscita.outputs.attiva == 'true'
+    runs-on: ubuntu-latest
+    # Otto minuti in 1080p non si montano nei 45 minuti che bastano a uno
+    # Short da mezzo minuto. La riserva rientra nel tempo lungo perche' puo'
+    # ritrovarsi a rifare proprio il video lungo: quale uscita le tocchi lo
+    # scopre solo a lavorazione iniziata.
+    timeout-minutes: ${{ ((github.event.schedule == '30 20 * * *') || inputs.lungo || inputs.recupero) && 120 || 45 }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Installa FFmpeg e font
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Cache modello Whisper
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/whisper
+          key: whisper-${{ vars.WHISPER_MODEL || 'base' }}
+
+      - name: Installa dipendenze Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Le credenziali OAuth NON stanno nel repository (sono in .gitignore).
+      # Due modi di averle, entrambi dai Secrets:
+      #   - client_secret.json e token.pickle in base64 (setup_secrets.py),
+      #     il modo di sempre: se ci sono, vincono;
+      #   - YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET e YOUTUBE_REFRESH_TOKEN,
+      #     scritti dalla pagina di installazione (installa/index.html): non
+      #     c'e' niente da ripristinare su disco, li legge uploader.py.
+      - name: Ripristina credenziali YouTube
+        env:
+          CLIENT_SECRET_B64: ${{ secrets.CLIENT_SECRET_B64 }}
+          YOUTUBE_TOKEN_B64: ${{ secrets.YOUTUBE_TOKEN_B64 }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "$CLIENT_SECRET_B64" ] && [ -n "$YOUTUBE_TOKEN_B64" ]; then
+            echo "$CLIENT_SECRET_B64" | base64 -d > client_secret.json
+            echo "$YOUTUBE_TOKEN_B64" | base64 -d > token.pickle
+            exit 0
+          fi
+          if [ -n "$YOUTUBE_CLIENT_ID" ] && [ -n "$YOUTUBE_CLIENT_SECRET" ] && [ -n "$YOUTUBE_REFRESH_TOKEN" ]; then
+            echo "Credenziali YouTube dai secret YOUTUBE_CLIENT_ID/SECRET/REFRESH_TOKEN."
+            exit 0
+          fi
+          echo "::error::Mancano le credenziali YouTube: servono CLIENT_SECRET_B64 e YOUTUBE_TOKEN_B64, oppure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET e YOUTUBE_REFRESH_TOKEN."
+          echo "Si preparano con la pagina installa/index.html, oppure in locale con: python setup_secrets.py"
+          exit 1
+
+      - name: Esegui pipeline Samaritan
+        id: pipeline
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          PRIVACY_STATUS: ${{ inputs.privacy || 'public' }}
+          # Quale partenza notturna e' questa (1-4). Orario di uscita, SLOT,
+          # lingua e voce li ricava config.risolvi_uscita dal profilo del
+          # canale: ORARIO_USCITA dice a YouTube quando mostrare il video,
+          # SLOT serve a non farne due per la stessa uscita quando una
+          # lavorazione arriva in ritardo. Il fuso e' quello del profilo.
+          # La riserva e le run lanciate a mano non programmano niente:
+          # escono subito, com'e' giusto sia per una prova sia per un'uscita
+          # gia' saltata; la riserva sceglie quale uscita recuperare
+          # leggendo la cronologia.
+          USCITA_CRON: ${{ (github.event.schedule == '17 1 * * *' && '1') || (github.event.schedule == '17 3 * * *' && '2') || (github.event.schedule == '17 5 * * *' && '3') || (github.event.schedule == '17 6 * * *' && '4') || '' }}
+          # Una run lanciata a mano con 'slot' fa le veci della partenza di
+          # quell'uscita: stesso orario di pubblicazione, stessa lingua.
+          USCITA_RICHIESTA: ${{ inputs.slot }}
+          # Quale dei due formati produrre. Vuoto = Short, com'e' sempre
+          # stato: tutto il resto della pipeline e' identico.
+          VIDEO_LUNGO: ${{ (inputs.lungo && '1') || '' }}
+          MINUTI_VIDEO_LUNGO: ${{ vars.MINUTI_VIDEO_LUNGO }}
+          SEZIONI_VIDEO_LUNGO: ${{ vars.SEZIONI_VIDEO_LUNGO }}
+          RECUPERO: ${{ (github.event.schedule == '30 20 * * *' && '1') || (inputs.recupero && '1') || '' }}
+          # La lingua la decide l'uscita coperta (per Poppone TV le 20:00 e le
+          # 21:00 sono in inglese: stesso canale, pubblico diverso). Solo le
+          # run lanciate a mano senza 'slot' la scelgono dal menu.
+          LINGUA: ${{ (!inputs.slot && inputs.lingua) || '' }}
+          # Vuoto = il nome scritto in canale.json, o Poppone TV senza file.
+          # Niente ripiego scritto qui: vincerebbe sul profilo di chi installa.
+          NOME_CANALE: ${{ vars.NOME_CANALE }}
+          # La voce di questa run la sceglie config fra le due qui sotto, in
+          # base alla lingua. La riserva sceglie la lingua solo a lavorazione
+          # iniziata, quindi le servono tutt'e due gia' pronte.
+          VOCE_TTS_IT: ${{ vars.VOCE_TTS || 'it-IT-DiegoNeural' }}
+          VOCE_TTS_EN: ${{ vars.VOCE_TTS_EN || 'en-US-AndrewNeural' }}
+          ELEVENLABS_VOCE: ${{ vars.ELEVENLABS_VOCE }}
+          ELEVENLABS_MODELLO: ${{ vars.ELEVENLABS_MODELLO }}
+          WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'base' }}
+          GROQ_MODELLI: ${{ vars.GROQ_MODELLI }}
+          # Passato via env e non interpolato nel comando: evita script injection
+          TEMA: ${{ inputs.tema }}
+        run: python main.py "$TEMA"
+
+      # Samaritan avvisa da solo su Telegram per ogni esito, ma solo se arriva
+      # a partire: una lavorazione che cade prima (installazione, credenziali
+      # mancanti) resterebbe muta. Questo passo copre proprio quel buco.
+      - name: Avvisa su Telegram se la lavorazione cade prima di Samaritan
+        if: failure() && steps.pipeline.outcome != 'failure'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          INDIRIZZO: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            exit 0
+          fi
+          curl -sS -o /dev/null "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=Samaritan - ERRORE, la lavorazione si e' fermata prima di partire: ${INDIRIZZO}" || true
+
+      - name: Cancella le credenziali dal runner
+        if: always()
+        run: rm -f client_secret.json token.pickle
+
+      - name: Salva memoria e performance
+        if: always()
+        run: |
+          git config --global user.name "Samaritan Bot"
+          git config --global user.email "bot@samaritan.local"
+
+          # Un file alla volta, e MAI due percorsi nello stesso 'git add':
+          # se uno dei due non esiste, git fallisce senza mettere in stage
+          # nemmeno l'altro. performance.json nasce solo quando YouTube
+          # Analytics risponde, quindi all'inizio non c'e': e' per questo che
+          # la memoria non veniva mai salvata.
+          for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+            if [ -f "$file_memoria" ]; then
+              git add -- "$file_memoria"
+            fi
+          done
+
+          if git diff --staged --quiet; then
+            echo "Nessuna modifica alla memoria da salvare."
+            exit 0
+          fi
+
+          git commit -m "Aggiornamento memoria Samaritan [skip ci]"
+
+          if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            exit 0
+          fi
+
+          # Rifiutato: un'altra lavorazione ha salvato nel frattempo. Niente
+          # rebase: sui due JSON git vede un conflitto dove ci sono solo due
+          # aggiunte, e il 26 settembre 2026 una memoria e' andata persa
+          # proprio cosi'. Riparto dalla versione remota e ci unisco la nostra
+          # sul contenuto (unisci_memoria.py).
+          copia="$RUNNER_TEMP/memoria-nostra"
+          mkdir -p "$copia"
+          for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+            if [ -f "$file_memoria" ]; then
+              cp -- "$file_memoria" "$copia/"
+            fi
+          done
+          for tentativo in 1 2 3 4; do
+            echo "Push rifiutato, unisco la memoria a quella remota (tentativo $tentativo)."
+            sleep $((RANDOM % 10 + 2))
+            git fetch origin "${GITHUB_REF_NAME}"
+            git reset --hard "origin/${GITHUB_REF_NAME}"
+            python unisci_memoria.py "$copia/cronologia_trend.json" "$copia/performance.json"
+            # La definizione del canale (autoprofilo.py) non si fonde: la
+            # nostra e' la piu' recente.
+            if [ -f "$copia/canale_auto.json" ]; then
+              cp -- "$copia/canale_auto.json" canale_auto.json
+            fi
+            for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+              if [ -f "$file_memoria" ]; then
+                git add -- "$file_memoria"
+              fi
+            done
+            if git diff --staged --quiet; then
+              echo "La memoria remota contiene gia' tutto."
+              exit 0
+            fi
+            git commit -m "Aggiornamento memoria Samaritan [skip ci]"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+          done
+          echo "::error::Memoria non salvata dopo quattro tentativi."
+          exit 1
+
+      - name: Conserva il video prodotto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: samaritan-short
+          path: output_videos/*.mp4
+          retention-days: 7
+          if-no-files-found: ignore
