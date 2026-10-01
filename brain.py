@@ -23,6 +23,7 @@ import requests
 from groq import Groq
 
 import config
+import prenotazione
 import profilo
 
 client = Groq(api_key=config.GROQ_API_KEY)
@@ -381,11 +382,20 @@ def _normalizza(item):
     return {}
 
 
+# La riga di questa lavorazione, (timestamp, titolo): con la prenotazione la
+# cronologia si unisce a quella di altre lavorazioni e l'ultima riga del file
+# puo' non essere la nostra.
+_NOSTRA_VOCE = None
+
+
 def salva_in_cronologia(dati):
     """Aggiunge l'impronta del nuovo video alla memoria."""
+    global _NOSTRA_VOCE
     cronologia = carica_cronologia()
+    adesso = int(time.time())
+    _NOSTRA_VOCE = (adesso, dati["titolo"])
     cronologia.append({
-        "timestamp": int(time.time()),
+        "timestamp": adesso,
         "data": time.strftime("%Y-%m-%d"),
         "titolo": dati["titolo"],
         "lingua": (config.LINGUA or "it").lower(),
@@ -420,8 +430,15 @@ def aggiorna_ultimo_video_id(video_id):
     cronologia = carica_cronologia()
     if not cronologia:
         return
-    if isinstance(cronologia[-1], dict):
-        cronologia[-1]["video_id"] = video_id
+    voce = cronologia[-1]
+    if _NOSTRA_VOCE:
+        for candidata in reversed(cronologia):
+            if (isinstance(candidata, dict)
+                    and (candidata.get("timestamp"), candidata.get("titolo")) == _NOSTRA_VOCE):
+                voce = candidata
+                break
+    if isinstance(voce, dict):
+        voce["video_id"] = video_id
         with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
             json.dump(cronologia, f, ensure_ascii=False, indent=2)
 
@@ -843,7 +860,39 @@ def _fuori_stile_tg(titolo, script):
     if prima.endswith("?"):
         return ("lo script apre con una domanda: un telegiornale apre "
                 "dicendo il fatto")
+    di_parte = _parola_di_parte(titolo + " " + script)
+    if di_parte:
+        return (f"usa '{di_parte}', una parola che prende posizione: un "
+                "telegiornale riferisce i fatti con parole neutre")
     return ""
+
+
+# Parole che in un titolo o in uno script prendono posizione invece di
+# riferire: un telegiornale le lascia ai commentatori. Servono soprattutto
+# sulla politica, che il canale notizie tratta dal 1 ottobre 2026 a patto di
+# restare neutro. Solo parole che un TG serio non userebbe mai a voce sua:
+# "attacca" o "critica" restano, perche' riferiscono cosa ha fatto qualcuno.
+PAROLE_DI_PARTE = {
+    "it": [
+        "vergogna", "vergognoso", "vergognosa", "scandaloso", "scandalosa",
+        "schiaffo", "batosta", "asfalta", "asfaltato", "asfaltata", "umilia",
+        "umiliato", "umiliata", "umiliazione", "disastroso", "disastrosa",
+        "flop", "trionfo", "trionfale", "stravince", "demolisce", "distrugge",
+        "massacra", "follia", "incredibile", "assurdo", "assurda", "shock",
+        "choc", "regime", "vergognarsi", "fa a pezzi", "zittisce", "gela",
+    ],
+    "en": [
+        "slams", "destroys", "humiliates", "humiliating", "disastrous",
+        "shameful", "outrageous", "crushing", "epic", "meltdown", "shock",
+        "shocking", "insane", "owns", "eviscerates", "obliterates",
+    ],
+}
+
+
+def _parola_di_parte(testo):
+    """La prima parola di parte che compare nel testo, o ""."""
+    lingua = (config.LINGUA or "it").lower()
+    return _tema_escluso(testo, PAROLE_DI_PARTE.get(lingua, []))
 
 
 def valida_titolo(titolo, gioco=""):
@@ -1434,8 +1483,15 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
             "titolari').\n"
             "- Nomina a voce la testata che riporta la notizia (per esempio "
             "'Lo riporta ANSA' / 'according to Reuters').\n"
-            "- Nessuna opinione su partiti, politici, governi o religioni: "
-            "riferisci cosa e' successo e chi l'ha detto, con il suo ruolo.\n"
+            "- POLITICA, NEUTRALITA' ASSOLUTA: nessuna opinione su partiti, "
+            "politici, governi o religioni. Riferisci cosa e' successo e chi "
+            "l'ha detto, con il suo ruolo ('secondo il ministro...', 'ha "
+            "dichiarato la segretaria del partito...'). Ogni giudizio e' "
+            "attribuito a chi lo ha espresso, mai detto con la tua voce. "
+            "Niente aggettivi di valore ('storico', 'vergognoso', "
+            "'disastroso'), niente previsioni, niente sondaggi presentati come "
+            "risultati. In uno scontro fra due parti non dai ragione a "
+            "nessuno: dici le posizioni che la fonte riporta.\n"
             "- Il loop della regola 2 non serve: chiudi con la CTA.\n"
             "- QUERY VIDEO: immagini di repertorio NEUTRE che non mostrino il "
             "fatto e non sembrino il suo filmato (per esempio 'city skyline "
@@ -1694,6 +1750,9 @@ def genera_script_samaritan(tema=None):
     Ritorna un dict: titolo, script, query_video, descrizione, fonte, stile.
     """
     tema = (tema or "").strip()
+    # Le notizie scelte da lavorazioni partite insieme a questa: vedi
+    # prenotazione.py.
+    prenotazione.riallinea_cronologia()
     cronologia = _stesso_formato(
         _stessa_lingua([_normalizza(i) for i in carica_cronologia()])
     )
@@ -1941,6 +2000,7 @@ def genera_script_samaritan(tema=None):
                     "stile": formato,
                 }
                 salva_in_cronologia(risultato)
+                prenotazione.prenota(titolo)
                 print(f"[Samaritan Brain] OK - '{titolo}' "
                       f"({len(script.split())} parole)")
                 if gioco:
