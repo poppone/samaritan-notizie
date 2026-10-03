@@ -1,0 +1,97 @@
+{
+  "aggiornato": "2026-10-03",
+  "video": {
+    "m9P_aSYgovE": {
+      "views": 1426,
+      "averageViewPercentage": 64.25,
+      "averageViewDuration": 15,
+      "likes": 15,
+      "comments": 0,
+      "subscribersGained": 3
+    },
+    "TQYai4Ocui8": {
+      "views": 1231,
+      "averageViewPercentage": 58.74,
+      "averageViewDuration": 13,
+      "likes": 11,
+      "comments": 0,
+      "subscribersGained": 3
+    },
+    "xzdmpFsFx7A": {
+      "views": 1203,
+      "averageViewPercentage": 43.41,
+      "averageViewDuration": 9,
+      "likes": 6,
+      "comments": 0,
+      "subscribersGained": 0
+    }
+  },
+  "ricerche": [
+    {
+      "termine": "inter news",
+      "views": 10
+    },
+    {
+      "termine": "inter",
+      "views": 8
+    },
+    {
+      "termine": "sanremo 2027",
+      "views": 7
+    },
+    {
+      "termine": "parma calcio",
+      "views": 5
+    },
+    {
+      "termine": "de martino",
+      "views": 3
+    },
+    {
+      "termine": "stefano de martino",
+      "views": 3
+    },
+    {
+      "termine": "gossip house",
+      "views": 2
+    },
+    {
+      "termine": "stefano di martino",
+      "views": 2
+    }
+  ],
+  "sorgenti": [
+    {
+      "sorgente": "SHORTS",
+      "views": 3767
+    },
+    {
+      "sorgente": "YT_SEARCH",
+      "views": 79
+    },
+    {
+      "sorgente": "YT_CHANNEL",
+      "views": 7
+    },
+    {
+      "sorgente": "SUBSCRIBER",
+      "views": 3
+    },
+    {
+      "sorgente": "YT_OTHER_PAGE",
+      "views": 2
+    },
+    {
+      "sorgente": "EXT_URL",
+      "views": 1
+    },
+    {
+      "sorgente": "HASHTAGS",
+      "views": 1
+    },
+    {
+      "sorgente": "NO_LINK_OTHER",
+      "views": 0
+    }
+  ]
+}
