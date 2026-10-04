@@ -1,27 +1,43 @@
 {
-  "aggiornato": "2026-10-03",
+  "aggiornato": "2026-10-04",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1426,
-      "averageViewPercentage": 64.25,
+      "views": 1618,
+      "averageViewPercentage": 65.26,
       "averageViewDuration": 15,
-      "likes": 15,
+      "likes": 17,
       "comments": 0,
       "subscribersGained": 3
     },
     "TQYai4Ocui8": {
-      "views": 1231,
-      "averageViewPercentage": 58.74,
+      "views": 1247,
+      "averageViewPercentage": 58.82000000000001,
       "averageViewDuration": 13,
-      "likes": 11,
+      "likes": 12,
       "comments": 0,
       "subscribersGained": 3
     },
     "xzdmpFsFx7A": {
-      "views": 1203,
-      "averageViewPercentage": 43.41,
+      "views": 1205,
+      "averageViewPercentage": 43.34,
       "averageViewDuration": 9,
-      "likes": 6,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "Qamg5BNmBZU": {
+      "views": 398,
+      "averageViewPercentage": 46.3,
+      "averageViewDuration": 10,
+      "likes": 2,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "U501zLEwMVM": {
+      "views": 281,
+      "averageViewPercentage": 55.24,
+      "averageViewDuration": 12,
+      "likes": 2,
       "comments": 0,
       "subscribersGained": 0
     }
@@ -29,15 +45,15 @@
   "ricerche": [
     {
       "termine": "inter news",
-      "views": 10
-    },
-    {
-      "termine": "inter",
-      "views": 8
+      "views": 12
     },
     {
       "termine": "sanremo 2027",
-      "views": 7
+      "views": 11
+    },
+    {
+      "termine": "inter",
+      "views": 10
     },
     {
       "termine": "parma calcio",
@@ -45,6 +61,10 @@
     },
     {
       "termine": "de martino",
+      "views": 3
+    },
+    {
+      "termine": "passione inter",
       "views": 3
     },
     {
@@ -63,30 +83,30 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 3767
+      "views": 4622
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 79
+      "views": 109
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 7
+      "views": 8
+    },
+    {
+      "sorgente": "YT_OTHER_PAGE",
+      "views": 4
     },
     {
       "sorgente": "SUBSCRIBER",
       "views": 3
     },
     {
-      "sorgente": "YT_OTHER_PAGE",
+      "sorgente": "HASHTAGS",
       "views": 2
     },
     {
       "sorgente": "EXT_URL",
-      "views": 1
-    },
-    {
-      "sorgente": "HASHTAGS",
       "views": 1
     },
     {
