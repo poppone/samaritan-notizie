@@ -2,16 +2,16 @@
   "aggiornato": "2026-10-04",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1618,
-      "averageViewPercentage": 65.26,
+      "views": 1685,
+      "averageViewPercentage": 65.14,
       "averageViewDuration": 15,
       "likes": 17,
       "comments": 0,
       "subscribersGained": 3
     },
     "TQYai4Ocui8": {
-      "views": 1247,
-      "averageViewPercentage": 58.82000000000001,
+      "views": 1248,
+      "averageViewPercentage": 58.84,
       "averageViewDuration": 13,
       "likes": 12,
       "comments": 0,
@@ -25,19 +25,35 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "fKVFqzv9z-I": {
+      "views": 984,
+      "averageViewPercentage": 44.53,
+      "averageViewDuration": 9,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 1
+    },
+    "P3yOUIGm0UU": {
+      "views": 876,
+      "averageViewPercentage": 67.8,
+      "averageViewDuration": 14,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "Qamg5BNmBZU": {
-      "views": 398,
-      "averageViewPercentage": 46.3,
-      "averageViewDuration": 10,
-      "likes": 2,
+      "views": 689,
+      "averageViewPercentage": 49.93,
+      "averageViewDuration": 11,
+      "likes": 5,
       "comments": 0,
       "subscribersGained": 0
     },
     "U501zLEwMVM": {
-      "views": 281,
-      "averageViewPercentage": 55.24,
-      "averageViewDuration": 12,
-      "likes": 2,
+      "views": 525,
+      "averageViewPercentage": 58.35,
+      "averageViewDuration": 13,
+      "likes": 4,
       "comments": 0,
       "subscribersGained": 0
     }
@@ -83,11 +99,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 4622
+      "views": 7061
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 109
+      "views": 128
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -95,11 +111,11 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 4
+      "views": 8
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 3
+      "views": 4
     },
     {
       "sorgente": "HASHTAGS",
