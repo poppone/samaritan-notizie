@@ -1,16 +1,16 @@
 {
-  "aggiornato": "2026-10-05",
+  "aggiornato": "2026-10-06",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1685,
-      "averageViewPercentage": 65.14,
+      "views": 1690,
+      "averageViewPercentage": 65.16,
       "averageViewDuration": 15,
       "likes": 17,
       "comments": 0,
       "subscribersGained": 3
     },
     "TQYai4Ocui8": {
-      "views": 1248,
+      "views": 1249,
       "averageViewPercentage": 58.84,
       "averageViewDuration": 13,
       "likes": 12,
@@ -26,8 +26,8 @@
       "subscribersGained": 0
     },
     "fKVFqzv9z-I": {
-      "views": 984,
-      "averageViewPercentage": 44.53,
+      "views": 986,
+      "averageViewPercentage": 44.63,
       "averageViewDuration": 9,
       "likes": 3,
       "comments": 0,
@@ -42,8 +42,8 @@
       "subscribersGained": 0
     },
     "Qamg5BNmBZU": {
-      "views": 689,
-      "averageViewPercentage": 49.93,
+      "views": 695,
+      "averageViewPercentage": 49.88,
       "averageViewDuration": 11,
       "likes": 5,
       "comments": 0,
@@ -54,6 +54,22 @@
       "averageViewPercentage": 58.35,
       "averageViewDuration": 13,
       "likes": 4,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "NJ2z0tv8-4k": {
+      "views": 9,
+      "averageViewPercentage": 68.12,
+      "averageViewDuration": 17,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "gRJfJxf742w": {
+      "views": 2,
+      "averageViewPercentage": 81.79,
+      "averageViewDuration": 20,
+      "likes": 0,
       "comments": 0,
       "subscribersGained": 0
     }
@@ -74,6 +90,10 @@
     {
       "termine": "parma calcio",
       "views": 5
+    },
+    {
+      "termine": "taranto",
+      "views": 4
     },
     {
       "termine": "de martino",
@@ -99,11 +119,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 7059
+      "views": 7069
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 128
+      "views": 143
     },
     {
       "sorgente": "YT_CHANNEL",
