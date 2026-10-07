@@ -1,9 +1,9 @@
 {
-  "aggiornato": "2026-10-06",
+  "aggiornato": "2026-10-07",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1690,
-      "averageViewPercentage": 65.16,
+      "views": 1699,
+      "averageViewPercentage": 65.1,
       "averageViewDuration": 15,
       "likes": 17,
       "comments": 0,
@@ -34,7 +34,7 @@
       "subscribersGained": 1
     },
     "P3yOUIGm0UU": {
-      "views": 876,
+      "views": 877,
       "averageViewPercentage": 67.8,
       "averageViewDuration": 14,
       "likes": 3,
@@ -42,23 +42,23 @@
       "subscribersGained": 0
     },
     "Qamg5BNmBZU": {
-      "views": 694,
-      "averageViewPercentage": 49.88,
+      "views": 696,
+      "averageViewPercentage": 49.72,
       "averageViewDuration": 11,
       "likes": 5,
       "comments": 0,
       "subscribersGained": 0
     },
     "U501zLEwMVM": {
-      "views": 524,
-      "averageViewPercentage": 58.35,
+      "views": 525,
+      "averageViewPercentage": 58.60999999999999,
       "averageViewDuration": 13,
       "likes": 4,
       "comments": 0,
       "subscribersGained": 0
     },
     "NJ2z0tv8-4k": {
-      "views": 9,
+      "views": 12,
       "averageViewPercentage": 68.12,
       "averageViewDuration": 17,
       "likes": 0,
@@ -69,6 +69,14 @@
       "views": 2,
       "averageViewPercentage": 81.79,
       "averageViewDuration": 20,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "3QNWDLcD9w8": {
+      "views": 1,
+      "averageViewPercentage": 0,
+      "averageViewDuration": 0,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -93,7 +101,7 @@
     },
     {
       "termine": "taranto",
-      "views": 4
+      "views": 5
     },
     {
       "termine": "de martino",
@@ -119,11 +127,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 7069
+      "views": 7077
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 143
+      "views": 150
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -135,7 +143,7 @@
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 4
+      "views": 6
     },
     {
       "sorgente": "HASHTAGS",
