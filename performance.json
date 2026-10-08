@@ -1,16 +1,16 @@
 {
-  "aggiornato": "2026-10-07",
+  "aggiornato": "2026-10-08",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1699,
-      "averageViewPercentage": 65.1,
+      "views": 1702,
+      "averageViewPercentage": 65.18,
       "averageViewDuration": 15,
       "likes": 17,
       "comments": 0,
       "subscribersGained": 3
     },
     "TQYai4Ocui8": {
-      "views": 1249,
+      "views": 1250,
       "averageViewPercentage": 58.84,
       "averageViewDuration": 13,
       "likes": 12,
@@ -34,8 +34,8 @@
       "subscribersGained": 1
     },
     "P3yOUIGm0UU": {
-      "views": 877,
-      "averageViewPercentage": 67.8,
+      "views": 956,
+      "averageViewPercentage": 67.94,
       "averageViewDuration": 14,
       "likes": 3,
       "comments": 0,
@@ -57,10 +57,26 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "pSgpYqlbihA": {
+      "views": 224,
+      "averageViewPercentage": 51.790000000000006,
+      "averageViewDuration": 10,
+      "likes": 1,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "3QNWDLcD9w8": {
+      "views": 76,
+      "averageViewPercentage": 54.1,
+      "averageViewDuration": 16,
+      "likes": 1,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "NJ2z0tv8-4k": {
-      "views": 12,
-      "averageViewPercentage": 68.12,
-      "averageViewDuration": 17,
+      "views": 16,
+      "averageViewPercentage": 96.82,
+      "averageViewDuration": 24,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -69,14 +85,6 @@
       "views": 2,
       "averageViewPercentage": 81.79,
       "averageViewDuration": 20,
-      "likes": 0,
-      "comments": 0,
-      "subscribersGained": 0
-    },
-    "3QNWDLcD9w8": {
-      "views": 1,
-      "averageViewPercentage": 0,
-      "averageViewDuration": 0,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -116,6 +124,10 @@
       "views": 3
     },
     {
+      "termine": "ecobonus 2027",
+      "views": 2
+    },
+    {
       "termine": "gossip house",
       "views": 2
     },
@@ -127,11 +139,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 7077
+      "views": 7447
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 150
+      "views": 166
     },
     {
       "sorgente": "YT_CHANNEL",
