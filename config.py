@@ -4,6 +4,7 @@ Configurazione centralizzata di Samaritan.
 Tutti i segreti vivono qui e SOLO qui, letti da variabili d'ambiente
 (.env in locale, GitHub Secrets su Actions). Nessuna chiave hardcoded.
 """
+import json
 import os
 import sys
 
@@ -86,6 +87,40 @@ except profilo.ProfiloNonValido as e:
 NOME_CANALE = _get("NOME_CANALE", PROFILO.nome_canale)
 # Handle YouTube: finisce nella descrizione di ogni video come link al canale.
 HANDLE_CANALE = _get("HANDLE_CANALE", PROFILO.handle)
+
+# Righe con link in fondo alla descrizione YouTube, per lingua (affiliazioni;
+# il sito ha gia' la sua riga, SITO_CANALE, dove esiste). La variabile LINK_DESCRIZIONE (JSON, es. {"it": ["riga", ...]}) vince;
+# senza, un canale gaming usa LINK_GAMING e gli altri nessun link.
+LINK_GAMING = {
+    "it": [
+        "Giochi scontati su Instant Gaming (link affiliato): "
+        "https://www.instant-gaming.com/it/?igr=poppone",
+    ],
+    "en": [
+        "Cheaper game keys on Instant Gaming (affiliate link): "
+        "https://www.instant-gaming.com/en/?igr=poppone",
+    ],
+}
+
+
+def link_descrizione(lingua):
+    """Le righe di link per questa lingua. Si legge a ogni video, non all'avvio:
+    il profilo attivo puo' cambiare (test, canali diversi)."""
+    grezzo = _get("LINK_DESCRIZIONE")
+    if grezzo:
+        try:
+            dati = json.loads(grezzo)
+        except ValueError:
+            print("[Config] LINK_DESCRIZIONE non e' JSON valido: nessun link in descrizione.")
+            return []
+        if not isinstance(dati, dict):
+            return []
+        righe = dati.get((lingua or "it").lower())
+        return [str(r) for r in righe if str(r).strip()] if isinstance(righe, list) else []
+    attivo = profilo.attivo()
+    if (attivo.argomento or "").strip().lower() == profilo.ARGOMENTO_GAMING:
+        return LINK_GAMING.get((lingua or "it").lower(), [])
+    return []
 
 # Lingua, uscita coperta, orario di pubblicazione e voce di questa run: li
 # decide risolvi_uscita() qui sotto, a partire dal profilo del canale.
