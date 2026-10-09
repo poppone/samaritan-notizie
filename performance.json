@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-08",
+  "aggiornato": "2026-10-09",
   "video": {
     "m9P_aSYgovE": {
       "views": 1702,
@@ -34,12 +34,20 @@
       "subscribersGained": 1
     },
     "P3yOUIGm0UU": {
-      "views": 956,
-      "averageViewPercentage": 67.94,
+      "views": 970,
+      "averageViewPercentage": 68.28,
       "averageViewDuration": 14,
       "likes": 3,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "qZ4XruA-k0Y": {
+      "views": 824,
+      "averageViewPercentage": 95.49,
+      "averageViewDuration": 23,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 1
     },
     "Qamg5BNmBZU": {
       "views": 696,
@@ -58,18 +66,18 @@
       "subscribersGained": 0
     },
     "pSgpYqlbihA": {
-      "views": 224,
-      "averageViewPercentage": 51.790000000000006,
+      "views": 284,
+      "averageViewPercentage": 50.46000000000001,
       "averageViewDuration": 10,
       "likes": 1,
       "comments": 0,
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 76,
-      "averageViewPercentage": 54.1,
-      "averageViewDuration": 16,
-      "likes": 1,
+      "views": 174,
+      "averageViewPercentage": 216.12999999999997,
+      "averageViewDuration": 64,
+      "likes": 2,
       "comments": 0,
       "subscribersGained": 0
     },
@@ -139,23 +147,23 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 7447
+      "views": 8427
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 166
+      "views": 173
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 8
+      "views": 15
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 8
+      "views": 9
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 6
+      "views": 7
     },
     {
       "sorgente": "HASHTAGS",
