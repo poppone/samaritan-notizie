@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-09",
+  "aggiornato": "2026-10-10",
   "video": {
     "m9P_aSYgovE": {
       "views": 1702,
@@ -25,8 +25,16 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "qZ4XruA-k0Y": {
+      "views": 1175,
+      "averageViewPercentage": 79.72,
+      "averageViewDuration": 19,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "fKVFqzv9z-I": {
-      "views": 986,
+      "views": 987,
       "averageViewPercentage": 44.63,
       "averageViewDuration": 9,
       "likes": 3,
@@ -41,21 +49,21 @@
       "comments": 0,
       "subscribersGained": 0
     },
-    "qZ4XruA-k0Y": {
-      "views": 824,
-      "averageViewPercentage": 95.49,
-      "averageViewDuration": 23,
-      "likes": 5,
-      "comments": 0,
-      "subscribersGained": 1
-    },
     "Qamg5BNmBZU": {
-      "views": 696,
-      "averageViewPercentage": 49.72,
+      "views": 697,
+      "averageViewPercentage": 49.71,
       "averageViewDuration": 11,
       "likes": 5,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "-uStdIfm10c": {
+      "views": 527,
+      "averageViewPercentage": 104.3,
+      "averageViewDuration": 20,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 1
     },
     "U501zLEwMVM": {
       "views": 525,
@@ -64,6 +72,14 @@
       "likes": 4,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "nVop-vDFI_A": {
+      "views": 451,
+      "averageViewPercentage": 45.21,
+      "averageViewDuration": 10,
+      "likes": 7,
+      "comments": 0,
+      "subscribersGained": 1
     },
     "pSgpYqlbihA": {
       "views": 284,
@@ -74,7 +90,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 174,
+      "views": 175,
       "averageViewPercentage": 216.12999999999997,
       "averageViewDuration": 64,
       "likes": 2,
@@ -147,19 +163,19 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 8427
+      "views": 9744
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 173
+      "views": 184
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 15
+      "views": 17
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 9
+      "views": 11
     },
     {
       "sorgente": "SUBSCRIBER",
