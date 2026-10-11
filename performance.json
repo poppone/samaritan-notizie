@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-10",
+  "aggiornato": "2026-10-11",
   "video": {
     "m9P_aSYgovE": {
       "views": 1702,
@@ -26,16 +26,16 @@
       "subscribersGained": 0
     },
     "qZ4XruA-k0Y": {
-      "views": 1175,
-      "averageViewPercentage": 79.72,
+      "views": 1179,
+      "averageViewPercentage": 79.66,
       "averageViewDuration": 19,
       "likes": 5,
       "comments": 0,
       "subscribersGained": 1
     },
     "fKVFqzv9z-I": {
-      "views": 987,
-      "averageViewPercentage": 44.63,
+      "views": 989,
+      "averageViewPercentage": 44.51,
       "averageViewDuration": 9,
       "likes": 3,
       "comments": 0,
@@ -49,6 +49,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "-uStdIfm10c": {
+      "views": 822,
+      "averageViewPercentage": 95.5,
+      "averageViewDuration": 19,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "Qamg5BNmBZU": {
       "views": 697,
       "averageViewPercentage": 49.71,
@@ -56,14 +64,6 @@
       "likes": 5,
       "comments": 0,
       "subscribersGained": 0
-    },
-    "-uStdIfm10c": {
-      "views": 527,
-      "averageViewPercentage": 104.3,
-      "averageViewDuration": 20,
-      "likes": 5,
-      "comments": 0,
-      "subscribersGained": 1
     },
     "U501zLEwMVM": {
       "views": 525,
@@ -81,6 +81,14 @@
       "comments": 0,
       "subscribersGained": 1
     },
+    "u9F9RG0_Hzg": {
+      "views": 348,
+      "averageViewPercentage": 41.91,
+      "averageViewDuration": 11,
+      "likes": 2,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "pSgpYqlbihA": {
       "views": 284,
       "averageViewPercentage": 50.46000000000001,
@@ -90,7 +98,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 175,
+      "views": 176,
       "averageViewPercentage": 216.12999999999997,
       "averageViewDuration": 64,
       "likes": 2,
@@ -115,6 +123,10 @@
     }
   },
   "ricerche": [
+    {
+      "termine": "legge elettorale",
+      "views": 14
+    },
     {
       "termine": "inter news",
       "views": 12
@@ -156,18 +168,30 @@
       "views": 2
     },
     {
+      "termine": "nuova legge elettorale",
+      "views": 2
+    },
+    {
+      "termine": "riforma legge elettorale",
+      "views": 2
+    },
+    {
       "termine": "stefano di martino",
+      "views": 2
+    },
+    {
+      "termine": "voto legge elettorale",
       "views": 2
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 9744
+      "views": 10357
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 184
+      "views": 218
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -175,7 +199,7 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 11
+      "views": 14
     },
     {
       "sorgente": "SUBSCRIBER",
