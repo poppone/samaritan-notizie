@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-11",
+  "aggiornato": "2026-10-12",
   "video": {
     "m9P_aSYgovE": {
       "views": 1702,
@@ -26,7 +26,7 @@
       "subscribersGained": 0
     },
     "qZ4XruA-k0Y": {
-      "views": 1179,
+      "views": 1181,
       "averageViewPercentage": 79.66,
       "averageViewDuration": 19,
       "likes": 5,
@@ -34,7 +34,7 @@
       "subscribersGained": 1
     },
     "fKVFqzv9z-I": {
-      "views": 989,
+      "views": 991,
       "averageViewPercentage": 44.51,
       "averageViewDuration": 9,
       "likes": 3,
@@ -50,8 +50,8 @@
       "subscribersGained": 0
     },
     "-uStdIfm10c": {
-      "views": 822,
-      "averageViewPercentage": 95.5,
+      "views": 926,
+      "averageViewPercentage": 95.2,
       "averageViewDuration": 19,
       "likes": 5,
       "comments": 0,
@@ -65,6 +65,22 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "u9F9RG0_Hzg": {
+      "views": 608,
+      "averageViewPercentage": 47.93,
+      "averageViewDuration": 12,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 1
+    },
+    "IfX5K3ljf8A": {
+      "views": 593,
+      "averageViewPercentage": 67.52,
+      "averageViewDuration": 16,
+      "likes": 5,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "U501zLEwMVM": {
       "views": 525,
       "averageViewPercentage": 58.60999999999999,
@@ -74,49 +90,41 @@
       "subscribersGained": 0
     },
     "nVop-vDFI_A": {
-      "views": 451,
-      "averageViewPercentage": 45.21,
-      "averageViewDuration": 10,
+      "views": 461,
+      "averageViewPercentage": 45.9,
+      "averageViewDuration": 11,
       "likes": 7,
       "comments": 0,
       "subscribersGained": 1
     },
-    "u9F9RG0_Hzg": {
-      "views": 348,
-      "averageViewPercentage": 41.91,
-      "averageViewDuration": 11,
-      "likes": 2,
-      "comments": 0,
-      "subscribersGained": 1
-    },
     "pSgpYqlbihA": {
-      "views": 284,
-      "averageViewPercentage": 50.46000000000001,
+      "views": 285,
+      "averageViewPercentage": 50.22,
       "averageViewDuration": 10,
       "likes": 1,
       "comments": 0,
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 176,
-      "averageViewPercentage": 216.12999999999997,
-      "averageViewDuration": 64,
+      "views": 178,
+      "averageViewPercentage": 287.88,
+      "averageViewDuration": 86,
       "likes": 2,
       "comments": 0,
       "subscribersGained": 0
     },
     "NJ2z0tv8-4k": {
-      "views": 16,
-      "averageViewPercentage": 96.82,
-      "averageViewDuration": 24,
+      "views": 18,
+      "averageViewPercentage": 92.15,
+      "averageViewDuration": 23,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
     },
     "gRJfJxf742w": {
-      "views": 2,
-      "averageViewPercentage": 81.79,
-      "averageViewDuration": 20,
+      "views": 3,
+      "averageViewPercentage": 55.09,
+      "averageViewDuration": 13,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -125,7 +133,11 @@
   "ricerche": [
     {
       "termine": "legge elettorale",
-      "views": 14
+      "views": 18
+    },
+    {
+      "termine": "arisa",
+      "views": 15
     },
     {
       "termine": "inter news",
@@ -187,27 +199,27 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 10357
+      "views": 11265
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 218
+      "views": 267
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 17
+      "views": 28
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 14
+      "views": 20
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 7
+      "views": 9
     },
     {
       "sorgente": "HASHTAGS",
-      "views": 2
+      "views": 3
     },
     {
       "sorgente": "EXT_URL",
