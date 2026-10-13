@@ -224,6 +224,10 @@ jobs:
           # La notizia scelta si salva subito sul repository, cosi' due
           # lavorazioni partite insieme non fanno la stessa: prenotazione.py.
           SAMARITAN_PRENOTA: '1'
+          # Copia pubblica dello Short su Vercel Blob, per il rilancio su
+          # TikTok e Instagram dalla stanza degli agenti (copia_pubblica.py).
+          # Vuoto = non si carica niente.
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
           # Passato via env e non interpolato nel comando: evita script injection
           TEMA: ${{ inputs.tema }}
         run: python main.py "$TEMA"

@@ -23,6 +23,7 @@ import config
 from brain import (
     genera_script_samaritan,
     registra_video_caricato,
+    aggiungi_alla_voce,
     carica_cronologia,
     costruisci_descrizione,
     costruisci_tag,
@@ -30,6 +31,7 @@ from brain import (
 from maker import assembla_video_finale
 from uploader import carica_short
 import autoprofilo
+import copia_pubblica
 import notifier
 import orari
 
@@ -212,6 +214,16 @@ def esegui_pipeline_samaritan(tema=None):
         # senza questo il feedback loop e' cieco, e una lavorazione caduta
         # prima di qui non lascia in memoria un video che non esiste.
         registra_video_caricato(video_id)
+        if not config.VIDEO_LUNGO:
+            # Il file a un indirizzo pubblico, per il rilancio su TikTok e
+            # Instagram: senza BLOB_READ_WRITE_TOKEN non fa niente, e un
+            # errore qui non deve toccare un video gia' uscito.
+            try:
+                campi = copia_pubblica.prepara(video_path, video_id, dati)
+                if campi:
+                    aggiungi_alla_voce(video_id, **campi)
+            except Exception as e:
+                print(f"[Warning Copia] Copia pubblica saltata: {e}")
 
     notifier.notifica_pubblicazione(dati, video_id, video_path)
 
