@@ -4,6 +4,8 @@ e mai una pipeline fermata per colpa sua. Niente rete: requests e' finto."""
 import json
 from datetime import datetime, timezone
 
+import pytest
+
 import brain
 import config
 import copia_pubblica
@@ -166,6 +168,9 @@ def test_didascalia_in_inglese(monkeypatch):
 
 def _pipeline(monkeypatch, tmp_path):
     """esegui_pipeline_samaritan con scrittura, upload e notifiche finti."""
+    # main importa maker, che vuole numpy e moviepy: nella CI leggera dei
+    # test non ci sono, e il test si salta come quelli di test_telegiornale.
+    pytest.importorskip("maker")
     import analyst
     import main
     _in(monkeypatch, tmp_path)
