@@ -251,16 +251,32 @@ jobs:
 
       - name: Salva memoria e performance
         if: always()
+        env:
+          ESITO_PIPELINE: ${{ steps.pipeline.outcome }}
         run: |
           git config --global user.name "Samaritan Bot"
           git config --global user.email "bot@samaritan.local"
+
+          # La cronologia si salva solo se la pipeline e' arrivata in fondo:
+          # la riga del video la scrive brain.registra_video_caricato a
+          # caricamento riuscito. Il 12 ottobre 2026 (run 38239595126) la
+          # lavorazione e' caduta con tutti gli script scartati e la memoria
+          # e' stata salvata lo stesso. Le performance di Analytics invece si
+          # salvano sempre: sono una fotografia del canale, non di questo video.
+          if [ "$ESITO_PIPELINE" = "success" ]; then
+            memoria="cronologia_trend.json performance.json canale_auto.json"
+          else
+            echo "Pipeline non riuscita ($ESITO_PIPELINE): la cronologia non si salva."
+            git checkout -- cronologia_trend.json 2>/dev/null || true
+            memoria="performance.json canale_auto.json"
+          fi
 
           # Un file alla volta, e MAI due percorsi nello stesso 'git add':
           # se uno dei due non esiste, git fallisce senza mettere in stage
           # nemmeno l'altro. performance.json nasce solo quando YouTube
           # Analytics risponde, quindi all'inizio non c'e': e' per questo che
           # la memoria non veniva mai salvata.
-          for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+          for file_memoria in $memoria; do
             if [ -f "$file_memoria" ]; then
               git add -- "$file_memoria"
             fi
@@ -284,7 +300,7 @@ jobs:
           # sul contenuto (unisci_memoria.py).
           copia="$RUNNER_TEMP/memoria-nostra"
           mkdir -p "$copia"
-          for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+          for file_memoria in $memoria; do
             if [ -f "$file_memoria" ]; then
               cp -- "$file_memoria" "$copia/"
             fi
@@ -300,7 +316,7 @@ jobs:
             if [ -f "$copia/canale_auto.json" ]; then
               cp -- "$copia/canale_auto.json" canale_auto.json
             fi
-            for file_memoria in cronologia_trend.json performance.json canale_auto.json; do
+            for file_memoria in $memoria; do
               if [ -f "$file_memoria" ]; then
                 git add -- "$file_memoria"
               fi

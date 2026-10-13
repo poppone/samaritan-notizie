@@ -21,6 +21,7 @@ import asyncio
 import requests
 
 import config
+import prenotazione
 
 # Emoji e simboli decorativi: la voce non deve leggerli
 _RE_EMOJI = re.compile(
@@ -128,22 +129,16 @@ def _ultima_voce_usata():
 
 
 def _segna_voce_usata(nome):
-    """Annota sulla cronologia la voce di questo video.
+    """Annota la voce di questo video sulla sua riga.
 
     Sta qui e non in brain.py perche' e' voice.py a decidere quale voce esce
-    davvero: il nome nella variabile puo' non esistere nell'account. Il
-    workflow committa gia' questo file, quindi il prossimo giro lo ritrova.
+    davvero: il nome nella variabile puo' non esistere nell'account. La riga
+    e' quella della lavorazione in corso (prenotazione.py), che entra in
+    cronologia solo a video caricato; senza riga in corso non si annota
+    niente, per non cambiare la voce di un video gia' uscito.
     """
-    cronologia = _carica_cronologia()
-    if not cronologia or not isinstance(cronologia[-1], dict):
-        return
-    cronologia[-1]["voce"] = nome
-    try:
-        with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
-            json.dump(cronologia, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        print(f"[Warning Voice] Voce scelta non annotata ({e}): "
-              f"il prossimo video potrebbe ripeterla.")
+    if not prenotazione.annota("voce", nome):
+        print("[Warning Voice] Nessun video in corso: voce non annotata.")
 
 
 # ElevenLabs restituisce il nome completo di descrizione, tipo

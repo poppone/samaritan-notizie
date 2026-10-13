@@ -19,7 +19,7 @@ import json
 import os
 import sys
 
-MASSIMO_VOCI = 200      # lo stesso tetto di brain.salva_in_cronologia
+MASSIMO_VOCI = 200      # lo stesso tetto di brain.registra_video_caricato
 
 
 def _chiave(voce):

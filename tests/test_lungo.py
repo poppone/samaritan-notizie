@@ -275,6 +275,8 @@ class TestScritturaDelVideoLungo:
         monkeypatch.setattr(config, "VIDEO_LUNGO", True)
 
         lungo.genera_video_lungo()
+        # In cronologia entra solo a video caricato.
+        assert brain.registra_video_caricato("VIDLUNGO")
 
         voci = brain.carica_cronologia()
         assert voci[-1]["formato"] == "lungo"

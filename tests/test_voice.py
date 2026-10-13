@@ -11,6 +11,7 @@ import json
 import pytest
 
 import config
+import prenotazione
 import voice
 
 
@@ -250,17 +251,18 @@ class TestMemoriaDellaRotazione:
 
         assert voice._ultima_voce_usata() is None
 
-    def test_annota_sull_ultimo_record(self, monkeypatch, tmp_path):
+    def test_annota_sulla_riga_in_corso(self, monkeypatch, tmp_path):
         percorso = self._storico(monkeypatch, tmp_path, json.dumps([
             {"titolo": "vecchio", "voce": "Marco"},
-            {"titolo": "in corso"},
+            {"titolo": "uscito ieri"},
         ]))
+        prenotazione.apri({"timestamp": 1, "titolo": "in corso"})
 
         voice._segna_voce_usata("Giulia")
 
+        assert prenotazione.voce_in_corso()["voce"] == "Giulia"
         salvato = json.loads(percorso.read_text(encoding="utf-8"))
-        assert salvato[-1]["voce"] == "Giulia"
-        assert salvato[-1]["titolo"] == "in corso"   # il resto non si tocca
+        assert "voce" not in salvato[-1]     # i video usciti non si toccano
         assert salvato[0]["voce"] == "Marco"
 
     def test_senza_cronologia_non_esplode(self, monkeypatch, tmp_path):

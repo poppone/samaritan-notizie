@@ -50,27 +50,45 @@ def due_copie(tmp_path, monkeypatch):
 def _in(monkeypatch, cartella):
     monkeypatch.setattr(config, "DIR_PROGETTO", str(cartella))
     monkeypatch.setattr(config, "FILE_CRONOLOGIA", str(cartella / "cronologia_trend.json"))
+    monkeypatch.setattr(config, "FILE_PRENOTAZIONI", str(cartella / "prenotazioni.json"))
+    # Ogni copia e' una lavorazione a se': la riga in corso non si eredita.
+    monkeypatch.setattr(prenotazione, "_IN_CORSO", None)
 
 
-def _remota(remoto):
-    uscita = subprocess.run(["git", "--git-dir", str(remoto), "show", "main:cronologia_trend.json"],
+def _remota(remoto, file="cronologia_trend.json"):
+    uscita = subprocess.run(["git", "--git-dir", str(remoto), "show", f"main:{file}"],
                             capture_output=True, text=True, check=True)
     return json.loads(uscita.stdout)
+
+
+def _dati(titolo, fonte):
+    return {"titolo": titolo, "script": "x", "stile": "VIRAL_HOOK_NEWS",
+            "query_video": "stage", "fonte": fonte}
 
 
 def test_la_seconda_vede_la_notizia_della_prima(due_copie, monkeypatch):
     remoto, (prima, seconda) = due_copie
     _in(monkeypatch, prima)
-    brain.salva_in_cronologia({"titolo": "Sanremo: festival targato De Martino",
-                               "script": "x", "stile": "VIRAL_HOOK_NEWS",
-                               "query_video": "stage", "fonte": "Sanremo (Adnkronos)"})
+    brain.prepara_voce_cronologia(_dati("Sanremo: festival targato De Martino",
+                                        "Sanremo (Adnkronos)"))
     assert prenotazione.prenota("Sanremo")
-    assert [v["titolo"] for v in _remota(remoto)][-1] == "Sanremo: festival targato De Martino"
+    assert [v["titolo"] for v in _remota(remoto, "prenotazioni.json")] == \
+        ["Sanremo: festival targato De Martino"]
 
     _in(monkeypatch, seconda)
     assert prenotazione.riallinea_cronologia()
-    fonti = [v.get("fonte") for v in brain.carica_cronologia()]
+    fonti = [v.get("fonte") for v in brain._memoria_per_la_scelta()]
     assert "Sanremo (Adnkronos)" in fonti
+
+
+def test_la_prenotazione_non_scrive_la_cronologia(due_copie, monkeypatch):
+    """Il difetto del 12 ottobre 2026: la riga di un video mai uscito."""
+    remoto, (prima, _) = due_copie
+    _in(monkeypatch, prima)
+    brain.prepara_voce_cronologia(_dati("T", "F (X)"))
+    assert prenotazione.prenota("T")
+    assert [v["titolo"] for v in _remota(remoto)] == ["Vecchio video"]
+    assert [v["titolo"] for v in brain.carica_cronologia()] == ["Vecchio video"]
 
 
 def test_la_prenotazione_non_sposta_il_ramo_locale(due_copie, monkeypatch):
@@ -79,13 +97,12 @@ def test_la_prenotazione_non_sposta_il_ramo_locale(due_copie, monkeypatch):
     prima_di = subprocess.run(["git", "rev-parse", "HEAD"], cwd=prima,
                               capture_output=True, text=True).stdout
     (prima / "performance.json").write_text('{"nostra": 1}', encoding="utf-8")
-    brain.salva_in_cronologia({"titolo": "T", "script": "x", "stile": "s",
-                               "query_video": "q", "fonte": "F (X)"})
+    brain.prepara_voce_cronologia(_dati("T", "F (X)"))
     assert prenotazione.prenota("T")
     dopo = subprocess.run(["git", "rev-parse", "HEAD"], cwd=prima,
                           capture_output=True, text=True).stdout
     assert prima_di == dopo
-    # Nel commit di prenotazione c'e' solo la cronologia.
+    # Nel commit di prenotazione ci sono solo le prenotazioni.
     remota_perf = subprocess.run(["git", "--git-dir", str(remoto), "show", "main:performance.json"],
                                  capture_output=True, text=True).stdout
     assert remota_perf == "{}"
@@ -95,28 +112,46 @@ def test_due_prenotazioni_non_si_cancellano(due_copie, monkeypatch):
     remoto, (prima, seconda) = due_copie
     for cartella, titolo in ((prima, "Uno"), (seconda, "Due")):
         _in(monkeypatch, cartella)
-        brain.salva_in_cronologia({"titolo": titolo, "script": "x", "stile": "s",
-                                   "query_video": "q", "fonte": titolo + " (X)"})
+        brain.prepara_voce_cronologia(_dati(titolo, titolo + " (X)"))
         assert prenotazione.prenota(titolo)
-    titoli = [v["titolo"] for v in _remota(remoto)]
+    titoli = [v["titolo"] for v in _remota(remoto, "prenotazioni.json")]
     assert "Uno" in titoli and "Due" in titoli
 
 
-def test_il_video_id_va_sulla_riga_giusta(due_copie, monkeypatch):
-    remoto, (prima, seconda) = due_copie
+def test_la_riga_entra_in_cronologia_solo_a_video_caricato(due_copie, monkeypatch):
+    _, (prima, _) = due_copie
     _in(monkeypatch, prima)
-    brain.salva_in_cronologia({"titolo": "Nostra", "script": "x", "stile": "s",
-                               "query_video": "q", "fonte": "N (X)"})
-    nostra = brain._NOSTRA_VOCE
-    # Un'altra lavorazione prenota dopo di noi: la sua riga finisce in fondo.
+    brain.prepara_voce_cronologia(_dati("Nostra", "N (X)"))
+    # Una lavorazione partita insieme ha registrato il suo video nel frattempo.
     cronologia = brain.carica_cronologia()
-    cronologia.append(_voce("Altra", "A (X)", nostra[0] + 5, video_id=None))
+    cronologia.append(_voce("Altra", "A (X)", 10 ** 10))
     with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
         json.dump(cronologia, f)
-    brain.aggiorna_ultimo_video_id("VID123")
+
+    assert brain.registra_video_caricato("VID123")
+
     per_titolo = {v["titolo"]: v.get("video_id") for v in brain.carica_cronologia()}
     assert per_titolo["Nostra"] == "VID123"
-    assert per_titolo["Altra"] is None
+    assert per_titolo["Altra"] == "abc"
+    # La prenotazione e' chiusa: la notizia ora sta in cronologia.
+    assert prenotazione.attive() == []
+    assert prenotazione.voce_in_corso() is None
+
+
+def test_senza_video_id_non_si_scrive_niente(tmp_path, monkeypatch):
+    _in(monkeypatch, tmp_path)
+    brain.prepara_voce_cronologia(_dati("Caricamento fallito", "C (X)"))
+    assert brain.registra_video_caricato(None) is False
+    assert brain.carica_cronologia() == []
+
+
+def test_le_prenotazioni_scadono(tmp_path, monkeypatch):
+    """Una lavorazione morta a meta' non blocca la notizia per sempre."""
+    _in(monkeypatch, tmp_path)
+    brain.prepara_voce_cronologia(_dati("Morta", "M (X)"))
+    ts = prenotazione.voce_in_corso()["timestamp"]
+    assert [p["titolo"] for p in prenotazione.attive(adesso=ts + 3600)] == ["Morta"]
+    assert prenotazione.attive(adesso=ts + (prenotazione.ORE_VALIDITA + 1) * 3600) == []
 
 
 def test_spenta_fuori_dal_workflow(tmp_path, monkeypatch):
@@ -126,7 +161,24 @@ def test_spenta_fuori_dal_workflow(tmp_path, monkeypatch):
     assert prenotazione.riallinea_cronologia() is False
 
 
-def test_il_workflow_la_accende():
+def _workflow():
     radice = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     with open(os.path.join(radice, ".github", "workflows", "samaritan.yml"), encoding="utf-8") as f:
-        assert "SAMARITAN_PRENOTA: '1'" in f.read()
+        return f.read()
+
+
+def test_il_workflow_la_accende():
+    assert "SAMARITAN_PRENOTA: '1'" in _workflow()
+
+
+def test_il_workflow_salva_la_cronologia_solo_a_pipeline_riuscita():
+    """Run 38239595126: caduta con tutti gli script scartati, memoria salvata lo stesso."""
+    testo = _workflow()
+    passo = testo[testo.index("- name: Salva memoria e performance"):]
+    passo = passo[:passo.index("- name: Conserva il video prodotto")]
+    assert "ESITO_PIPELINE: ${{ steps.pipeline.outcome }}" in passo
+    assert 'if [ "$ESITO_PIPELINE" = "success" ]; then' in passo
+    # Nessun elenco fisso che contenga sempre la cronologia.
+    assert "for file_memoria in cronologia_trend.json" not in passo
+    ramo_fallito = passo[passo.index("else"):passo.index("fi", passo.index("else"))]
+    assert "cronologia_trend.json" not in ramo_fallito.split("memoria=")[1]

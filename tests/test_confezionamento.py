@@ -287,7 +287,7 @@ class TestRigenerazioneInformata:
                             self._finto_client([scartato, buono], prompt_visti))
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         risultato = brain.genera_script_samaritan()
 
@@ -427,7 +427,7 @@ class TestAperturaRipetutaDalVivo:
         monkeypatch.setattr(brain, "client", finto)
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: cronologia)
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         risultato = brain.genera_script_samaritan()
 
@@ -591,7 +591,7 @@ class TestCodaTroncata:
         monkeypatch.setattr(brain, "client", finto)
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         risultato = brain.genera_script_samaritan()
 
@@ -803,7 +803,7 @@ class TestSchemaApertura:
         monkeypatch.setattr(brain, "client", finto)
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: cronologia)
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         risultato = brain.genera_script_samaritan()
 
@@ -881,7 +881,7 @@ class TestUltimaSpiaggia:
         monkeypatch.setattr(brain, "client", finto)
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", self._cronologia)
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         risultato = brain.genera_script_samaritan()
 
@@ -901,7 +901,7 @@ class TestUltimaSpiaggia:
         monkeypatch.setattr(brain.config, "GROQ_MODELLI", ["openai/gpt-oss-120b"])
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: [])
         monkeypatch.setattr(brain, "carica_cronologia", self._cronologia)
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
 
         brain.genera_script_samaritan()
 
@@ -1179,11 +1179,12 @@ class TestLinguaInglese:
         monkeypatch.setattr(brain.config, "FILE_CRONOLOGIA", str(percorso))
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
 
-        brain.salva_in_cronologia({
+        brain.prepara_voce_cronologia({
             "titolo": "Portal: the room nobody opens", "script": "A script.",
             "stile": "TIER_LIST_LAMPO", "gioco": "Portal",
             "query_video": "portal gameplay",
         })
+        assert brain.registra_video_caricato("VID1")
 
         import json as _json
         salvato = _json.loads(percorso.read_text(encoding="utf-8"))
@@ -1312,7 +1313,7 @@ class TestTemaChiestoAMano:
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [
             {"titolo": "Cyberpunk 2077: la patch", "gioco": "Cyberpunk 2077",
              "lingua": "it"}])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         try:
             risultato = brain.genera_script_samaritan(tema)
         except RuntimeError:
