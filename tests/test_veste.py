@@ -13,6 +13,7 @@ import re
 import pytest
 
 import config
+import prenotazione
 import veste
 
 
@@ -154,12 +155,20 @@ class TestRotazione:
 
 
 class TestAnnotazione:
-    def test_si_scrive_sull_ultimo_record(self, monkeypatch, tmp_path):
+    def test_si_scrive_sulla_riga_in_corso(self, monkeypatch, tmp_path):
+        # Il video in corso non e' ancora in cronologia: la veste va sulla sua
+        # riga, e le righe dei video gia' usciti non si toccano.
         percorso = _memoria(monkeypatch, tmp_path, [{"titolo": "a"}, {"titolo": "b"}])
+        prenotazione.apri({"timestamp": 1, "titolo": "in corso"})
         veste.segna_veste("fuoco")
+        assert prenotazione.voce_in_corso()["veste"] == "fuoco"
         dati = json.loads(percorso.read_text(encoding="utf-8"))
-        assert dati[1]["veste"] == "fuoco"
-        assert "veste" not in dati[0]
+        assert all("veste" not in v for v in dati)
+
+    def test_senza_video_in_corso_non_tocca_i_video_usciti(self, monkeypatch, tmp_path):
+        percorso = _memoria(monkeypatch, tmp_path, [{"titolo": "a"}])
+        veste.segna_veste("fuoco")
+        assert "veste" not in json.loads(percorso.read_text(encoding="utf-8"))[0]
 
     def test_senza_cronologia_non_si_scrive_niente(self, monkeypatch, tmp_path):
         percorso = _memoria(monkeypatch, tmp_path, [])

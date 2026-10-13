@@ -357,7 +357,7 @@ CRON_RISERVA_ORA = "20"
 
 
 def _voce(slot, quando, video_id="VIDEOFINTO1"):
-    """Una riga di cronologia come la scrive brain.salva_in_cronologia."""
+    """Una riga di cronologia come la scrive brain.registra_video_caricato."""
     return {
         "slot": slot,
         "timestamp": int(quando.timestamp()),

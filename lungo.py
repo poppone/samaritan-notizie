@@ -309,7 +309,7 @@ def genera_video_lungo(tema=None):
     # Solo i video lunghi gia' usciti: quello che ha detto uno Short da mezzo
     # minuto non vincola un video da otto.
     cronologia = brain._stesso_formato(brain._stessa_lingua(
-        [brain._normalizza(v) for v in brain.carica_cronologia()]
+        [brain._normalizza(v) for v in brain._memoria_per_la_scelta()]
     ))
     titoli_recenti = [v.get("titolo", "") for v in cronologia[-12:]]
     giochi_recenti = sorted({
@@ -391,7 +391,7 @@ def genera_video_lungo(tema=None):
         "fonte_url": fonte_url,
         "stile": "VIDEO_LUNGO",
     }
-    brain.salva_in_cronologia(risultato)
+    brain.prepara_voce_cronologia(risultato)
     return risultato
 
 

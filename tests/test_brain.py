@@ -227,7 +227,7 @@ class TestDettagliInventati:
         monkeypatch.setattr(brain, "recupera_trend_gaming_online",
                             lambda **k: [dict(self.NOTIZIA)])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         return brain.genera_script_samaritan(), prompt_visti, verifiche
 
     def test_il_prompt_dice_che_della_notizia_si_sa_solo_il_titolo(self):
@@ -301,7 +301,7 @@ class TestDettagliInventati:
         monkeypatch.setattr(brain, "recupera_trend_gaming_online",
                             lambda **k: [dict(self.NOTIZIA), altra])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         risultato = brain.genera_script_samaritan()
         assert "Non usare le notizie [0]" not in prompt_visti[1][1]
         assert "Non usare le notizie [0]" in prompt_visti[2][1]
@@ -328,7 +328,7 @@ class TestDettagliInventati:
         monkeypatch.setattr(brain, "recupera_trend_gaming_online",
                             lambda **k: [dict(self.NOTIZIA, sommario=sommario)])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         brain.genera_script_samaritan()
         assert "Sommario: " + sommario in prompt_visti[0][0]
         assert "SOMMARIO: " + sommario in verifiche[0]
@@ -458,7 +458,7 @@ class TestNotiziaSulGiocoPrecedente:
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [{
             "titolo": "Grand Theft Auto VI: la box da 400 euro",
             "gioco": "Grand Theft Auto VI", "lingua": "it"}])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         try:
             brain.genera_script_samaritan()
         except RuntimeError:
@@ -489,7 +489,7 @@ class TestNotiziaSulGiocoPrecedente:
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [{
             "titolo": "Grand Theft Auto VI: la box da 400 euro",
             "gioco": "Grand Theft Auto VI", "lingua": "it"}])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         try:
             brain.genera_script_samaritan()
         except RuntimeError:
@@ -523,3 +523,115 @@ class TestTestataNellaVerifica:
             "GTA 6, ce ne sono quasi 90", "Everyeye ne ha contate quasi 90.",
             testata="Everyeye.it") == []
         assert "TESTATA: Everyeye.it" in visti[0]
+
+
+# ---------------------------------------------------------------------------
+# La data della riga di cronologia e il controllo sul tema (13 ottobre 2026)
+# ---------------------------------------------------------------------------
+from datetime import datetime as _dt, timezone as _tz
+
+
+# Le righe vere dell'11 e del 13 ottobre 2026.
+PENSIONI_11_OTTOBRE = {
+    "timestamp": 1791702926,      # 11/10/2026 09:15 italiane
+    "titolo": "Pensioni: 64 anni, Quota 41 e minime più alte",
+    "lingua": "it",
+    "gioco": "Pensioni",
+    "fonte": "Pensioni, tutte le ipotesi per la Manovra 2027: uscita a 64 anni, "
+             "Quota 41 e aumenti delle minime. Il nodo delle risorse (Il Messaggero)",
+    "video_id": "edj-Rjgnu7k",
+}
+MANOVRA_13_OTTOBRE = ("Manovra, dalla pensione a 64 anni alla detassazione delle "
+                      "tredicesime: cosa vogliono i partiti. La Corte dei Conti: "
+                      "mancano gli effetti delle misure")
+ARISA_9_OTTOBRE = {
+    "timestamp": 1791542610,
+    "titolo": "Arisa: canzone inviata a De Martino per Sanremo 2027",
+    "gioco": "Arisa",
+    "fonte": 'Arisa: "Sanremo 2027? Ho già mandato la mia canzone, De Martino '
+             'non ha risposto" (Il Sole 24 ORE)',
+    "video_id": "IfX5K3ljf8A",
+}
+
+
+class TestDataDellaRiga:
+    def test_la_riserva_dopo_mezzanotte_scrive_il_giorno_dell_uscita(self, monkeypatch):
+        # Run del 13/10/2026 alle 02:13 UTC che recupera le 18:00 del 12.
+        monkeypatch.setattr(brain.config, "USCITA", 1791820800)
+        monkeypatch.setattr(brain.config, "FUSO_USCITA", "Europe/Rome")
+        assert brain._data_della_uscita() == "2026-10-12"
+
+    def test_senza_uscita_conta_il_giorno_italiano_non_quello_del_runner(self, monkeypatch):
+        class Adesso(_dt):
+            @classmethod
+            def now(cls, tz=None):
+                # 23:30 UTC del 12 = 01:30 italiane del 13.
+                return _dt(2026, 10, 12, 23, 30, tzinfo=_tz.utc).astimezone(tz)
+
+        monkeypatch.setattr(brain, "datetime", Adesso)
+        monkeypatch.setattr(brain.config, "USCITA", None)
+        monkeypatch.setattr(brain.config, "FUSO_USCITA", "Europe/Rome")
+        assert brain._data_della_uscita() == "2026-10-13"
+
+    def test_la_riga_preparata_porta_la_data_dell_uscita(self, monkeypatch):
+        monkeypatch.setattr(brain.config, "USCITA", 1791820800)
+        monkeypatch.setattr(brain.config, "SLOT", "18:00")
+        voce = brain.prepara_voce_cronologia({
+            "titolo": "T", "script": "x", "stile": "s", "query_video": "q"})
+        assert (voce["data"], voce["slot"], voce["uscita"]) == ("2026-10-12", "18:00", 1791820800)
+
+
+class TestStessoTema:
+    def test_pensione_e_pensioni_sono_la_stessa_parola(self):
+        assert brain._radice("pensione") == brain._radice("pensioni")
+
+    def test_stopword_e_anni_non_contano(self):
+        parole = brain._parole_tema("La manovra 2027 delle pensioni a 64 anni")
+        assert parole == {"manovr", "pension", "64"}
+
+    def test_manovra_del_13_e_lo_stesso_tema_delle_pensioni_dell_11(self):
+        assert brain._tema_gia_trattato(MANOVRA_13_OTTOBRE, [PENSIONI_11_OTTOBRE]) \
+            == PENSIONI_11_OTTOBRE["titolo"]
+
+    def test_due_notizie_diverse_su_sanremo_restano_libere(self):
+        titolo = ('Sanremo, De Martino e la sfida del festival: "Ci metto '
+                  'entusiasmo e incoscienza" - Video')
+        assert brain._tema_gia_trattato(titolo, [ARISA_9_OTTOBRE]) == ""
+
+    def test_oltre_la_finestra_il_tema_torna_libero(self):
+        adesso = PENSIONI_11_OTTOBRE["timestamp"] + 5 * 86400
+        recenti = brain._voci_degli_ultimi_giorni([PENSIONI_11_OTTOBRE], adesso=adesso)
+        assert recenti == []
+        adesso = PENSIONI_11_OTTOBRE["timestamp"] + 2 * 86400
+        assert brain._voci_degli_ultimi_giorni([PENSIONI_11_OTTOBRE], adesso=adesso) \
+            == [PENSIONI_11_OTTOBRE]
+
+    def test_la_ricerca_scarta_la_notizia_sullo_stesso_tema(self, monkeypatch):
+        monkeypatch.setattr(brain, "carica_cronologia", lambda: [PENSIONI_11_OTTOBRE])
+        monkeypatch.setattr(brain.time, "time",
+                            lambda: PENSIONI_11_OTTOBRE["timestamp"] + 2 * 86400)
+        monkeypatch.setattr(brain, "_voci_rss", lambda ricerca: [
+            (MANOVRA_13_OTTOBRE, "Corriere della Sera", "https://x/1"),
+            ("Serie A, Inter-Parma: le formazioni ufficiali", "Gazzetta", "https://x/2"),
+        ])
+        notizie = brain.recupera_trend_gaming_online()
+        titoli = [n["titolo"] for n in notizie]
+        assert MANOVRA_13_OTTOBRE not in titoli
+        assert "Serie A, Inter-Parma: le formazioni ufficiali" in titoli
+
+    def test_un_tema_chiesto_a_mano_vince(self, monkeypatch):
+        monkeypatch.setattr(brain, "carica_cronologia", lambda: [PENSIONI_11_OTTOBRE])
+        monkeypatch.setattr(brain.time, "time",
+                            lambda: PENSIONI_11_OTTOBRE["timestamp"] + 2 * 86400)
+        monkeypatch.setattr(brain, "_voci_rss", lambda ricerca: [
+            (MANOVRA_13_OTTOBRE, "Corriere della Sera", "https://x/1")])
+        notizie = brain.recupera_trend_gaming_online(tema="manovra pensioni")
+        assert [n["titolo"] for n in notizie] == [MANOVRA_13_OTTOBRE]
+
+    def test_conta_anche_una_notizia_prenotata(self, monkeypatch):
+        import prenotazione
+        monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
+        prenotazione.apri(dict(PENSIONI_11_OTTOBRE, timestamp=int(brain.time.time())))
+        monkeypatch.setattr(brain, "_voci_rss", lambda ricerca: [
+            (MANOVRA_13_OTTOBRE, "Corriere della Sera", "https://x/1")])
+        assert brain.recupera_trend_gaming_online() == []

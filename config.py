@@ -354,6 +354,9 @@ CONTATTO_PROMO = _get("CONTATTO_PROMO", "scrivimi in DM")
 DIR_PROGETTO = os.path.dirname(os.path.abspath(__file__))
 
 FILE_CRONOLOGIA = os.path.join(DIR_PROGETTO, "cronologia_trend.json")
+# Le notizie scelte da lavorazioni ancora in corso (vedi prenotazione.py). Non
+# e' la cronologia: in cronologia una riga entra solo a video caricato.
+FILE_PRENOTAZIONI = os.path.join(DIR_PROGETTO, "prenotazioni.json")
 FILE_PERFORMANCE = os.path.join(DIR_PROGETTO, "performance.json")
 DIR_TEMP = os.path.join(DIR_PROGETTO, "temp_assets")
 DIR_OUTPUT = os.path.join(DIR_PROGETTO, "output_videos")

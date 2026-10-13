@@ -40,3 +40,13 @@ def _niente_sommari_dalla_rete(monkeypatch):
     """Il sommario delle notizie si cerca su Bing: nei test niente rete."""
     import brain
     monkeypatch.setattr(brain, "_sommario_bing", lambda titolo: "")
+
+
+@pytest.fixture(autouse=True)
+def _prenotazioni_isolate(monkeypatch, tmp_path):
+    """Le prenotazioni di un test stanno nella sua cartella, e nessun test
+    eredita la riga 'in corso' lasciata da un altro."""
+    import config
+    import prenotazione
+    monkeypatch.setattr(config, "FILE_PRENOTAZIONI", str(tmp_path / "prenotazioni.json"))
+    monkeypatch.setattr(prenotazione, "_IN_CORSO", None)

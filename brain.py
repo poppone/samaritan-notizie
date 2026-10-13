@@ -17,6 +17,8 @@ import re
 import html
 import unicodedata
 import xml.etree.ElementTree as ET
+from datetime import datetime
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from urllib.parse import quote
 
 import requests
@@ -25,6 +27,7 @@ from groq import Groq
 import config
 import prenotazione
 import profilo
+from unisci_memoria import unisci_cronologie
 
 client = Groq(api_key=config.GROQ_API_KEY)
 
@@ -382,21 +385,42 @@ def _normalizza(item):
     return {}
 
 
-# La riga di questa lavorazione, (timestamp, titolo): con la prenotazione la
-# cronologia si unisce a quella di altre lavorazioni e l'ultima riga del file
-# puo' non essere la nostra.
-_NOSTRA_VOCE = None
+def _data_della_uscita():
+    """Il giorno, in ora italiana, a cui appartiene il video di questa lavorazione.
+
+    Fino al 13 ottobre 2026 era time.strftime("%Y-%m-%d"), cioe' il giorno in
+    cui la riga veniva scritta, nel fuso del runner di GitHub (UTC). La
+    riserva partita alle 04:13 italiane del 13 ottobre per recuperare
+    l'uscita delle 18:00 del 12 ha scritto "2026-10-13" accanto a slot
+    "18:00": una riga che diceva coperta un'uscita che doveva ancora
+    arrivare. Il giorno giusto e' quello dell'uscita coperta (campo
+    'uscita'), letto nel fuso del canale; senza uscita (prove a mano) e'
+    oggi, sempre nel fuso del canale e non in quello del runner.
+    """
+    try:
+        fuso = ZoneInfo(config.FUSO_USCITA)
+    except (ZoneInfoNotFoundError, ValueError, TypeError):
+        fuso = ZoneInfo("Europe/Rome")
+    if isinstance(config.USCITA, (int, float)):
+        return datetime.fromtimestamp(config.USCITA, fuso).strftime("%Y-%m-%d")
+    return datetime.now(fuso).strftime("%Y-%m-%d")
 
 
-def salva_in_cronologia(dati):
-    """Aggiunge l'impronta del nuovo video alla memoria."""
-    global _NOSTRA_VOCE
-    cronologia = carica_cronologia()
-    adesso = int(time.time())
-    _NOSTRA_VOCE = (adesso, dati["titolo"])
-    cronologia.append({
-        "timestamp": adesso,
-        "data": time.strftime("%Y-%m-%d"),
+def prepara_voce_cronologia(dati):
+    """Prepara la riga di cronologia di questo video e prenota la notizia.
+
+    La riga NON entra ancora in cronologia: ci entra solo a video caricato
+    (registra_video_caricato). Il 12 ottobre 2026 una lavorazione e' caduta
+    con tutti gli script scartati e la memoria e' stata salvata lo stesso:
+    con la riga scritta prima del montaggio, ogni lavorazione morta a meta'
+    lasciava in cronologia un video mai uscito, che contava come gia'
+    trattato per le regole anti-ripetizione. Nel frattempo la notizia resta
+    prenotata (prenotazione.py), cosi' una lavorazione partita insieme a
+    questa non la sceglie.
+    """
+    voce = {
+        "timestamp": int(time.time()),
+        "data": _data_della_uscita(),
         "titolo": dati["titolo"],
         "lingua": (config.LINGUA or "it").lower(),
         # Quale uscita della giornata sta coprendo questo video ('14:00',
@@ -418,29 +442,41 @@ def salva_in_cronologia(dati):
         "fonte": dati.get("fonte", ""),
         "fonte_url": dati.get("fonte_url", ""),
         "video_id": None,          # riempito dopo l'upload
-    })
+    }
+    prenotazione.apri(voce)
+    return voce
+
+
+def registra_video_caricato(video_id):
+    """Scrive in cronologia la riga di questo video, ora che YouTube l'ha.
+
+    E' l'unico punto in cui una riga entra in cronologia. Senza video_id (o
+    senza una riga preparata) non scrive niente: un video che non e' su
+    YouTube non deve risultare uscito, ne' al freno anti-doppioni ne' alla
+    riserva. Ritorna True se ha scritto.
+    """
+    voce = prenotazione.voce_in_corso()
+    if not video_id or not isinstance(voce, dict):
+        return False
+    riga = dict(voce, video_id=video_id)
+    cronologia = carica_cronologia()
+    cronologia.append(riga)
     cronologia = cronologia[-200:]
     with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
         json.dump(cronologia, f, ensure_ascii=False, indent=2)
+    prenotazione.chiudi()
+    return True
 
 
-def aggiorna_ultimo_video_id(video_id):
-    """Collega l'ultimo record di memoria all'ID YouTube, cosi' analyst.py
-    puo' poi incrociare formato <-> retention reale."""
-    cronologia = carica_cronologia()
-    if not cronologia:
-        return
-    voce = cronologia[-1]
-    if _NOSTRA_VOCE:
-        for candidata in reversed(cronologia):
-            if (isinstance(candidata, dict)
-                    and (candidata.get("timestamp"), candidata.get("titolo")) == _NOSTRA_VOCE):
-                voce = candidata
-                break
-    if isinstance(voce, dict):
-        voce["video_id"] = video_id
-        with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
-            json.dump(cronologia, f, ensure_ascii=False, indent=2)
+def _memoria_per_la_scelta():
+    """La cronologia piu' le notizie prenotate da lavorazioni in corso.
+
+    E' quello che conta come "gia' trattato" quando si sceglie la notizia;
+    per tutto il resto (riserva, freno sulle uscite) vale solo la cronologia.
+    """
+    # In ordine di tempo: la prenotazione di una lavorazione partita insieme
+    # e' il video "precedente" per le regole anti-ripetizione.
+    return unisci_cronologie(carica_cronologia(), prenotazione.attive())
 
 
 # ===========================================================================
@@ -584,6 +620,95 @@ def _aggiungi_sommari(notizie):
               f"{len(notizie)}.")
 
 
+# Il controllo sul TEMA, oltre a quello sulla notizia. L'11 ottobre 2026 e'
+# uscito "Pensioni: 64 anni, Quota 41 e minime piu' alte" (dal Messaggero) e il
+# 13 "Manovra: pensione a 64 anni e detassazione tredicesime" (dal Corriere):
+# due testate, due titoli diversi, lo stesso tema. Il confronto sull'impronta
+# della notizia non poteva vederlo, e quello sulle parole dei titoli cercava
+# "pensione" dentro "pensioni" e non la trovava.
+# Qui si confrontano le parole significative (senza stopword, senza accenti,
+# senza la vocale finale, cosi' pensione e pensioni coincidono) del titolo
+# della notizia con titolo, notizia di origine e soggetto dei video degli
+# ultimi GIORNI_STESSO_TEMA giorni: almeno MIN_PAROLE_STESSO_TEMA in comune e
+# il tema e' gia' stato trattato. Tre e non due: "Sanremo" e "De Martino"
+# tornano ogni giorno in notizie diverse (Arisa il 9, la commissione il 10),
+# mentre manovra + pensione + 64 e' un tema solo.
+GIORNI_STESSO_TEMA = 4
+MIN_PAROLE_STESSO_TEMA = 3
+
+# Parole che non dicono di che cosa parla una notizia. Gia' senza accenti e
+# in minuscolo; le parole di tre lettere o meno sono scartate a parte.
+STOPWORD_TEMA = frozenset("""
+    alla alle allo agli dalla dalle dallo dagli della delle dello degli
+    nella nelle nello negli sulla sulle sullo sugli colla anche come cosa
+    cose dopo dove fino oggi ieri domani ecco ancora sono stato stata stati
+    state essere avere hanno aveva questo questa questi queste quello
+    quella quelli quelle tutto tutta tutti tutte molto molti molte poco
+    perche quando mentre senza sopra sotto verso contro oltre circa
+    nuovo nuova nuovi nuove primo prima ultimo ultima ultime ultimi
+    anni anno mese mesi giorno giorni settimana volta volte ogni altro
+    altra altri altre fatto fatti dice detto dopo video news notizie
+    ufficiale arriva arrivano ecco cosa vogliono chi
+    with from that this have about after over into what will your their
+""".split())
+
+
+def _radice(parola):
+    """La parola senza le vocali finali: 'pensioni' e 'pensione' -> 'pension'."""
+    if parola.isdigit() or len(parola) <= 4:
+        return parola
+    return parola.rstrip("aeiou") or parola
+
+
+def _parole_tema(testo):
+    """Le radici delle parole che dicono di che cosa parla un testo.
+
+    I numeri contano ("64" e' mezzo tema delle pensioni), gli anni no: il
+    2027 sta in ogni notizia sulla manovra e su Sanremo.
+    """
+    radici = set()
+    for parola in _impronta_notizia(testo).split():
+        if parola in STOPWORD_TEMA:
+            continue
+        if parola.isdigit():
+            if len(parola) < 2 or (len(parola) == 4 and parola[:2] in ("19", "20")):
+                continue
+        elif len(parola) <= 3:
+            continue
+        radici.add(_radice(parola))
+    return radici
+
+
+def _voci_degli_ultimi_giorni(voci, adesso=None, giorni=None):
+    """Le voci di cronologia scritte negli ultimi `giorni` giorni."""
+    adesso = adesso if adesso is not None else time.time()
+    giorni = GIORNI_STESSO_TEMA if giorni is None else giorni
+    limite = adesso - giorni * 86400
+    return [v for v in voci
+            if isinstance(v, dict) and (v.get("timestamp") or 0) >= limite]
+
+
+def _tema_gia_trattato(titolo, voci_recenti):
+    """Il titolo del video recente con lo stesso tema di questa notizia, o "".
+
+    Di ogni video si guardano insieme il titolo, la notizia da cui e' nato
+    (senza la testata) e il soggetto: il titolo del video e' riscritto dal
+    modello e da solo puo' perdere parole del tema.
+    """
+    nuove = _parole_tema(titolo)
+    if len(nuove) < MIN_PAROLE_STESSO_TEMA:
+        return ""
+    for voce in reversed(voci_recenti or []):
+        testo = " ".join((
+            voce.get("titolo", "") or "",
+            _notizia_di_una_voce(voce.get("fonte", "")),
+            voce.get("gioco", "") or "",
+        ))
+        if len(nuove & _parole_tema(testo)) >= MIN_PAROLE_STESSO_TEMA:
+            return voce.get("titolo", "") or "un video recente"
+    return ""
+
+
 def recupera_trend_gaming_online(max_notizie=8, tema=None, gioco_da_evitare=""):
     """Scarica notizie gaming fresche e scarta quelle gia' sfruttate.
 
@@ -611,8 +736,11 @@ def recupera_trend_gaming_online(max_notizie=8, tema=None, gioco_da_evitare=""):
         print(f"[Samaritan Search] Ricerche del pubblico non leggibili ({e}).")
         cercate = frozenset()
 
-    cronologia = carica_cronologia()
+    cronologia = _memoria_per_la_scelta()
     voci = _stessa_lingua([_normalizza(i) for i in cronologia])
+    # Lo stesso tema (non la stessa notizia) negli ultimi giorni: vedi
+    # _tema_gia_trattato.
+    voci_tema = _voci_degli_ultimi_giorni(voci)
     # Solo gli ultimi titoli: vedi MEMORIA_PAROLE_TITOLI.
     titoli_passati = " ".join(
         v.get("titolo", "") for v in voci[-MEMORIA_PAROLE_TITOLI:]
@@ -631,6 +759,7 @@ def recupera_trend_gaming_online(max_notizie=8, tema=None, gioco_da_evitare=""):
     # testate diverse la scrivono con parole appena diverse.
     trovate = {}
     scartate_per_tema = 0
+    scartate_stesso_tema = 0
     tema = (tema or "").strip()
     ricerche = ((tema,) if tema else ()) + tuple(_lingua()["ricerche"])
     for ricerca in ricerche:
@@ -651,6 +780,17 @@ def recupera_trend_gaming_online(max_notizie=8, tema=None, gioco_da_evitare=""):
             # Questa notizia e' gia' diventata un video: saltala.
             if impronta in notizie_passate:
                 continue
+
+            # Stesso tema di un video degli ultimi giorni, raccontato da
+            # un'altra testata o con un altro taglio. Un tema chiesto a mano
+            # vince, come per il gioco del video precedente.
+            if not (tema and ricerca == tema):
+                simile = _tema_gia_trattato(titolo, voci_tema)
+                if simile:
+                    scartate_stesso_tema += 1
+                    print(f"[Samaritan Search] Scarto '{titolo}': stesso tema "
+                          f"di '{simile}'.")
+                    continue
 
             # Un tema che il canale non tratta (per un telegiornale: morti,
             # crimini, tragedie). Si scarta qui e non dopo: la notizia non
@@ -707,6 +847,10 @@ def recupera_trend_gaming_online(max_notizie=8, tema=None, gioco_da_evitare=""):
     if scartate_per_tema:
         print(f"[Samaritan Search] Scartate {scartate_per_tema} notizie su "
               f"temi che il canale non tratta (profilo, 'temi_esclusi').")
+
+    if scartate_stesso_tema:
+        print(f"[Samaritan Search] Scartate {scartate_stesso_tema} notizie su "
+              f"temi gia' trattati negli ultimi {GIORNI_STESSO_TEMA} giorni.")
 
     if notizie:
         print(f"[Samaritan Search] {len(notizie)} notizie fresche non ancora "
@@ -1765,7 +1909,7 @@ def genera_script_samaritan(tema=None):
     # prenotazione.py.
     prenotazione.riallinea_cronologia()
     cronologia = _stesso_formato(
-        _stessa_lingua([_normalizza(i) for i in carica_cronologia()])
+        _stessa_lingua([_normalizza(i) for i in _memoria_per_la_scelta()])
     )
     # Il gioco si blocca solo sull'ultimo video, non su tutta la finestra:
     # vedi _doppione_recente per il perche'.
@@ -2010,7 +2154,7 @@ def genera_script_samaritan(tema=None):
                     "fonte_url": fonte_url,
                     "stile": formato,
                 }
-                salva_in_cronologia(risultato)
+                prepara_voce_cronologia(risultato)
                 prenotazione.prenota(titolo)
                 print(f"[Samaritan Brain] OK - '{titolo}' "
                       f"({len(script.split())} parole)")

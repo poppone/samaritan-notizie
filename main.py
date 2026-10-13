@@ -22,7 +22,7 @@ import traceback
 import config
 from brain import (
     genera_script_samaritan,
-    aggiorna_ultimo_video_id,
+    registra_video_caricato,
     carica_cronologia,
     costruisci_descrizione,
     costruisci_tag,
@@ -208,8 +208,10 @@ def esegui_pipeline_samaritan(tema=None):
     )
 
     if video_id:
-        # Collega il video alla memoria: senza questo il feedback loop e' cieco
-        aggiorna_ultimo_video_id(video_id)
+        # Solo adesso il video entra in cronologia, con il suo identificativo:
+        # senza questo il feedback loop e' cieco, e una lavorazione caduta
+        # prima di qui non lascia in memoria un video che non esiste.
+        registra_video_caricato(video_id)
 
     notifier.notifica_pubblicazione(dati, video_id, video_path)
 

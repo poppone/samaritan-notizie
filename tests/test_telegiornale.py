@@ -194,7 +194,7 @@ class TestPrompt:
         monkeypatch.setattr(brain, "client", FintoClient())
         monkeypatch.setattr(brain, "recupera_trend_gaming_online", lambda **k: self.NOTIZIE)
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
-        monkeypatch.setattr(brain, "salva_in_cronologia", lambda r: None)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", lambda r: None)
         with pytest.raises(RuntimeError):
             brain.genera_script_samaritan()
         assert any("un telegiornale racconta solo quelle" in v for v in visti)

@@ -21,6 +21,7 @@ toccano, perche' sono leggibilita' e non gusto:
 import json
 
 import config
+import prenotazione
 
 # Tutte le vesti, nell'ordine in cui girano.
 #
@@ -149,19 +150,14 @@ def scegli_veste():
 
 
 def segna_veste(nome):
-    """Annota sulla cronologia la veste con cui il video e' stato montato.
+    """Annota la veste con cui il video e' stato montato sulla sua riga.
 
     Si chiama solo a rendering riuscito: un record che dice 'fuoco' su un video
     mai uscito sposterebbe il giro a vuoto, e la veste saltata non tornerebbe.
-    Il workflow committa gia' questo file, quindi il prossimo giro lo ritrova.
+    La riga e' quella della lavorazione in corso (prenotazione.py), che entra
+    in cronologia solo a video caricato; senza riga in corso non si annota
+    niente: scrivere sull'ultima riga di cronologia vorrebbe dire cambiare la
+    veste di un video gia' uscito.
     """
-    cronologia = _carica_cronologia()
-    if not cronologia or not isinstance(cronologia[-1], dict):
-        return
-    cronologia[-1]["veste"] = nome
-    try:
-        with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
-            json.dump(cronologia, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        print(f"[Warning Veste] Veste non annotata ({e}): "
-              f"il prossimo video potrebbe ripetere questa.")
+    if not prenotazione.annota("veste", nome):
+        print("[Warning Veste] Nessun video in corso: veste non annotata.")

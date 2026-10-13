@@ -344,7 +344,7 @@ class TestCanaleDiCucina:
                             lambda **k: [dict(NOTIZIA)])
         monkeypatch.setattr(brain, "carica_cronologia", lambda: [])
         salvati = []
-        monkeypatch.setattr(brain, "salva_in_cronologia", salvati.append)
+        monkeypatch.setattr(brain, "prepara_voce_cronologia", salvati.append)
         dati = brain.genera_script_samaritan()
         assert dati["query_video"] == "pasta carbonara cooking"
         assert dati["gioco"] == "Carbonara"
