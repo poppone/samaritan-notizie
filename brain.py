@@ -468,6 +468,27 @@ def registra_video_caricato(video_id):
     return True
 
 
+def aggiungi_alla_voce(video_id, **campi):
+    """Aggiunge campi alla riga di cronologia di un video gia' caricato.
+
+    La riga la trova per video_id, che dopo registra_video_caricato e'
+    l'unica chiave sicura: un'altra lavorazione puo' aver scritto la sua nel
+    frattempo, quindi 'l'ultima riga' non basta. Serve a copia_pubblica.py,
+    che dopo l'upload aggiunge l'indirizzo pubblico del file e la didascalia
+    per TikTok. Ritorna True se ha scritto.
+    """
+    if not video_id or not campi:
+        return False
+    cronologia = carica_cronologia()
+    for voce in reversed(cronologia):
+        if isinstance(voce, dict) and voce.get("video_id") == video_id:
+            voce.update(campi)
+            with open(config.FILE_CRONOLOGIA, "w", encoding="utf-8") as f:
+                json.dump(cronologia, f, ensure_ascii=False, indent=2)
+            return True
+    return False
+
+
 def _memoria_per_la_scelta():
     """La cronologia piu' le notizie prenotate da lavorazioni in corso.
 
@@ -1406,6 +1427,26 @@ def costruisci_descrizione(dati, materiale=None, capitoli=""):
 # inglese e '#perte' la' non lo cerca nessuno.
 HASHTAG_PER_TE = {"it": "#perte", "en": "#fyp"}
 
+# Le due righe fisse della didascalia TikTok, lingua per lingua: da dove
+# viene la notizia e che il video e' fatto con l'AI (la stessa dichiarazione
+# della descrizione di YouTube, in breve).
+RIGHE_TIKTOK = {
+    "it": {"fonte": "Fonte: {}",
+           "ai": "Video realizzato con l'AI: voce sintetica e montaggio automatico."},
+    "en": {"fonte": "Source: {}",
+           "ai": "Video made with AI: synthetic voice and automated editing."},
+}
+
+
+def _testata(fonte):
+    """'Titolo della notizia (Testata)' -> 'Testata'. Senza parentesi, tutto."""
+    testo = (fonte or "").strip()
+    if testo.endswith(")") and "(" in testo:
+        testata = testo[testo.rfind("(") + 1:-1].strip()
+        if testata:
+            return testata
+    return testo
+
 
 def costruisci_didascalia_tiktok(dati, massimo_hashtag=4):
     """La didascalia pronta da incollare su TikTok.
@@ -1413,8 +1454,9 @@ def costruisci_didascalia_tiktok(dati, massimo_hashtag=4):
     Non e' la descrizione di YouTube e non deve diventarlo: li' servono la
     fonte, il credito al materiale e il link al canale, qui no. Su TikTok i
     link non sono cliccabili e le prime due righe sono le uniche che si
-    leggono prima di 'altro', quindi resta il titolo, un rigo di contenuto e
-    gli hashtag.
+    leggono prima di 'altro', quindi resta il titolo, un rigo di contenuto,
+    la testata da cui viene la notizia, la nota che il video e' fatto con
+    l'AI e gli hashtag.
     """
     titolo = (dati.get("titolo") or "").strip()
 
@@ -1431,7 +1473,16 @@ def costruisci_didascalia_tiktok(dati, massimo_hashtag=4):
     if len(hashtag) < massimo_hashtag and per_te not in hashtag:
         hashtag.append(per_te)
 
-    parti = [p for p in (titolo, prima_riga, " ".join(hashtag)) if p]
+    # La fonte e' la testata della notizia scelta, mai inventata: se il
+    # video non ne ha una, la riga non c'e'. Il link no, su TikTok non si
+    # clicca.
+    lingua = (config.LINGUA or "it").lower()
+    righe = RIGHE_TIKTOK.get(lingua, RIGHE_TIKTOK["it"])
+    testata = _testata(dati.get("fonte"))
+    riga_fonte = righe["fonte"].format(testata) if testata else ""
+
+    parti = [p for p in (titolo, prima_riga, riga_fonte, righe["ai"],
+                         " ".join(hashtag)) if p]
     return "\n\n".join(parti)
 
 
