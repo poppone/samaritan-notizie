@@ -1,8 +1,8 @@
 {
-  "aggiornato": "2026-10-13",
+  "aggiornato": "2026-10-14",
   "video": {
     "m9P_aSYgovE": {
-      "views": 1702,
+      "views": 1703,
       "averageViewPercentage": 65.18,
       "averageViewDuration": 15,
       "likes": 17,
@@ -26,34 +26,50 @@
       "subscribersGained": 0
     },
     "qZ4XruA-k0Y": {
-      "views": 1181,
-      "averageViewPercentage": 79.66,
+      "views": 1184,
+      "averageViewPercentage": 79.56,
       "averageViewDuration": 19,
       "likes": 5,
       "comments": 0,
       "subscribersGained": 1
     },
+    "edj-Rjgnu7k": {
+      "views": 1128,
+      "averageViewPercentage": 60.84,
+      "averageViewDuration": 15,
+      "likes": 8,
+      "comments": 0,
+      "subscribersGained": 4
+    },
+    "-uStdIfm10c": {
+      "views": 1062,
+      "averageViewPercentage": 92.44,
+      "averageViewDuration": 18,
+      "likes": 6,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "IfX5K3ljf8A": {
-      "views": 1020,
-      "averageViewPercentage": 60.27,
+      "views": 1039,
+      "averageViewPercentage": 60.45,
       "averageViewDuration": 14,
       "likes": 7,
       "comments": 0,
       "subscribersGained": 2
+    },
+    "myb9Zy5qO-U": {
+      "views": 1013,
+      "averageViewPercentage": 54.69,
+      "averageViewDuration": 10,
+      "likes": 2,
+      "comments": 0,
+      "subscribersGained": 0
     },
     "fKVFqzv9z-I": {
       "views": 990,
       "averageViewPercentage": 44.51,
       "averageViewDuration": 9,
       "likes": 3,
-      "comments": 0,
-      "subscribersGained": 1
-    },
-    "-uStdIfm10c": {
-      "views": 985,
-      "averageViewPercentage": 94.57,
-      "averageViewDuration": 18,
-      "likes": 5,
       "comments": 0,
       "subscribersGained": 1
     },
@@ -66,16 +82,16 @@
       "subscribersGained": 0
     },
     "A-5woI6TTF8": {
-      "views": 774,
-      "averageViewPercentage": 50.39,
-      "averageViewDuration": 11,
-      "likes": 8,
+      "views": 961,
+      "averageViewPercentage": 48.2,
+      "averageViewDuration": 10,
+      "likes": 10,
       "comments": 0,
-      "subscribersGained": 1
+      "subscribersGained": 3
     },
     "u9F9RG0_Hzg": {
-      "views": 702,
-      "averageViewPercentage": 52.44,
+      "views": 703,
+      "averageViewPercentage": 52.52,
       "averageViewDuration": 14,
       "likes": 3,
       "comments": 0,
@@ -90,8 +106,8 @@
       "subscribersGained": 0
     },
     "CNo2b8WAFcc": {
-      "views": 599,
-      "averageViewPercentage": 40.27,
+      "views": 612,
+      "averageViewPercentage": 40.78,
       "averageViewDuration": 10,
       "likes": 0,
       "comments": 1,
@@ -106,7 +122,7 @@
       "subscribersGained": 0
     },
     "nVop-vDFI_A": {
-      "views": 458,
+      "views": 459,
       "averageViewPercentage": 45.9,
       "averageViewDuration": 11,
       "likes": 7,
@@ -114,7 +130,7 @@
       "subscribersGained": 1
     },
     "pSgpYqlbihA": {
-      "views": 285,
+      "views": 286,
       "averageViewPercentage": 50.22,
       "averageViewDuration": 10,
       "likes": 1,
@@ -122,7 +138,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 179,
+      "views": 180,
       "averageViewPercentage": 287.88,
       "averageViewDuration": 86,
       "likes": 2,
@@ -130,7 +146,7 @@
       "subscribersGained": 0
     },
     "NJ2z0tv8-4k": {
-      "views": 18,
+      "views": 20,
       "averageViewPercentage": 92.15,
       "averageViewDuration": 23,
       "likes": 0,
@@ -149,7 +165,7 @@
   "ricerche": [
     {
       "termine": "arisa",
-      "views": 19
+      "views": 20
     },
     {
       "termine": "legge elettorale",
@@ -172,6 +188,10 @@
       "views": 9
     },
     {
+      "termine": "pensioni ultime notizie",
+      "views": 7
+    },
+    {
       "termine": "parma calcio",
       "views": 5
     },
@@ -192,6 +212,10 @@
       "views": 3
     },
     {
+      "termine": "uzak sehir 68",
+      "views": 3
+    },
+    {
       "termine": "cookies family",
       "views": 2
     },
@@ -208,11 +232,23 @@
       "views": 2
     },
     {
+      "termine": "putellas",
+      "views": 2
+    },
+    {
       "termine": "riforma legge elettorale",
       "views": 2
     },
     {
+      "termine": "sanremo giovani",
+      "views": 2
+    },
+    {
       "termine": "stefano di martino",
+      "views": 2
+    },
+    {
+      "termine": "trend",
       "views": 2
     },
     {
@@ -223,23 +259,23 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 13145
+      "views": 15507
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 331
+      "views": 391
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 28
+      "views": 45
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 22
+      "views": 29
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 9
+      "views": 10
     },
     {
       "sorgente": "HASHTAGS",
