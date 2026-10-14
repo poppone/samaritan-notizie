@@ -1,34 +1,18 @@
 [
   {
-    "timestamp": 1791877521,
-    "data": "2026-10-13",
-    "titolo": "Serie A, il Torino si sblocca in casa, l'Udinese battuta 2-1",
+    "timestamp": 1791958243,
+    "data": "2026-10-14",
+    "titolo": "Autonomia differenziata: via libera del Governo",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1791892800,
+    "uscita": 1791979200,
     "formato": "short",
-    "estratto_script": "Il Torino si sblocca in casa. Lo riporta ANSA. Ignazio Abate porta i granata a 2-1 contro ",
+    "estratto_script": "Il Consiglio dei ministri ha approvato i disegni di legge per l’autonomia differenziata. S",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Serie A",
-    "query_video": "soccer match stadium",
-    "fonte": "Serie A, il Torino si sblocca in casa, l'Udinese battuta 2-1 (ANSA)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPbEZvWFpoVDBTQkhvUlIxdTNRNEl3X2tJWHVfS01UMlJxUnZPWXdJQ0lFSzVBYmhkUnBfUVhtWkFlT2ZjT2Ywc3dkRlctSGJOaWNyMzl5WWZTLUJONjRFYVc5SE1uLVdJWEs0WnVjS0tRbEU4NFZCWHhiRXlFVlFNSXY4WWVBWFp4SnJaQkVET2tZcHc1empCWEEwYnAtbDBDSm9UX3ZGZjZjTjloUDZaUURUVlpHYzVqLUM4T2hZUjN3WnNteEdkOFFjaGFOb3U1SUJtWEtBNWpVTGtPTDZPVWQ0VGlMZVlBWm9XMQ?oc=5",
-    "video_id": null
-  },
-  {
-    "timestamp": 1791888298,
-    "data": "2026-10-13",
-    "titolo": "Manovra 2027: Irpef al 33% e flat tax 5%",
-    "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1791907200,
-    "formato": "short",
-    "estratto_script": "L'Irpef scende al 33% fino a 60 mila euro. La flat tax al 5% si applica agli aumenti di st",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Manovra 2027",
+    "gioco": "Governo",
     "query_video": "government building interior",
-    "fonte": "Manovra 2027, dall’Irpef al 33% alla flat tax per i giovani: cosa potrebbe cambiare per stipendi, affitti e tasse (StartupItalia)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE41V3ZPVXpyMGtlNWFyZ3JrWXk4V1FvdFlqZHlTc2dMX0lQNEw5ZVlIWjZ1bndjeUNNcG9ZeTl6NFpjb2c2UzJwd01qY2MtMWJGMXFjVHlqQ1J2MG5Udm1ZOXVMRXMzUkFjejZGT2NnM0YxbndjUHRmcQ?oc=5",
+    "fonte": "Governo, via libera all'autonomia differenziata. Salvini: \"Ora ultimo passo in Parlamento\" (Adnkronos)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOUC1CeVJsdjF0bXFzdEQwLVYtQjBiRUYxM2JWMWUxLTlXS1BYUnlZOVk2cHhtTW5UZ1F0d3FLX0JYalBsUnZMOHNvWGRjVE5jZDVJZUQyS0Y1aUJoaFI5U3FIWlFKU0pQZW9FdGkxZ2hkUXZSaXFZYWJIS2ltY2tzaWFnNlEtQ1hWajB3dFp3Q3R2dw?oc=5",
     "video_id": null
   }
 ]
