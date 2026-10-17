@@ -10,7 +10,7 @@
       "subscribersGained": 3
     },
     "edj-Rjgnu7k": {
-      "views": 1552,
+      "views": 1551,
       "averageViewPercentage": 63.34000000000001,
       "averageViewDuration": 16,
       "likes": 10,
@@ -34,15 +34,15 @@
       "subscribersGained": 0
     },
     "Uf7HNy9-5FI": {
-      "views": 1198,
-      "averageViewPercentage": 47.82,
+      "views": 1202,
+      "averageViewPercentage": 47.94,
       "averageViewDuration": 10,
       "likes": 8,
       "comments": 0,
       "subscribersGained": 1
     },
     "qZ4XruA-k0Y": {
-      "views": 1187,
+      "views": 1191,
       "averageViewPercentage": 79.45,
       "averageViewDuration": 19,
       "likes": 5,
@@ -50,8 +50,8 @@
       "subscribersGained": 1
     },
     "1Pdez4fE-hM": {
-      "views": 1063,
-      "averageViewPercentage": 42.55,
+      "views": 1069,
+      "averageViewPercentage": 42.54,
       "averageViewDuration": 11,
       "likes": 6,
       "comments": 0,
@@ -66,8 +66,8 @@
       "subscribersGained": 1
     },
     "IfX5K3ljf8A": {
-      "views": 1041,
-      "averageViewPercentage": 60.5,
+      "views": 1043,
+      "averageViewPercentage": 60.61,
       "averageViewDuration": 14,
       "likes": 7,
       "comments": 0,
@@ -75,7 +75,7 @@
     },
     "myb9Zy5qO-U": {
       "views": 1022,
-      "averageViewPercentage": 54.669999999999995,
+      "averageViewPercentage": 54.75,
       "averageViewDuration": 10,
       "likes": 2,
       "comments": 0,
@@ -106,17 +106,17 @@
       "subscribersGained": 0
     },
     "WPZDZj4fOAw": {
-      "views": 957,
-      "averageViewPercentage": 62.83,
+      "views": 960,
+      "averageViewPercentage": 62.75999999999999,
       "averageViewDuration": 18,
       "likes": 6,
       "comments": 0,
       "subscribersGained": 3
     },
     "-i6Z434jcUA": {
-      "views": 868,
-      "averageViewPercentage": 65.86,
-      "averageViewDuration": 15,
+      "views": 917,
+      "averageViewPercentage": 66.81,
+      "averageViewDuration": 16,
       "likes": 2,
       "comments": 0,
       "subscribersGained": 1
@@ -138,8 +138,8 @@
       "subscribersGained": 0
     },
     "CNo2b8WAFcc": {
-      "views": 617,
-      "averageViewPercentage": 41.25,
+      "views": 620,
+      "averageViewPercentage": 41.24,
       "averageViewDuration": 10,
       "likes": 0,
       "comments": 1,
@@ -170,7 +170,7 @@
       "subscribersGained": 0
     },
     "rPbJNLpzBnw": {
-      "views": 191,
+      "views": 194,
       "averageViewPercentage": 62.23,
       "averageViewDuration": 18,
       "likes": 3,
@@ -178,7 +178,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 190,
+      "views": 193,
       "averageViewPercentage": 277.2,
       "averageViewDuration": 83,
       "likes": 2,
@@ -186,7 +186,7 @@
       "subscribersGained": 0
     },
     "23KhHX68SlM": {
-      "views": 138,
+      "views": 140,
       "averageViewPercentage": 42.4,
       "averageViewDuration": 9,
       "likes": 1,
@@ -194,7 +194,7 @@
       "subscribersGained": 0
     },
     "NJ2z0tv8-4k": {
-      "views": 21,
+      "views": 23,
       "averageViewPercentage": 92.15,
       "averageViewDuration": 23,
       "likes": 0,
@@ -232,16 +232,20 @@
       "views": 12
     },
     {
-      "termine": "pensioni ultime notizie",
-      "views": 11
+      "termine": "shari",
+      "views": 12
     },
     {
-      "termine": "shari",
+      "termine": "pensioni ultime notizie",
       "views": 11
     },
     {
       "termine": "inter",
       "views": 10
+    },
+    {
+      "termine": "amici 26",
+      "views": 9
     },
     {
       "termine": "shari amici",
@@ -254,10 +258,6 @@
     {
       "termine": "torino udinese",
       "views": 7
-    },
-    {
-      "termine": "amici 26",
-      "views": 6
     },
     {
       "termine": "pensione anticipata 64 anni",
@@ -315,11 +315,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 20157
+      "views": 20190
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 613
+      "views": 659
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -327,11 +327,11 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 33
+      "views": 34
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 14
+      "views": 16
     },
     {
       "sorgente": "EXT_URL",
