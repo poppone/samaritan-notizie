@@ -2,9 +2,9 @@ name: Test
 
 # Samaritan pubblica da solo, di notte, senza nessuno a guardare: la rete di
 # sicurezza sulla logica deve girare a ogni push e a ogni pull request.
+# Solo sulle pull request (e a mano): tutto il codice entra in main da una PR,
+# e girare a ogni push, compresi quelli del bot, costava minuti di Actions.
 on:
-  push:
-    branches: ['**']
   pull_request:
   workflow_dispatch:
 
