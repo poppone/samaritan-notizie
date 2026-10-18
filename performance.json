@@ -10,8 +10,8 @@
       "subscribersGained": 3
     },
     "edj-Rjgnu7k": {
-      "views": 1551,
-      "averageViewPercentage": 63.34000000000001,
+      "views": 1552,
+      "averageViewPercentage": 63.35000000000001,
       "averageViewDuration": 16,
       "likes": 10,
       "comments": 0,
@@ -25,6 +25,14 @@
       "comments": 0,
       "subscribersGained": 3
     },
+    "Uf7HNy9-5FI": {
+      "views": 1206,
+      "averageViewPercentage": 47.94,
+      "averageViewDuration": 10,
+      "likes": 8,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "xzdmpFsFx7A": {
       "views": 1205,
       "averageViewPercentage": 43.34,
@@ -33,16 +41,8 @@
       "comments": 0,
       "subscribersGained": 0
     },
-    "Uf7HNy9-5FI": {
-      "views": 1202,
-      "averageViewPercentage": 47.94,
-      "averageViewDuration": 10,
-      "likes": 8,
-      "comments": 0,
-      "subscribersGained": 1
-    },
     "qZ4XruA-k0Y": {
-      "views": 1191,
+      "views": 1193,
       "averageViewPercentage": 79.45,
       "averageViewDuration": 19,
       "likes": 5,
@@ -50,7 +50,7 @@
       "subscribersGained": 1
     },
     "1Pdez4fE-hM": {
-      "views": 1069,
+      "views": 1072,
       "averageViewPercentage": 42.54,
       "averageViewDuration": 11,
       "likes": 6,
@@ -74,7 +74,7 @@
       "subscribersGained": 2
     },
     "myb9Zy5qO-U": {
-      "views": 1022,
+      "views": 1023,
       "averageViewPercentage": 54.75,
       "averageViewDuration": 10,
       "likes": 2,
@@ -106,19 +106,19 @@
       "subscribersGained": 0
     },
     "WPZDZj4fOAw": {
-      "views": 960,
-      "averageViewPercentage": 62.75999999999999,
+      "views": 964,
+      "averageViewPercentage": 62.91,
       "averageViewDuration": 18,
       "likes": 6,
       "comments": 0,
       "subscribersGained": 3
     },
     "-i6Z434jcUA": {
-      "views": 917,
-      "averageViewPercentage": 66.81,
+      "views": 958,
+      "averageViewPercentage": 66.68,
       "averageViewDuration": 16,
       "likes": 2,
-      "comments": 0,
+      "comments": 1,
       "subscribersGained": 1
     },
     "u9F9RG0_Hzg": {
@@ -272,6 +272,10 @@
       "views": 5
     },
     {
+      "termine": "torino udinese 2-1",
+      "views": 5
+    },
+    {
       "termine": "amici 2026",
       "views": 4
     },
@@ -306,20 +310,16 @@
     {
       "termine": "uzak sehir 68",
       "views": 3
-    },
-    {
-      "termine": "amadeus",
-      "views": 2
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 20190
+      "views": 20220
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 659
+      "views": 680
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -331,18 +331,18 @@
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 16
+      "views": 17
     },
     {
       "sorgente": "EXT_URL",
       "views": 6
     },
     {
-      "sorgente": "HASHTAGS",
-      "views": 3
+      "sorgente": "SOUND_PAGE",
+      "views": 4
     },
     {
-      "sorgente": "SOUND_PAGE",
+      "sorgente": "HASHTAGS",
       "views": 3
     },
     {
