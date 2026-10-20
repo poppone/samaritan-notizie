@@ -1,26 +1,36 @@
 {
-  "nome_canale": "Notizie in 60 secondi",
-  "handle": "@Notiziein60secondioff",
-  "argomento": "di attualita'",
+  "nome_canale": "Motori in 60 secondi",
+  "handle": "@Motoriin60secondi",
+  "argomento": "di motori",
+  "descrizione_argomento": "motori",
+  "descrizione_canale": "di notizie su auto e moto in 60 secondi",
   "soggetto": "tema",
   "soggetto_plurale": "temi",
   "genere": "m",
+  "pubblico": "chi ama le auto e vuole sapere cosa cambia per chi guida",
   "telegiornale": true,
   "materiale": "stock",
   "ricerche": {
     "it": [
-      "ultime notizie Italia",
-      "governo OR Parlamento OR manovra OR elezioni",
-      "economia OR bollette OR pensioni OR tasse",
-      "tecnologia OR intelligenza artificiale",
-      "cinema OR musica OR Sanremo",
-      "Serie A OR Sinner OR Formula 1"
-    ],
-    "en": [
-      "top news",
-      "politics OR government OR election",
-      "economy OR inflation OR stock market",
-      "technology OR artificial intelligence"
+      "nuove auto OR anteprima auto OR lancio auto",
+      "auto elettriche OR ibride OR colonnine",
+      "prezzi auto OR incentivi auto OR listino",
+      "benzina OR diesel OR prezzo carburante",
+      "codice della strada OR multe OR bollo auto",
+      "Formula 1 OR MotoGP OR Ferrari OR Ducati"
+    ]
+  },
+  "parole_calde": {
+    "it": [
+      "ufficiale",
+      "prezzo",
+      "debutta",
+      "nuova",
+      "record",
+      "incentivi",
+      "da oggi",
+      "cambia",
+      "arriva"
     ]
   },
   "uscite": [
@@ -34,28 +44,43 @@
     }
   ],
   "fuso": "Europe/Rome",
-  "categoria_youtube": "25",
+  "categoria_youtube": "2",
   "esempi_soggetto": [
-    "Banca d'Italia",
-    "Apple",
-    "Serie A"
+    "Fiat Grande Panda",
+    "Ferrari",
+    "incentivi auto"
   ],
   "query_stock_riserva": [
-    "city skyline aerial",
-    "newspaper printing press",
-    "stock market screen",
-    "world map globe"
+    "car driving highway",
+    "car dashboard night",
+    "electric car charging",
+    "race track aerial",
+    "car showroom"
   ],
   "nomi_grossi": [
-    "apple",
-    "google",
-    "sinner",
-    "serie a",
-    "sanremo",
-    "inps",
-    "bce",
-    "governo",
-    "manovra"
+    "ferrari",
+    "fiat",
+    "tesla",
+    "alfa romeo",
+    "lamborghini",
+    "ducati",
+    "formula 1",
+    "motogp",
+    "stellantis",
+    "bmw",
+    "volkswagen"
   ],
-  "hashtag_canale": "notizie"
+  "tag_fissi": [
+    "motori",
+    "auto",
+    "notizie auto",
+    "news auto",
+    "shorts ita"
+  ],
+  "tag_fissi_lungo": [
+    "motori",
+    "auto",
+    "notizie auto"
+  ],
+  "hashtag_canale": "motori"
 }
