@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-20",
+  "aggiornato": "2026-10-21",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -10,8 +10,8 @@
       "subscribersGained": 3
     },
     "edj-Rjgnu7k": {
-      "views": 1551,
-      "averageViewPercentage": 63.35000000000001,
+      "views": 1555,
+      "averageViewPercentage": 63.35999999999999,
       "averageViewDuration": 16,
       "likes": 10,
       "comments": 0,
@@ -50,8 +50,8 @@
       "subscribersGained": 1
     },
     "1Pdez4fE-hM": {
-      "views": 1075,
-      "averageViewPercentage": 42.61,
+      "views": 1089,
+      "averageViewPercentage": 42.84,
       "averageViewDuration": 11,
       "likes": 6,
       "comments": 0,
@@ -82,8 +82,8 @@
       "subscribersGained": 0
     },
     "oBMQ2t0aNGk": {
-      "views": 1007,
-      "averageViewPercentage": 139.92,
+      "views": 1012,
+      "averageViewPercentage": 139.87,
       "averageViewDuration": 32,
       "likes": 1,
       "comments": 0,
@@ -105,6 +105,14 @@
       "comments": 0,
       "subscribersGained": 3
     },
+    "-i6Z434jcUA": {
+      "views": 972,
+      "averageViewPercentage": 66.71,
+      "averageViewDuration": 16,
+      "likes": 2,
+      "comments": 1,
+      "subscribersGained": 1
+    },
     "P3yOUIGm0UU": {
       "views": 970,
       "averageViewPercentage": 68.28,
@@ -113,24 +121,16 @@
       "comments": 0,
       "subscribersGained": 0
     },
-    "-i6Z434jcUA": {
-      "views": 968,
-      "averageViewPercentage": 66.69,
-      "averageViewDuration": 16,
-      "likes": 2,
-      "comments": 1,
-      "subscribersGained": 1
-    },
     "WPZDZj4fOAw": {
-      "views": 964,
-      "averageViewPercentage": 62.91,
+      "views": 969,
+      "averageViewPercentage": 63.22,
       "averageViewDuration": 18,
-      "likes": 6,
+      "likes": 7,
       "comments": 0,
-      "subscribersGained": 3
+      "subscribersGained": 4
     },
     "u9F9RG0_Hzg": {
-      "views": 701,
+      "views": 702,
       "averageViewPercentage": 52.52,
       "averageViewDuration": 14,
       "likes": 3,
@@ -146,7 +146,7 @@
       "subscribersGained": 0
     },
     "CNo2b8WAFcc": {
-      "views": 620,
+      "views": 621,
       "averageViewPercentage": 41.24,
       "averageViewDuration": 10,
       "likes": 0,
@@ -186,7 +186,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 193,
+      "views": 194,
       "averageViewPercentage": 277.2,
       "averageViewDuration": 83,
       "likes": 2,
@@ -202,7 +202,7 @@
       "subscribersGained": 0
     },
     "NJ2z0tv8-4k": {
-      "views": 23,
+      "views": 25,
       "averageViewPercentage": 92.15,
       "averageViewDuration": 23,
       "likes": 0,
@@ -236,11 +236,15 @@
       "views": 17
     },
     {
-      "termine": "inter news",
-      "views": 12
+      "termine": "shari",
+      "views": 15
     },
     {
-      "termine": "shari",
+      "termine": "shari amici",
+      "views": 14
+    },
+    {
+      "termine": "inter news",
       "views": 12
     },
     {
@@ -256,16 +260,12 @@
       "views": 9
     },
     {
-      "termine": "shari amici",
-      "views": 9
-    },
-    {
       "termine": "stefano de martino",
       "views": 9
     },
     {
       "termine": "manovra 2027",
-      "views": 7
+      "views": 8
     },
     {
       "termine": "torino udinese",
@@ -296,10 +296,6 @@
       "views": 4
     },
     {
-      "termine": "torino udinese 2-1",
-      "views": 4
-    },
-    {
       "termine": "cap",
       "views": 3
     },
@@ -318,16 +314,20 @@
     {
       "termine": "torino - udinese",
       "views": 3
+    },
+    {
+      "termine": "uzak sehir 68",
+      "views": 3
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 21219
+      "views": 21225
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 701
+      "views": 726
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -343,7 +343,7 @@
     },
     {
       "sorgente": "EXT_URL",
-      "views": 8
+      "views": 10
     },
     {
       "sorgente": "SOUND_PAGE",
