@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-22",
+  "aggiornato": "2026-10-23",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -34,7 +34,7 @@
       "subscribersGained": 0
     },
     "Uf7HNy9-5FI": {
-      "views": 1200,
+      "views": 1201,
       "averageViewPercentage": 47.94,
       "averageViewDuration": 10,
       "likes": 8,
@@ -50,7 +50,7 @@
       "subscribersGained": 1
     },
     "1Pdez4fE-hM": {
-      "views": 1097,
+      "views": 1098,
       "averageViewPercentage": 42.95,
       "averageViewDuration": 11,
       "likes": 6,
@@ -82,8 +82,8 @@
       "subscribersGained": 0
     },
     "oBMQ2t0aNGk": {
-      "views": 1015,
-      "averageViewPercentage": 139.94,
+      "views": 1017,
+      "averageViewPercentage": 139.85,
       "averageViewDuration": 32,
       "likes": 1,
       "comments": 0,
@@ -106,7 +106,7 @@
       "subscribersGained": 3
     },
     "-i6Z434jcUA": {
-      "views": 979,
+      "views": 983,
       "averageViewPercentage": 66.89,
       "averageViewDuration": 16,
       "likes": 2,
@@ -170,8 +170,8 @@
       "subscribersGained": 1
     },
     "dVFsufxRRgU": {
-      "views": 428,
-      "averageViewPercentage": 51.96000000000001,
+      "views": 458,
+      "averageViewPercentage": 50.85999999999999,
       "averageViewDuration": 12,
       "likes": 3,
       "comments": 0,
@@ -186,7 +186,7 @@
       "subscribersGained": 0
     },
     "3QNWDLcD9w8": {
-      "views": 195,
+      "views": 197,
       "averageViewPercentage": 272.74,
       "averageViewDuration": 81,
       "likes": 2,
@@ -210,15 +210,23 @@
       "subscribersGained": 0
     },
     "Lr8yCw1ZrZA": {
-      "views": 82,
-      "averageViewPercentage": 46.48,
+      "views": 90,
+      "averageViewPercentage": 46.4,
       "averageViewDuration": 10,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
     },
+    "ixQJss50GIM": {
+      "views": 80,
+      "averageViewPercentage": 60.25,
+      "averageViewDuration": 13,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "NJ2z0tv8-4k": {
-      "views": 25,
+      "views": 26,
       "averageViewPercentage": 92.15,
       "averageViewDuration": 23,
       "likes": 0,
@@ -240,15 +248,15 @@
       "views": 20
     },
     {
+      "termine": "sanremo 2027",
+      "views": 20
+    },
+    {
       "termine": "amici",
       "views": 17
     },
     {
       "termine": "legge elettorale",
-      "views": 17
-    },
-    {
-      "termine": "sanremo 2027",
       "views": 17
     },
     {
@@ -339,11 +347,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 21731
+      "views": 21837
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 753
+      "views": 775
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -355,7 +363,7 @@
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 21
+      "views": 23
     },
     {
       "sorgente": "EXT_URL",
