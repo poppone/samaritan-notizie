@@ -180,6 +180,13 @@ class TestDescrizione:
         monkeypatch.setattr(brain.config, "LINGUA", "it")
         assert "igr=poppone" in brain.costruisci_descrizione(DATI_GTA)
 
+    def test_canale_motori_porta_amazon(self, monkeypatch):
+        monkeypatch.delenv("LINK_DESCRIZIONE", raising=False)
+        monkeypatch.setattr(brain.config.profilo.attivo(), "argomento", "di motori")
+        assert brain.config.link_descrizione("it") == brain.config.LINK_MOTORI["it"]
+        assert "tag=davidedurazzi-21" in brain.config.link_descrizione("it")[0]
+        assert brain.config.link_descrizione("en") == []
+
     def test_porta_al_canale(self):
         assert "@PopponeTV" in brain.costruisci_descrizione(DATI_GTA)
 
