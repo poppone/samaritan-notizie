@@ -1,34 +1,18 @@
 [
   {
-    "timestamp": 1792649544,
-    "data": "2026-10-22",
-    "titolo": "MotoGP Academy: il nuovo progetto globale",
+    "timestamp": 1792735666,
+    "data": "2026-10-23",
+    "titolo": "Tesla Roadster: tutto il fumo negli occhi",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1792670400,
+    "uscita": 1792756800,
     "formato": "short",
-    "estratto_script": "Arriva la MotoGP Academy, il nuovo progetto per promuovere lo sport in tutto il mondo. La ",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "MotoGP Academy",
-    "query_video": "global sports arena",
-    "fonte": "Arriva la MotoGP™ Academy (www.motogp.com)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1ESzFfVllvTTBtVUY5VGdUTzZhT0YtSjhTb3FLTXBLMlk3a3R6emt4S3plekJqa3ZJVnA3MlhDSnRmTm1IdkptUGFyS2dQYXRic3BYSlZiM0luUDh2eHc?oc=5",
-    "video_id": null
-  },
-  {
-    "timestamp": 1792658571,
-    "data": "2026-10-22",
-    "titolo": "Mercato auto Europa: Tesla domina e cinesi crescono",
-    "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1792684800,
-    "formato": "short",
-    "estratto_script": "Crescita del 10,2% nel mercato europeo a settembre, secondo Automoto.it. Tesla Model Y e M",
+    "estratto_script": "Fumo: la nuova Tesla Roadster vola, salta, si arrampica sui muri, secondo Motor1.com Itali",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "mercato auto europa",
-    "query_video": "stock market screen, city skyline aerial",
-    "fonte": "Mercato auto Europa a settembre: Tesla Model Y e Model 3 in vetta, i cinesi volano al 14,5% (Automoto.it)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPQmVuYk1wNExsYU5CQWduS3luaTdUYlY1bVVSaFBvekVtTVBIQTZEUi1UNWxoODRRcnFzVlh4a1M1RnJDMC1qbnhjN19yYUJRczVzeC1GRndaQ1RGdzByNnpNMTViNGlGTlpIVi1USEMzbHZST3JRZlRyRElBeU1xY255VmtXSHhzbFRXWXB2QndxdEZNNHBudERHQ0RRVkZCeVltd2VGMnhwenItMXN4SmZ0MDRWRy1COU8zNHBn?oc=5",
+    "gioco": "Tesla Roadster",
+    "query_video": "electric car showroom",
+    "fonte": "Tutto il fumo negli occhi della nuova Tesla Roadster (Motor1.com Italia)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQNmJuQ29ReVJtYm1RaThoLWN2SEtWYVNZLVJ5RGJsLWtjRkw3ZTYzNEtXNXd6RFpLa1JadFBXaUpfNE44NU5CMF9ERTdYOTFLVHMxTVJ2cXdTYkc2eXpCOU14c2hoZ3lCdTg1OGsxUUdEM2ZOUnNYZzlaSGM3TkVleWFpVDBRQzA?oc=5",
     "video_id": null
   }
 ]
