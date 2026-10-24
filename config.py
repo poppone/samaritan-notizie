@@ -90,7 +90,7 @@ HANDLE_CANALE = _get("HANDLE_CANALE", PROFILO.handle)
 
 # Righe con link in fondo alla descrizione YouTube, per lingua (affiliazioni;
 # il sito ha gia' la sua riga, SITO_CANALE, dove esiste). La variabile LINK_DESCRIZIONE (JSON, es. {"it": ["riga", ...]}) vince;
-# senza, un canale gaming usa LINK_GAMING e gli altri nessun link.
+# senza, un canale gaming usa LINK_GAMING, uno di motori LINK_MOTORI e gli altri nessun link.
 LINK_GAMING = {
     "it": [
         "Giochi scontati su Instant Gaming (link affiliato): "
@@ -99,6 +99,12 @@ LINK_GAMING = {
     "en": [
         "Cheaper game keys on Instant Gaming (affiliate link): "
         "https://www.instant-gaming.com/en/?igr=poppone",
+    ],
+}
+LINK_MOTORI = {
+    "it": [
+        "Accessori per l'auto su Amazon (link affiliato): "
+        "https://www.amazon.it/s?k=accessori+auto&tag=davidedurazzi-21",
     ],
 }
 
@@ -118,8 +124,11 @@ def link_descrizione(lingua):
         righe = dati.get((lingua or "it").lower())
         return [str(r) for r in righe if str(r).strip()] if isinstance(righe, list) else []
     attivo = profilo.attivo()
-    if (attivo.argomento or "").strip().lower() == profilo.ARGOMENTO_GAMING:
+    argomento = (attivo.argomento or "").strip().lower()
+    if argomento == profilo.ARGOMENTO_GAMING:
         return LINK_GAMING.get((lingua or "it").lower(), [])
+    if "motori" in argomento:
+        return LINK_MOTORI.get((lingua or "it").lower(), [])
     return []
 
 # Lingua, uscita coperta, orario di pubblicazione e voce di questa run: li
