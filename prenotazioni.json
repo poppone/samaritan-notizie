@@ -1,34 +1,18 @@
 [
   {
-    "timestamp": 1792735666,
-    "data": "2026-10-23",
-    "titolo": "Tesla Roadster: tutto il fumo negli occhi",
+    "timestamp": 1792821694,
+    "data": "2026-10-24",
+    "titolo": "MotoGP: Marquez vince Sprint in Australia",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1792756800,
+    "uscita": 1792843200,
     "formato": "short",
-    "estratto_script": "Fumo: la nuova Tesla Roadster vola, salta, si arrampica sui muri, secondo Motor1.com Itali",
+    "estratto_script": "Marc Marquez ha vinto la Sprint Race in Australia, riprendendo la leadership del mondiale ",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Tesla Roadster",
-    "query_video": "electric car showroom",
-    "fonte": "Tutto il fumo negli occhi della nuova Tesla Roadster (Motor1.com Italia)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQNmJuQ29ReVJtYm1RaThoLWN2SEtWYVNZLVJ5RGJsLWtjRkw3ZTYzNEtXNXd6RFpLa1JadFBXaUpfNE44NU5CMF9ERTdYOTFLVHMxTVJ2cXdTYkc2eXpCOU14c2hoZ3lCdTg1OGsxUUdEM2ZOUnNYZzlaSGM3TkVleWFpVDBRQzA?oc=5",
-    "video_id": null
-  },
-  {
-    "timestamp": 1792744701,
-    "data": "2026-10-23",
-    "titolo": "Alfa Romeo Giulia: il libro debutta",
-    "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1792771200,
-    "formato": "short",
-    "estratto_script": "Il nuovo libro “Alfa Romeo Giulia‑Timeless Classic” debutta ad Auto e Moto d’Epoca. La pub",
-    "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Alfa Romeo Giulia",
-    "query_video": "book launch event",
-    "fonte": "Il nuovo libro “Alfa Romeo Giulia-Timeless Classic” debutta ad Auto e Moto d’Epoca (Italpress)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWUNSM0o4YXFWbTNSQ2hSM2p2MmVaZTAyaFBqNnFBbnpsamJOMElFeXdZaF9VUHlBaTV5X0E5THAxY2pQYlBiTnlYd2JKQkRGRDBoeVJkVFlHVTRGWjN4cEZ0ZUNTMnZoRkFKdXRZYWl4dXRBSEpsUjJqbEtZcWxiek5hdHdOVUlVY29ESGpBcy0wZngydGdNTVFfNVJRQ1YxcXFNb2t4V2Zwdw?oc=5",
+    "gioco": "MotoGP",
+    "query_video": "motorcycle race footage",
+    "fonte": "VIDEO. MotoGP, GP Australia: highlights Sprint Race (Sky Sport)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQd0dkT0pTMWlndUZxYjFtX3E5ZDkwbi1IeVdpM3ZnUWFrVm5BUm5wOTBCY1pnN2pMRktkSlNXOENMLVFsN3dlc0J3MDVzN3czaFNxWDZCMlVfUjJRckNJbHQyTGJ3bmxFelFKZ2tiNDBTMU05bU15ZVd2V3hCb0x6VnJvZFk2aEtKRWc1QWo0bjRjcnphOC0wN2FUMA?oc=5",
     "video_id": null
   }
 ]
