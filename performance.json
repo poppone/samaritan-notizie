@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-23",
+  "aggiornato": "2026-10-24",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -49,6 +49,14 @@
       "comments": 0,
       "subscribersGained": 1
     },
+    "3ZYS66ZwrxQ": {
+      "views": 1192,
+      "averageViewPercentage": 52.78,
+      "averageViewDuration": 12,
+      "likes": 8,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "1Pdez4fE-hM": {
       "views": 1098,
       "averageViewPercentage": 42.95,
@@ -64,6 +72,14 @@
       "likes": 6,
       "comments": 0,
       "subscribersGained": 1
+    },
+    "vscKl6JxGdQ": {
+      "views": 1058,
+      "averageViewPercentage": 90.04,
+      "averageViewDuration": 25,
+      "likes": 4,
+      "comments": 1,
+      "subscribersGained": 0
     },
     "IfX5K3ljf8A": {
       "views": 1044,
@@ -113,14 +129,6 @@
       "comments": 1,
       "subscribersGained": 1
     },
-    "P3yOUIGm0UU": {
-      "views": 970,
-      "averageViewPercentage": 68.28,
-      "averageViewDuration": 14,
-      "likes": 3,
-      "comments": 0,
-      "subscribersGained": 0
-    },
     "WPZDZj4fOAw": {
       "views": 970,
       "averageViewPercentage": 63.22,
@@ -128,6 +136,14 @@
       "likes": 7,
       "comments": 0,
       "subscribersGained": 4
+    },
+    "P3yOUIGm0UU": {
+      "views": 970,
+      "averageViewPercentage": 68.28,
+      "averageViewDuration": 14,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 0
     },
     "u9F9RG0_Hzg": {
       "views": 702,
@@ -316,6 +332,10 @@
       "views": 4
     },
     {
+      "termine": "motogp",
+      "views": 4
+    },
+    {
       "termine": "pensione",
       "views": 4
     },
@@ -338,20 +358,16 @@
     {
       "termine": "torino - udinese",
       "views": 3
-    },
-    {
-      "termine": "uzak sehir 68",
-      "views": 3
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 21837
+      "views": 24056
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 775
+      "views": 793
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -359,7 +375,7 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 35
+      "views": 44
     },
     {
       "sorgente": "SUBSCRIBER",
@@ -371,7 +387,7 @@
     },
     {
       "sorgente": "SOUND_PAGE",
-      "views": 4
+      "views": 7
     },
     {
       "sorgente": "HASHTAGS",
