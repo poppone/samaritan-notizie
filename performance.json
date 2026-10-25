@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-24",
+  "aggiornato": "2026-10-25",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -16,6 +16,14 @@
       "likes": 10,
       "comments": 0,
       "subscribersGained": 4
+    },
+    "3ZYS66ZwrxQ": {
+      "views": 1250,
+      "averageViewPercentage": 52.129999999999995,
+      "averageViewDuration": 11,
+      "likes": 9,
+      "comments": 0,
+      "subscribersGained": 1
     },
     "TQYai4Ocui8": {
       "views": 1250,
@@ -49,14 +57,6 @@
       "comments": 0,
       "subscribersGained": 1
     },
-    "3ZYS66ZwrxQ": {
-      "views": 1192,
-      "averageViewPercentage": 52.78,
-      "averageViewDuration": 12,
-      "likes": 8,
-      "comments": 0,
-      "subscribersGained": 1
-    },
     "1Pdez4fE-hM": {
       "views": 1098,
       "averageViewPercentage": 42.95,
@@ -65,6 +65,14 @@
       "comments": 0,
       "subscribersGained": 1
     },
+    "vscKl6JxGdQ": {
+      "views": 1078,
+      "averageViewPercentage": 90.24,
+      "averageViewDuration": 25,
+      "likes": 4,
+      "comments": 1,
+      "subscribersGained": 0
+    },
     "-uStdIfm10c": {
       "views": 1061,
       "averageViewPercentage": 92.49,
@@ -72,14 +80,6 @@
       "likes": 6,
       "comments": 0,
       "subscribersGained": 1
-    },
-    "vscKl6JxGdQ": {
-      "views": 1058,
-      "averageViewPercentage": 90.04,
-      "averageViewDuration": 25,
-      "likes": 4,
-      "comments": 1,
-      "subscribersGained": 0
     },
     "IfX5K3ljf8A": {
       "views": 1044,
@@ -169,6 +169,14 @@
       "comments": 1,
       "subscribersGained": 0
     },
+    "3Rgwvla2QKI": {
+      "views": 585,
+      "averageViewPercentage": 45.03,
+      "averageViewDuration": 14,
+      "likes": 2,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "U501zLEwMVM": {
       "views": 526,
       "averageViewPercentage": 58.60999999999999,
@@ -186,7 +194,7 @@
       "subscribersGained": 1
     },
     "dVFsufxRRgU": {
-      "views": 458,
+      "views": 457,
       "averageViewPercentage": 50.85999999999999,
       "averageViewDuration": 12,
       "likes": 3,
@@ -245,6 +253,14 @@
       "views": 26,
       "averageViewPercentage": 92.15,
       "averageViewDuration": 23,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "heIU9XtzOYE": {
+      "views": 7,
+      "averageViewPercentage": 24.44,
+      "averageViewDuration": 6,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -316,6 +332,10 @@
       "views": 6
     },
     {
+      "termine": "stellantis",
+      "views": 6
+    },
+    {
       "termine": "paolo jannacci",
       "views": 5
     },
@@ -352,22 +372,18 @@
       "views": 3
     },
     {
-      "termine": "shari amici 2026",
-      "views": 3
-    },
-    {
-      "termine": "torino - udinese",
+      "termine": "sanremo giovani 2026",
       "views": 3
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 24056
+      "views": 24703
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 793
+      "views": 814
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -375,7 +391,7 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 44
+      "views": 46
     },
     {
       "sorgente": "SUBSCRIBER",
