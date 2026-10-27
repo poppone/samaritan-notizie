@@ -1,0 +1,23 @@
+name: tmp montaggio gomme
+on:
+  push:
+    branches: [tmp-montaggio-gomme]
+    paths: [tmp/chiusura.mp4, .github/workflows/tmp-montaggio.yml]
+permissions:
+  contents: write
+jobs:
+  monta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: |
+          curl -sSfL -o tmp/short.mp4 "https://8ggiyctagekoppcx.public.blob.vercel-storage.com/notizie/Ot-MeSsbovo-JdGBEXJWniqsxtNKPeXX53VUM2jgJH.mp4"
+          ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate,sample_rate -of compact tmp/short.mp4
+          ffmpeg -v error -y -i tmp/short.mp4 -i tmp/chiusura.mp4 -filter_complex "[0:v]scale=1080:1920,fps=30,setsar=1,format=yuv420p[v0];[1:v]scale=1080:1920,fps=30,setsar=1,format=yuv420p[v1];[0:a]aformat=sample_rates=44100:channel_layouts=stereo[a0];[1:a]aformat=sample_rates=44100:channel_layouts=stereo[a1];[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 21 -c:a aac -b:a 160k -movflags +faststart tmp/gomme-pneumatici.mp4
+          for t in 1.5 4 8 13 18 25; do ffmpeg -v error -y -ss $t -i tmp/short.mp4 -frames:v 1 -vf scale=360:-1 tmp/f$t.jpg; done
+          rm tmp/short.mp4
+          ls -la tmp
+      - run: |
+          git config user.name "Finch (stanza)"; git config user.email "finch@davidedurazzi.it"
+          git add tmp && git commit -m "tmp: video gomme con chiusura" && git push
