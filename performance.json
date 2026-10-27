@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-26",
+  "aggiornato": "2026-10-27",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -18,17 +18,17 @@
       "subscribersGained": 4
     },
     "Axx79u9q5gg": {
-      "views": 1305,
-      "averageViewPercentage": 52.12,
+      "views": 1308,
+      "averageViewPercentage": 51.97999999999999,
       "averageViewDuration": 11,
       "likes": 7,
       "comments": 0,
       "subscribersGained": 1
     },
     "3ZYS66ZwrxQ": {
-      "views": 1261,
-      "averageViewPercentage": 52.349999999999994,
-      "averageViewDuration": 12,
+      "views": 1277,
+      "averageViewPercentage": 52.11,
+      "averageViewDuration": 11,
       "likes": 9,
       "comments": 0,
       "subscribersGained": 1
@@ -64,6 +64,14 @@
       "likes": 5,
       "comments": 0,
       "subscribersGained": 1
+    },
+    "fqxzsRWpKjQ": {
+      "views": 1155,
+      "averageViewPercentage": 38.32,
+      "averageViewDuration": 9,
+      "likes": 11,
+      "comments": 0,
+      "subscribersGained": 0
     },
     "1Pdez4fE-hM": {
       "views": 1098,
@@ -138,8 +146,8 @@
       "subscribersGained": 1
     },
     "7jAhDToSksQ": {
-      "views": 978,
-      "averageViewPercentage": 36.67,
+      "views": 981,
+      "averageViewPercentage": 36.73,
       "averageViewDuration": 10,
       "likes": 11,
       "comments": 0,
@@ -162,8 +170,8 @@
       "subscribersGained": 0
     },
     "3Rgwvla2QKI": {
-      "views": 795,
-      "averageViewPercentage": 41.09,
+      "views": 807,
+      "averageViewPercentage": 40.87,
       "averageViewDuration": 13,
       "likes": 3,
       "comments": 0,
@@ -201,6 +209,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "vkDvtBuuqNM": {
+      "views": 501,
+      "averageViewPercentage": 56.38999999999999,
+      "averageViewDuration": 10,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "nVop-vDFI_A": {
       "views": 459,
       "averageViewPercentage": 45.9,
@@ -218,8 +234,8 @@
       "subscribersGained": 0
     },
     "s78yUFOZ5T4": {
-      "views": 405,
-      "averageViewPercentage": 47.03,
+      "views": 406,
+      "averageViewPercentage": 46.65,
       "averageViewDuration": 11,
       "likes": 0,
       "comments": 0,
@@ -348,6 +364,10 @@
       "views": 8
     },
     {
+      "termine": "sprint race motogp",
+      "views": 7
+    },
+    {
       "termine": "stellantis",
       "views": 7
     },
@@ -392,30 +412,26 @@
       "views": 3
     },
     {
-      "termine": "passione inter",
-      "views": 3
-    },
-    {
-      "termine": "sanremo giovani 2026",
+      "termine": "motogp sprint",
       "views": 3
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 27539
+      "views": 29128
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 878
+      "views": 974
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 56
+      "views": 57
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 50
+      "views": 55
     },
     {
       "sorgente": "SUBSCRIBER",
