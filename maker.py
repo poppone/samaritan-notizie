@@ -39,7 +39,8 @@ from moviepy import (
 import config
 import profilo
 import veste
-from voice import genera_voce_samaritan, grafia_canale, pulisci_testo
+from voice import (genera_voce_samaritan, grafia_canale, leggi_parole,
+                   pulisci_testo, tempi_parole)
 
 # Le ricerche Pexels di riserva, quando quella del video trova troppo poco,
 # stanno nel profilo del canale (voce 'query_stock_riserva'): per Poppone TV
@@ -644,48 +645,60 @@ def _sottotitoli_a_frase(risultato, stile):
     return clips
 
 
-def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None):
+def _parole_da_whisper(audio_path):
     import whisper
-
-    stile = stile or STILE_BASE
 
     print(f"[Samaritan Subtitles] Trascrizione con modello '{config.WHISPER_MODEL}'...")
     modello = whisper.load_model(config.WHISPER_MODEL)
     risultato = modello.transcribe(audio_path, language=config.LINGUA,
                                    word_timestamps=not config.VIDEO_LUNGO)
+    if config.VIDEO_LUNGO:
+        return risultato
+    return [{"parola": info["word"], "inizio": info["start"], "fine": info["end"]}
+            for segmento in risultato.get("segments", [])
+            for info in segmento.get("words", [])]
+
+
+def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None):
+    stile = stile or STILE_BASE
 
     if config.VIDEO_LUNGO:
-        return _sottotitoli_a_frase(risultato, stile)
+        return _sottotitoli_a_frase(_parole_da_whisper(audio_path), stile)
+
+    # I tempi esatti dati dalla voce stessa (vedi voice.leggi_parole); Whisper
+    # solo se la voce non li ha dati.
+    parole = leggi_parole(audio_path)
+    if parole:
+        print(f"[Samaritan Subtitles] Tempi esatti dalla voce ({len(parole)} parole).")
+    else:
+        parole = _parole_da_whisper(audio_path)
 
     parole_chiave = {w.upper() for w in re.findall(r"\b[A-Za-z]{4,}\b",
                                                    f"{titolo} {gioco}")}
     clips = []
     y = int(config.VIDEO_H * stile["y_sottotitoli"])
 
-    for segmento in risultato.get("segments", []):
-        for info in segmento.get("words", []):
-            parola = grafia_canale(info["word"]).strip().upper()
-            if not parola:
-                continue
+    for testo, inizio, durata in tempi_parole(parole):
+        parola = grafia_canale(testo).strip().upper()
+        if not parola:
+            continue
 
-            inizio = info["start"]
-            durata = max(info["end"] - inizio, 0.25)
-            nudo = parola.strip(".,!?;:")
-            evidenzia = nudo.isdigit() or nudo in parole_chiave
+        nudo = parola.strip(".,!?;:")
+        evidenzia = nudo.isdigit() or nudo in parole_chiave
 
-            colore = (stile["colore_evidenza"] if evidenzia
-                      else stile["colore_testo"])
-            clip = (
-                ImageClip(crea_immagine_parola(
-                    parola, font_size=stile["corpo_sottotitoli"], colore=colore))
-                .with_start(inizio).with_duration(durata)
-                .with_position(("center", y))
-            )
-            try:
-                clip = clip.resized(lambda t: min(1.0, 0.80 + 2.2 * t))
-            except Exception:
-                pass
-            clips.append(clip)
+        colore = (stile["colore_evidenza"] if evidenzia
+                  else stile["colore_testo"])
+        clip = (
+            ImageClip(crea_immagine_parola(
+                parola, font_size=stile["corpo_sottotitoli"], colore=colore))
+            .with_start(inizio).with_duration(durata)
+            .with_position(("center", y))
+        )
+        try:
+            clip = clip.resized(lambda t: min(1.0, 0.80 + 2.2 * t))
+        except Exception:
+            pass
+        clips.append(clip)
 
     print(f"[Samaritan Subtitles] {len(clips)} parole sincronizzate.")
     return clips

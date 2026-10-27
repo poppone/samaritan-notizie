@@ -15,6 +15,7 @@ l'hook dei primi 3 secondi "suona" davvero come un hook.
 """
 import os
 import re
+import base64
 import json
 import asyncio
 
@@ -231,6 +232,95 @@ def _risolvi_voce(chiave):
     )
 
 
+# ---------------------------------------------------------------------------
+# Tempi delle parole
+# ---------------------------------------------------------------------------
+# I sottotitoli parola per parola li dava Whisper riascoltando l'audio, e il
+# modello 'base' in italiano sbaglia gli istanti: il 27 ottobre 2026 Davide ha
+# chiesto di sistemare il tempo dei sottotitoli. Le due voci vere sanno gia'
+# quando dicono ogni parola (ElevenLabs con /with-timestamps, Edge-TTS con i
+# WordBoundary): quei tempi si salvano accanto all'audio e il montaggio li
+# usa al posto di Whisper. gTTS non li da': li' resta Whisper.
+
+def percorso_parole(audio_path):
+    """Il file con i tempi delle parole che accompagna un audio."""
+    return os.path.splitext(audio_path)[0] + ".parole.json"
+
+
+def _salva_parole(audio_path, parole):
+    parole = [p for p in parole if str(p.get("parola", "")).strip()]
+    if not parole:
+        return
+    with open(percorso_parole(audio_path), "w", encoding="utf-8") as f:
+        json.dump(parole, f, ensure_ascii=False)
+
+
+def _scarta_parole(audio_path):
+    try:
+        os.remove(percorso_parole(audio_path))
+    except OSError:
+        pass
+
+
+def leggi_parole(audio_path):
+    """Tempi delle parole salvati con l'audio, o lista vuota se non ci sono."""
+    try:
+        with open(percorso_parole(audio_path), encoding="utf-8") as f:
+            parole = json.load(f)
+    except (OSError, ValueError):
+        return []
+    buone = []
+    for p in parole if isinstance(parole, list) else []:
+        try:
+            buone.append({"parola": str(p["parola"]), "inizio": float(p["inizio"]),
+                          "fine": float(p["fine"])})
+        except (KeyError, TypeError, ValueError):
+            return []
+    return buone
+
+
+def parole_da_allineamento(allineamento):
+    """Dall'allineamento a caratteri di ElevenLabs alle parole con i loro tempi."""
+    caratteri = (allineamento or {}).get("characters") or []
+    inizi = (allineamento or {}).get("character_start_times_seconds") or []
+    fini = (allineamento or {}).get("character_end_times_seconds") or []
+    parole, corrente = [], None
+    for c, ini, fin in zip(caratteri, inizi, fini):
+        if c.isspace():
+            if corrente:
+                parole.append(corrente)
+            corrente = None
+            continue
+        if corrente is None:
+            corrente = {"parola": c, "inizio": float(ini), "fine": float(fin)}
+        else:
+            corrente["parola"] += c
+            corrente["fine"] = float(fin)
+    if corrente:
+        parole.append(corrente)
+    return parole
+
+
+# Una parola resta a schermo fino all'inizio della successiva, cosi' non
+# lampeggia nei vuoti brevi tra una parola e l'altra; nelle pause vere (oltre
+# PAUSA_SOTTOTITOLI secondi) sparisce alla sua fine naturale.
+PAUSA_SOTTOTITOLI = 0.6
+DURATA_MIN_PAROLA = 0.25
+
+
+def tempi_parole(parole):
+    """[(parola, inizio, durata)] con le durate cucite parola dopo parola."""
+    tempi = []
+    for i, p in enumerate(parole):
+        inizio, fine = p["inizio"], p["fine"]
+        if i + 1 < len(parole):
+            prossima = parole[i + 1]["inizio"]
+            if prossima - fine < PAUSA_SOTTOTITOLI:
+                fine = prossima
+        tempi.append((p["parola"], inizio, max(fine - inizio, DURATA_MIN_PAROLA)))
+    return tempi
+
+
 def _sintetizza_elevenlabs(testo, output_filename):
     chiave = config.ELEVENLABS_API_KEY
     if not chiave:
@@ -238,7 +328,7 @@ def _sintetizza_elevenlabs(testo, output_filename):
 
     voce = _risolvi_voce(chiave)
     risposta = requests.post(
-        f"{_API_ELEVENLABS}/text-to-speech/{voce}",
+        f"{_API_ELEVENLABS}/text-to-speech/{voce}/with-timestamps",
         headers={"xi-api-key": chiave, "Content-Type": "application/json"},
         params={"output_format": "mp3_44100_128"},
         json={
@@ -267,8 +357,10 @@ def _sintetizza_elevenlabs(testo, output_filename):
         raise RuntimeError("credito ElevenLabs esaurito o troppe richieste")
     risposta.raise_for_status()
 
+    dati = risposta.json()
     with open(output_filename, "wb") as f:
-        f.write(risposta.content)
+        f.write(base64.b64decode(dati.get("audio_base64") or ""))
+    _salva_parole(output_filename, parole_da_allineamento(dati.get("alignment")))
 
 
 async def _sintetizza_edge(testo, output_filename):
@@ -279,8 +371,19 @@ async def _sintetizza_edge(testo, output_filename):
         voice=config.VOCE_TTS,
         rate=config.VOCE_VELOCITA,
         pitch=config.VOCE_PITCH,
+        boundary="WordBoundary",
     )
-    await communicate.save(output_filename)
+    parole = []
+    with open(output_filename, "wb") as f:
+        async for pezzo in communicate.stream():
+            if pezzo["type"] == "audio":
+                f.write(pezzo["data"])
+            elif pezzo["type"] == "WordBoundary":
+                # offset e duration sono in unita' da 100 nanosecondi
+                inizio = pezzo["offset"] / 1e7
+                parole.append({"parola": pezzo["text"], "inizio": inizio,
+                               "fine": inizio + pezzo["duration"] / 1e7})
+    _salva_parole(output_filename, parole)
 
 
 def genera_voce_samaritan(testo, output_filename=None, permetti_elevenlabs=True):
@@ -296,6 +399,10 @@ def genera_voce_samaritan(testo, output_filename=None, permetti_elevenlabs=True)
     os.makedirs(config.DIR_TEMP, exist_ok=True)
     if output_filename is None:
         output_filename = os.path.join(config.DIR_TEMP, "audio.mp3")
+
+    # Tempi di un audio precedente con lo stesso nome: non devono finire
+    # sotto questa voce.
+    _scarta_parole(output_filename)
 
     testo_pulito = pronuncia(pulisci_testo(testo))
     if not testo_pulito:
@@ -319,6 +426,7 @@ def genera_voce_samaritan(testo, output_filename=None, permetti_elevenlabs=True)
             raise RuntimeError("ElevenLabs ha prodotto un file vuoto")
 
         except Exception as e:
+            _scarta_parole(output_filename)
             print(f"[Warning Voice] ElevenLabs non utilizzabile ({e}). "
                   f"Il video usera' la voce Microsoft.")
 
@@ -334,6 +442,7 @@ def genera_voce_samaritan(testo, output_filename=None, permetti_elevenlabs=True)
         raise RuntimeError("Edge-TTS ha prodotto un file vuoto")
 
     except Exception as e:
+        _scarta_parole(output_filename)
         print(f"[Warning Voice] Edge-TTS non disponibile ({e}). Passo al fallback gTTS.")
 
     # --- Tentativo 3: gTTS (ripiego robotico) ---

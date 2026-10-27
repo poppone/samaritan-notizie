@@ -5,6 +5,7 @@ dall'ambiente di sviluppo, quindi le risposte sono finte e si verifica solo che
 la catena dei ripieghi si comporti come deve. Serve perche' la voce sta nel
 percorso che pubblica: se questa parte sbaglia, il video esce muto o robotico.
 """
+import base64
 import importlib
 import json
 
@@ -294,14 +295,90 @@ class TestSintesiElevenLabs:
     def test_scrive_l_audio_ricevuto(self, monkeypatch, tmp_path):
         monkeypatch.setattr(config, "ELEVENLABS_API_KEY", "k")
         monkeypatch.setattr(voice, "_risolvi_voce", lambda chiave: "id")
-        monkeypatch.setattr(
-            voice.requests, "post", lambda *a, **k: RispostaFinta(contenuto=b"mp3" * 400)
-        )
+        risposta = {
+            "audio_base64": base64.b64encode(b"mp3" * 400).decode(),
+            "alignment": {
+                "characters": list("ciao a"),
+                "character_start_times_seconds": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5],
+                "character_end_times_seconds": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+            },
+        }
+        chiamate = []
+
+        def post(url, **k):
+            chiamate.append(url)
+            return RispostaFinta(dati=risposta)
+
+        monkeypatch.setattr(voice.requests, "post", post)
         destinazione = tmp_path / "a.mp3"
 
-        voice._sintetizza_elevenlabs("ciao", str(destinazione))
+        voice._sintetizza_elevenlabs("ciao a", str(destinazione))
 
         assert destinazione.read_bytes().startswith(b"mp3")
+        assert chiamate[0].endswith("/with-timestamps")
+        assert [p["parola"] for p in voice.leggi_parole(str(destinazione))] == ["ciao", "a"]
+
+
+class TestTempiDelleParole:
+    """Il tempo dei sottotitoli viene dalla voce, non da Whisper (27/10/2026)."""
+
+    def test_allineamento_a_caratteri_diventa_parole(self):
+        parole = voice.parole_da_allineamento({
+            "characters": list("Gomme  nuove!"),
+            "character_start_times_seconds": [i / 10 for i in range(13)],
+            "character_end_times_seconds": [i / 10 + 0.1 for i in range(13)],
+        })
+        assert [p["parola"] for p in parole] == ["Gomme", "nuove!"]
+        assert parole[0]["inizio"] == 0.0
+        assert parole[0]["fine"] == pytest.approx(0.5)
+        assert parole[1]["inizio"] == pytest.approx(0.7)
+
+    def test_allineamento_assente_non_esplode(self):
+        assert voice.parole_da_allineamento(None) == []
+
+    def test_salva_e_rilegge(self, tmp_path):
+        audio = str(tmp_path / "audio.mp3")
+        voice._salva_parole(audio, [{"parola": "ciao", "inizio": 0.1, "fine": 0.4}])
+        assert voice.leggi_parole(audio) == [{"parola": "ciao", "inizio": 0.1, "fine": 0.4}]
+
+    def test_file_rotto_vuol_dire_niente_tempi(self, tmp_path):
+        audio = tmp_path / "audio.mp3"
+        (tmp_path / "audio.parole.json").write_text("[{", encoding="utf-8")
+        assert voice.leggi_parole(str(audio)) == []
+
+    def test_senza_file_niente_tempi(self, tmp_path):
+        assert voice.leggi_parole(str(tmp_path / "audio.mp3")) == []
+
+    def test_la_parola_resta_fino_alla_successiva(self):
+        tempi = voice.tempi_parole([
+            {"parola": "a", "inizio": 0.0, "fine": 0.2},
+            {"parola": "b", "inizio": 0.3, "fine": 0.5},
+        ])
+        assert tempi[0] == ("a", 0.0, pytest.approx(0.3))
+
+    def test_nelle_pause_vere_sparisce(self):
+        tempi = voice.tempi_parole([
+            {"parola": "a", "inizio": 0.0, "fine": 0.3},
+            {"parola": "b", "inizio": 2.0, "fine": 2.4},
+        ])
+        assert tempi[0] == ("a", 0.0, pytest.approx(0.3))
+
+    def test_parola_brevissima_resta_leggibile(self):
+        tempi = voice.tempi_parole([{"parola": "e", "inizio": 1.0, "fine": 1.05}])
+        assert tempi[0][2] == voice.DURATA_MIN_PAROLA
+
+    def test_tempi_vecchi_si_scartano_prima_di_una_nuova_voce(self, monkeypatch, tmp_path):
+        audio = str(tmp_path / "audio.mp3")
+        voice._salva_parole(audio, [{"parola": "vecchia", "inizio": 0, "fine": 1}])
+        monkeypatch.setattr(config, "ELEVENLABS_API_KEY", "")
+
+        async def edge(testo, destinazione):
+            with open(destinazione, "wb") as f:
+                f.write(b"x" * 2048)
+
+        monkeypatch.setattr(voice, "_sintetizza_edge", edge)
+        voice.genera_voce_samaritan("ciao", audio)
+        assert voice.leggi_parole(audio) == []
 
 
 class TestCatenaDeiRipieghi:
@@ -439,5 +516,5 @@ class TestPronunciaDelCanale:
         radice = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         with open(os.path.join(radice, "maker.py"), encoding="utf-8") as f:
             sorgente = f.read()
-        assert 'grafia_canale(info["word"])' in sorgente
+        assert "grafia_canale(testo)" in sorgente
         assert 'grafia_canale(segmento.get("text")' in sorgente
