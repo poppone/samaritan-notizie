@@ -36,7 +36,15 @@
   },
   "uscite": [
     {
+      "orario": "12:00",
+      "lingua": "it"
+    },
+    {
       "orario": "14:00",
+      "lingua": "it"
+    },
+    {
+      "orario": "16:00",
       "lingua": "it"
     },
     {
