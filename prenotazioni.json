@@ -1,21 +1,5 @@
 [
   {
-    "timestamp": 1793103764,
-    "data": "2026-10-27",
-    "titolo": "MotoGP: Rossi più completo, Marquez più veloce",
-    "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1793120400,
-    "formato": "short",
-    "estratto_script": "Aspar Martinez dichiara: Rossi è più completo, Marquez più veloce. Un'affermazione che met",
-    "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle racing footage",
-    "fonte": "MotoGP, “Aspar” Martinez: “Rossi più completo, Marquez più veloce” (Moto.it)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPSlJpRHU4ai12aGNKVDJPZ2VnMGZMRTh0b3ZhaUtFb2NpOXRGMmhsMGl4V01vQXY3MlpzdG1VSHY2YUd2V3JQcU5FSWFiT1p6cGNybmZzMjFyNGl0MWRNWjJrLUxLS1VVaVFpM05GMkRPNGtRSlluVk15T252R25zamY2UDNkczB3RllIZlVFc3hWRmJoWFE?oc=5",
-    "video_id": null
-  },
-  {
     "timestamp": 1793125183,
     "data": "2026-10-27",
     "titolo": "Invernali: conto voce per voce prima dell’obbligo",
@@ -29,6 +13,22 @@
     "query_video": "road winter tires",
     "fonte": "Invernali o quattro stagioni: il conto voce per voce prima di scegliere (Valledaostaglocal.it)",
     "fonte_url": "https://news.google.com/rss/articles/CBMilgJBVV95cUxQLWRrY29LM2ItRHozVDY0U2RfUnVmbTBCT1Q1M2pmVGNfOG4zSVJ6LVV4SkdOdERIQUhwNnhyeDZ3Mi1yeXBFN0JNZnkwRzRlOUhJX2FMZXl5blBlYzZEOXowOWJtRUpPQVZDRHpBelNabnd0UGxrR21qa3gydFZ5OGZxeTVoRjlUM2hmYm5PMHFwaDBWWFZqalNfSk5fVWdTa3BrV1JPR01HUlpnUVlhTVpDRVZnUUNhUUNzck1uN2NRd0NUTmhGWnVpd1k0WGI4TVN5SjdLdzFXTzA4XzFpbURtZkhQZEVsenBIdmxHUkFjRmFOQy1DbGd6ODZiemh3VlhXMmI3MUd1bC04NG9HQk1IaVRPdw?oc=5",
+    "video_id": null
+  },
+  {
+    "timestamp": 1793145365,
+    "data": "2026-10-27",
+    "titolo": "RS 660 Tribute: Aprilia celebra 300 successi in MotoGP",
+    "lingua": "it",
+    "slot": "14:00",
+    "uscita": 1793106000,
+    "formato": "short",
+    "estratto_script": "La RS 660 Tribute è stata lanciata per celebrare 300 successi in MotoGP. Lo riporta HDmoto",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "Aprilia",
+    "query_video": "motorcycle race footage",
+    "fonte": "MotoGP, addio a Phillip Island: Aprilia risponde con una RS 660 speciale (HDmotori)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1BLUhUOWNnRS1rRkVGZHNYTFYzUlpIeXFlUjJmaEJEZHBVMEUzRUNqSWd2Y21yZEdOME1BNFNyRTRQX0htN094WFRac3FrWFZIY2FxXzZZaGtNQ3Vsb1BGM29lV1M5bF9DckdJRy1SUQ?oc=5",
     "video_id": null
   }
 ]
