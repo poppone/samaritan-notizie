@@ -1,21 +1,5 @@
 [
   {
-    "timestamp": 1793170611,
-    "data": "2026-10-28",
-    "titolo": "Genova: albero blocca la strada",
-    "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1793185200,
-    "formato": "short",
-    "estratto_script": "Improvvisamente un albero è caduto in via Brignole De Ferrari a Genova, bloccando la viabi",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Genova",
-    "query_video": "city street traffic",
-    "fonte": "Cade un albero in via Brignole De Ferrari a Genova, strada bloccata (Il Secolo XIX)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQUnhhUW1wSzJWaHBjbG5Ka296ZWdWa0diSjdoMUVTLWVfbHZlRTRwakhhYWVXbVlJWGVfTVJJUEJ4NkJpZUZyQlRZV190V2ctU3lDTHNic2FHUWtseVNtVXVJcXBmT3hqOWl3R1Zhc01admNFUFRTX3FQeWJnZVp6RnJlUlk4d1Jwb2t0TmlRWTdLbjQwT1Z4OVhhYmtrZw?oc=5",
-    "video_id": null
-  },
-  {
     "timestamp": 1793180796,
     "data": "2026-10-28",
     "titolo": "Stellantis: ricavi in crescita e perdita ridotta",
@@ -45,6 +29,22 @@
     "query_video": "race track footage",
     "fonte": "MotoGP | GP Malesia, Bagnaia: “Vogliamo giocarci le nostre carte “ (MotoGrandPrix.it)",
     "fonte_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPU0ZzOHg3UDBIQWp0aVhfQzJSMGNJQTlUUU1qUTVxaVZ4dld6VVdSNmVmNi1PSUc4Q2RvdmllVnJUeW15bTBUV2Y5THJidFh2TEg1WURIS3A3T3Z4ZUgzdG1ITElSckQ5RHlzdS1QUHRGdl9DWFpud0xVNnZNRW1IRTVBeFY4WmZTQjFWaXV2TWZ3SndsVUlIVHRvUnBDV1dmQmdyZThQbw?oc=5",
+    "video_id": null
+  },
+  {
+    "timestamp": 1793192865,
+    "data": "2026-10-28",
+    "titolo": "Citycar elettrica: Stellantis punta 15.000 €",
+    "lingua": "it",
+    "slot": "18:00",
+    "uscita": 1793206800,
+    "formato": "short",
+    "estratto_script": "Stellanti sta sviluppando una citycar elettrica da 15.000 euro. L’obiettivo è lanciare il ",
+    "stile": "MYTH_BUSTING_VIRAL",
+    "gioco": "citycar elettrica",
+    "query_video": "city skyline electric car",
+    "fonte": "Stellantis lavora all'auto elettrica da 15.000 euro: nel 2028 potrebbe tornare la Opel Agila (Autoappassionati.it)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPRDFOTFZNYmNLbnRkVWg0YVBtR25CcmdteG5MY3NwTlRTVHJqRW1vcWdBVkpvblhBa0kzODU3WkxRdS1RcTNaU3o1b2lQelNqcjJvc0V0bklRNXpiMTUyYUVnUzNWTnFmb0FYSXhVbkt6NUZMQ0J5TW54WDN3Y3dMZXJBTjhqQkh2RnZERkVFWlRiSVFFZi10UFR2WDNUOERYNjVoZXFfc3hpNTFHREVuM3NVRGhvRUtDRTJLZGVQZEZyQQ?oc=5",
     "video_id": null
   }
 ]
