@@ -18,7 +18,7 @@
       "subscribersGained": 4
     },
     "Axx79u9q5gg": {
-      "views": 1308,
+      "views": 1309,
       "averageViewPercentage": 51.97999999999999,
       "averageViewDuration": 11,
       "likes": 7,
@@ -26,8 +26,8 @@
       "subscribersGained": 1
     },
     "3ZYS66ZwrxQ": {
-      "views": 1277,
-      "averageViewPercentage": 52.11,
+      "views": 1280,
+      "averageViewPercentage": 52.06000000000001,
       "averageViewDuration": 11,
       "likes": 9,
       "comments": 0,
@@ -66,10 +66,10 @@
       "subscribersGained": 1
     },
     "fqxzsRWpKjQ": {
-      "views": 1155,
-      "averageViewPercentage": 38.32,
-      "averageViewDuration": 9,
-      "likes": 11,
+      "views": 1183,
+      "averageViewPercentage": 38.5,
+      "averageViewDuration": 10,
+      "likes": 12,
       "comments": 0,
       "subscribersGained": 0
     },
@@ -137,20 +137,20 @@
       "comments": 0,
       "subscribersGained": 3
     },
+    "7jAhDToSksQ": {
+      "views": 983,
+      "averageViewPercentage": 36.71,
+      "averageViewDuration": 10,
+      "likes": 11,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "-i6Z434jcUA": {
       "views": 983,
       "averageViewPercentage": 66.89,
       "averageViewDuration": 16,
       "likes": 2,
       "comments": 1,
-      "subscribersGained": 1
-    },
-    "7jAhDToSksQ": {
-      "views": 981,
-      "averageViewPercentage": 36.73,
-      "averageViewDuration": 10,
-      "likes": 11,
-      "comments": 0,
       "subscribersGained": 1
     },
     "WPZDZj4fOAw": {
@@ -201,6 +201,14 @@
       "comments": 1,
       "subscribersGained": 0
     },
+    "vkDvtBuuqNM": {
+      "views": 592,
+      "averageViewPercentage": 57.54,
+      "averageViewDuration": 10,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "U501zLEwMVM": {
       "views": 526,
       "averageViewPercentage": 58.60999999999999,
@@ -208,14 +216,6 @@
       "likes": 4,
       "comments": 0,
       "subscribersGained": 0
-    },
-    "vkDvtBuuqNM": {
-      "views": 501,
-      "averageViewPercentage": 56.38999999999999,
-      "averageViewDuration": 10,
-      "likes": 0,
-      "comments": 0,
-      "subscribersGained": 1
     },
     "nVop-vDFI_A": {
       "views": 459,
@@ -234,9 +234,9 @@
       "subscribersGained": 0
     },
     "s78yUFOZ5T4": {
-      "views": 406,
-      "averageViewPercentage": 46.65,
-      "averageViewDuration": 11,
+      "views": 434,
+      "averageViewPercentage": 45.8,
+      "averageViewDuration": 10,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 1
@@ -289,6 +289,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "bRg-mjhYlBI": {
+      "views": 79,
+      "averageViewPercentage": 79.5,
+      "averageViewDuration": 19,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "NJ2z0tv8-4k": {
       "views": 26,
       "averageViewPercentage": 92.15,
@@ -298,9 +306,9 @@
       "subscribersGained": 0
     },
     "heIU9XtzOYE": {
-      "views": 8,
-      "averageViewPercentage": 24.44,
-      "averageViewDuration": 6,
+      "views": 9,
+      "averageViewPercentage": 37.16,
+      "averageViewDuration": 10,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -356,16 +364,16 @@
       "views": 9
     },
     {
+      "termine": "sprint race motogp",
+      "views": 9
+    },
+    {
       "termine": "stefano de martino",
       "views": 9
     },
     {
       "termine": "manovra 2027",
       "views": 8
-    },
-    {
-      "termine": "sprint race motogp",
-      "views": 7
     },
     {
       "termine": "stellantis",
@@ -419,11 +427,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 29113
+      "views": 29312
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 983
+      "views": 1017
     },
     {
       "sorgente": "YT_CHANNEL",
