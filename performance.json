@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-28",
+  "aggiornato": "2026-10-29",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -49,6 +49,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "fqxzsRWpKjQ": {
+      "views": 1204,
+      "averageViewPercentage": 38.55,
+      "averageViewDuration": 10,
+      "likes": 12,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "Uf7HNy9-5FI": {
       "views": 1201,
       "averageViewPercentage": 47.94,
@@ -64,14 +72,6 @@
       "likes": 5,
       "comments": 0,
       "subscribersGained": 1
-    },
-    "fqxzsRWpKjQ": {
-      "views": 1183,
-      "averageViewPercentage": 38.5,
-      "averageViewDuration": 10,
-      "likes": 12,
-      "comments": 0,
-      "subscribersGained": 0
     },
     "1Pdez4fE-hM": {
       "views": 1098,
@@ -138,8 +138,8 @@
       "subscribersGained": 3
     },
     "7jAhDToSksQ": {
-      "views": 983,
-      "averageViewPercentage": 36.71,
+      "views": 987,
+      "averageViewPercentage": 36.75,
       "averageViewDuration": 10,
       "likes": 11,
       "comments": 0,
@@ -153,14 +153,6 @@
       "comments": 1,
       "subscribersGained": 1
     },
-    "WPZDZj4fOAw": {
-      "views": 970,
-      "averageViewPercentage": 63.22,
-      "averageViewDuration": 18,
-      "likes": 7,
-      "comments": 0,
-      "subscribersGained": 4
-    },
     "P3yOUIGm0UU": {
       "views": 970,
       "averageViewPercentage": 68.28,
@@ -168,6 +160,14 @@
       "likes": 3,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "WPZDZj4fOAw": {
+      "views": 970,
+      "averageViewPercentage": 63.22,
+      "averageViewDuration": 18,
+      "likes": 7,
+      "comments": 0,
+      "subscribersGained": 4
     },
     "3Rgwvla2QKI": {
       "views": 806,
@@ -202,9 +202,9 @@
       "subscribersGained": 0
     },
     "vkDvtBuuqNM": {
-      "views": 592,
-      "averageViewPercentage": 57.54,
-      "averageViewDuration": 10,
+      "views": 599,
+      "averageViewPercentage": 58.39,
+      "averageViewDuration": 11,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 1
@@ -273,6 +273,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "bRg-mjhYlBI": {
+      "views": 93,
+      "averageViewPercentage": 79.48,
+      "averageViewDuration": 19,
+      "likes": 0,
+      "comments": 0,
+      "subscribersGained": 0
+    },
     "Lr8yCw1ZrZA": {
       "views": 90,
       "averageViewPercentage": 46.4,
@@ -289,10 +297,10 @@
       "comments": 0,
       "subscribersGained": 0
     },
-    "bRg-mjhYlBI": {
-      "views": 79,
-      "averageViewPercentage": 79.5,
-      "averageViewDuration": 19,
+    "QXACxLy17BU": {
+      "views": 58,
+      "averageViewPercentage": 55.91,
+      "averageViewDuration": 12,
       "likes": 0,
       "comments": 0,
       "subscribersGained": 0
@@ -360,11 +368,11 @@
       "views": 11
     },
     {
-      "termine": "amici 26",
-      "views": 9
+      "termine": "sprint race motogp",
+      "views": 10
     },
     {
-      "termine": "sprint race motogp",
+      "termine": "amici 26",
       "views": 9
     },
     {
@@ -372,12 +380,12 @@
       "views": 9
     },
     {
-      "termine": "manovra 2027",
-      "views": 8
+      "termine": "stellantis",
+      "views": 9
     },
     {
-      "termine": "stellantis",
-      "views": 7
+      "termine": "manovra 2027",
+      "views": 8
     },
     {
       "termine": "torino udinese",
@@ -408,6 +416,10 @@
       "views": 4
     },
     {
+      "termine": "motogp sprint australia",
+      "views": 4
+    },
+    {
       "termine": "pensione",
       "views": 4
     },
@@ -418,20 +430,16 @@
     {
       "termine": "de martino",
       "views": 3
-    },
-    {
-      "termine": "filma shqiptar te vjeter",
-      "views": 3
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 29312
+      "views": 29381
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 1017
+      "views": 1040
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -439,7 +447,7 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 55
+      "views": 54
     },
     {
       "sorgente": "SUBSCRIBER",
@@ -447,7 +455,7 @@
     },
     {
       "sorgente": "EXT_URL",
-      "views": 10
+      "views": 11
     },
     {
       "sorgente": "SOUND_PAGE",
