@@ -790,18 +790,24 @@ def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None)
 
 
 def _colore_parola(tipo, attiva, stile):
-    if tipo:
-        return stile["colore_evidenza"]
-    return stile["colore_parola"] if attiva else BIANCO
+    # La parola detta ha sempre il suo colore, anche se e' un numero o un
+    # nome: altrimenti su quelle righe la si riconoscerebbe solo dal corpo.
+    if attiva:
+        return stile["colore_parola"]
+    return stile["colore_evidenza"] if tipo else BIANCO
 
 
-def _sottotitoli_accesi(parole, titolo, gioco, stile):
+def _sottotitoli_accesi(parole, titolo, gioco, stile, dopo=0.0):
     """I sottotitoli dello Short: righe di poche parole, quella detta accesa.
 
     Una riga resta a schermo finche' la voce la legge; a ogni parola cambia
     l'immagine (stessa riga, accesa un'altra parola) e la parola detta fa un
     piccolo salto. Il salto e' un ritaglio della parola stessa ingrandito per
     un decimo di secondo: si ridimensiona un francobollo, non tutta la riga.
+
+    Prima di `dopo` (la fine dell'amo) non compare niente: in quei secondi a
+    schermo c'e' gia' il titolo enorme, e tre testi insieme non li legge
+    nessuno. Una parola a cavallo entra quando l'amo esce, senza salto.
     """
     W = config.VIDEO_W
     y = int(config.VIDEO_H * stile["y_sottotitoli"])
@@ -820,6 +826,12 @@ def _sottotitoli_accesi(parole, titolo, gioco, stile):
             continue
         for posizione, i in enumerate(riga):
             _, inizio, durata = tempi[i]
+            salto = True
+            if inizio + durata <= dopo:
+                continue
+            if inizio < dopo:
+                durata -= dopo - inizio
+                inizio, salto = dopo, False
             colori = [_colore_parola(tipi[j], j == i, stile) for j in riga]
             try:
                 immagine, (x0, y0, x1, y1) = crea_immagine_riga(
@@ -832,7 +844,7 @@ def _sottotitoli_accesi(parole, titolo, gioco, stile):
                          .with_duration(durata).with_position((x_riga, y)))
 
             ritaglio = immagine[y0:y1, x0:x1]
-            if ritaglio.size == 0:
+            if ritaglio.size == 0 or not salto:
                 continue
             cx, cy = x_riga + (x0 + x1) / 2, y + (y0 + y1) / 2
             larga, alta = x1 - x0, y1 - y0
@@ -859,7 +871,7 @@ def _sottotitoli_accesi(parole, titolo, gioco, stile):
 
 
 def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None,
-                             parole=None):
+                             parole=None, dopo=0.0):
     stile = stile or STILE_BASE
 
     if config.VIDEO_LUNGO:
@@ -867,7 +879,7 @@ def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None,
 
     if parole is None:
         parole = parole_dello_short(audio_path)
-    return _sottotitoli_accesi(parole, titolo, gioco, stile)
+    return _sottotitoli_accesi(parole, titolo, gioco, stile, dopo)
 
 
 # ===========================================================================
@@ -941,10 +953,14 @@ def crea_amo(titolo, stile):
     return [_a_scatto(immagine, 0, min(effetti.SECONDI_AMO, 10), (W / 2, cy))]
 
 
+# Opacita' del lampo: abbastanza per sentire il colpo, non uno schermo bianco.
+OPACITA_LAMPO = 0.6
+
+
 def crea_lampi(punti, stile, fps=None):
-    """Il lampo bianco sugli stacchi: due-tre fotogrammi, a opacita' piena
-    sul primo e meta' sul resto, cosi' si percepisce come un colpo di luce e
-    non come uno schermo bianco."""
+    """Il lampo bianco sugli stacchi gia' scelti (effetti.punti_dei_lampi):
+    un solo fotogramma a opacita' 0.6, un colpo di luce e non uno schermo
+    bianco."""
     if "flash" not in stile["transizione"]:
         return []
     fps = fps or config.FPS or 30
@@ -954,10 +970,8 @@ def crea_lampi(punti, stile, fps=None):
         if t <= 0:
             continue
         lampi.append(ColorClip(size=(W, H), color=(255, 255, 255))
-                     .with_start(t).with_duration(1 / fps).with_opacity(0.85))
-        lampi.append(ColorClip(size=(W, H), color=(255, 255, 255))
-                     .with_start(t + 1 / fps).with_duration(1.5 / fps)
-                     .with_opacity(0.40))
+                     .with_start(t).with_duration(1 / fps)
+                     .with_opacity(OPACITA_LAMPO))
     return lampi
 
 
@@ -1105,13 +1119,18 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
 
     if wow:
         try:
-            livelli.extend(crea_lampi(punti, stile))
+            livelli.extend(crea_lampi(effetti.punti_dei_lampi(punti, parole),
+                                      stile))
         except Exception as e:
             print(f"[Warning Maker] Lampi sugli stacchi saltati: {e}")
 
     # Un telegiornale ha il suo cartello fisso al posto del banner: titolo,
-    # testata e "immagini di repertorio" per tutta la durata. Senza l'avviso
+    # testata e "immagini di repertorio" fino alla fine. Senza l'avviso
     # una clip stock sotto una notizia vera sembra il filmato della notizia.
+    # Nello Short il cartello entra quando esce l'amo: nei primi due secondi
+    # il titolo c'e' gia', enorme, e due volte non serve.
+    con_amo = wow and bool(titolo)
+    inizio_cartello = min(effetti.SECONDI_AMO, durata) if con_amo else 0
     telegiornale = profilo.attivo().telegiornale and not config.VIDEO_LUNGO
     if telegiornale and titolo:
         try:
@@ -1119,7 +1138,8 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
                 ImageClip(crea_cartello_tg(pulisci_testo(titolo),
                                            testata_della_fonte(fonte),
                                            config.LINGUA))
-                .with_start(0).with_duration(durata)
+                .with_start(inizio_cartello)
+                .with_duration(durata - inizio_cartello)
                 .with_position(("center", int(config.VIDEO_H * Y_CARTELLO_TG)))
             )
         except Exception as e:
@@ -1150,21 +1170,26 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
         except Exception as e:
             print(f"[Warning Maker] Progress bar saltata: {e}")
 
-    if wow and titolo:
+    amo_a_schermo = False
+    if con_amo:
         try:
             from brain import testo_miniatura
             amo = testo_miniatura(titolo) or pulisci_testo(titolo)
         except Exception:
             amo = pulisci_testo(titolo)
         try:
-            livelli.extend(crea_amo(amo, stile))
+            clip_amo = crea_amo(amo, stile)
+            livelli.extend(clip_amo)
+            amo_a_schermo = bool(clip_amo)
         except Exception as e:
             print(f"[Warning Maker] Amo iniziale saltato: {e}")
 
     try:
         livelli.extend(genera_sottotitoli_clips(audio_path, titolo,
                                                 gioco_ufficiale or gioco, stile,
-                                                parole=parole or None))
+                                                parole=parole or None,
+                                                dopo=effetti.SECONDI_AMO
+                                                if amo_a_schermo else 0.0))
     except Exception as e:
         print(f"[Warning Maker] Sottotitoli saltati: {e}")
 

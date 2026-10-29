@@ -92,7 +92,7 @@ VESTI = [
         "zoom": "alternato",
         "intensita_zoom": 0.12,
         "ritmo": 0.85,
-        "colore_parola": "#FF8A00",
+        "colore_parola": "#3DDCFF",
         "stacco": (1.4, 1.8),
         "transizione": "flash+scatto",
     },
