@@ -273,6 +273,23 @@ class TestFinale:
     def test_in_inglese(self):
         assert effetti.testi_finale("Cars", lingua="en")[0] == "FOLLOW US"
 
+    def test_la_voce_dice_l_invito_col_nome_del_canale(self):
+        # Davide, 29/10/2026: "integra nella voce la parte finale".
+        assert effetti.frase_finale_parlata("Motori in 60 secondi") == \
+            "Seguici: Motori in 60 secondi."
+        assert effetti.frase_finale_parlata("Cars", "en") == "Follow: Cars."
+        assert effetti.frase_finale_parlata("") == ""
+
+    def test_trova_dove_comincia_l_invito_detto(self):
+        parole = _parole(TESTO + " Seguici: Motori in sessanta secondi.")
+        k = effetti.indice_invito_parlato(parole)
+        assert parole[k]["parola"].rstrip(":") == "Seguici"
+        assert k == len(parole) - 5
+
+    def test_un_seguici_nello_script_non_conta(self):
+        parole = _parole("Seguici sempre. " + TESTO)
+        assert effetti.indice_invito_parlato(parole) is None
+
     def test_logo_solo_se_c_e(self, tmp_path):
         assert effetti.trova_logo(str(tmp_path)) is None
         (tmp_path / "logo.png").write_bytes(b"x")

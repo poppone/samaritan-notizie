@@ -1119,7 +1119,21 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
         gioco = dati.get("gioco", "")
         fonte = dati.get("fonte", "")
 
-    audio_path = audio_pronto or genera_voce_samaritan(testo_per_audio)
+    # Lo Short ha il montaggio veloce (vedi effetti.py): stacchi a tempo con
+    # la voce, amo, lampi, suoni e finale. Il video lungo no: su otto minuti
+    # un lampo ogni due secondi sfinirebbe, e il suo ritmo e' un altro.
+    wow = not config.VIDEO_LUNGO
+
+    # Nello Short la voce chiude con l'invito a seguire il canale, detto
+    # mentre a schermo compare il finale.
+    testo_voce = testo_per_audio or ""
+    if wow and not audio_pronto:
+        invito = effetti.frase_finale_parlata(profilo.attivo().nome_canale,
+                                              config.LINGUA)
+        if invito:
+            testo_voce = f"{testo_voce.rstrip()} {invito}"
+
+    audio_path = audio_pronto or genera_voce_samaritan(testo_voce)
     if not audio_path:
         print("[Errore Maker] Audio non generato: interrompo.")
         return None
@@ -1146,19 +1160,25 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
     audio_clip = AudioFileClip(audio_path)
     durata = audio_clip.duration + 0.4
 
-    # Lo Short ha il montaggio veloce (vedi effetti.py): stacchi a tempo con
-    # la voce, amo, lampi, suoni e finale. Il video lungo no: su otto minuti
-    # un lampo ogni due secondi sfinirebbe, e il suo ritmo e' un altro.
-    wow = not config.VIDEO_LUNGO
     parole, punti, inizio_finale = [], None, None
     if wow:
         try:
-            parole = parole_dello_short(audio_path, testo_per_audio or "")
+            parole = parole_dello_short(audio_path, testo_voce)
         except Exception as e:
             print(f"[Warning Maker] Tempi delle parole non disponibili: {e}")
-        # Il finale parte quando la voce ha finito, non le passa sopra.
-        inizio_finale = audio_clip.duration + 0.1
-        durata = inizio_finale + effetti.SECONDI_FINALE
+        # Il finale parte quando la voce comincia l'invito ("Seguici: ...").
+        # Le parole dell'invito non fanno sottotitoli, stacchi ne' pop: a
+        # schermo c'e' gia' il finale. Senza invito riconosciuto il finale
+        # parte quando la voce ha finito, come prima.
+        k = effetti.indice_invito_parlato(parole, config.LINGUA)
+        if k is not None:
+            inizio_finale = parole[k]["inizio"]
+            parole = parole[:k]
+            durata = max(audio_clip.duration + 0.5,
+                         inizio_finale + effetti.SECONDI_FINALE)
+        else:
+            inizio_finale = audio_clip.duration + 0.1
+            durata = inizio_finale + effetti.SECONDI_FINALE
         minimo, massimo = stile["stacco"]
         punti = effetti.punti_di_stacco(parole, durata, minimo, massimo)
 

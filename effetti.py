@@ -69,6 +69,14 @@ PERCORSI_LOGO = ("logo.png", "assets/logo.png", "assets/logo-512.png",
 
 INVITO_FINALE = {"it": "SEGUICI", "en": "FOLLOW US"}
 
+# Lo stesso invito detto dalla voce, in coda allo script (Davide, 29/10/2026:
+# "integra nella voce la parte finale"). Il finale a schermo parte quando la
+# voce dice la prima parola dell'invito.
+INVITO_PARLATO = {"it": "Seguici", "en": "Follow"}
+
+# Fra quante parole in fondo si cerca l'inizio dell'invito detto dalla voce.
+PAROLE_CODA_INVITO = 12
+
 _FINE_FRASE = ".!?;:"
 _FINE_INCISO = ","
 
@@ -400,6 +408,29 @@ def testi_finale(nome_canale, handle="", lingua="it"):
     if handle and handle.strip().lower() != (nome_canale or "").strip().lower():
         righe.append(handle.strip())
     return righe
+
+
+def frase_finale_parlata(nome_canale, lingua="it"):
+    """L'invito che la voce dice in fondo allo Short, o "" senza nome canale."""
+    nome = (nome_canale or "").strip()
+    if not nome:
+        return ""
+    return f"{INVITO_PARLATO.get(lingua, INVITO_PARLATO['it'])}: {nome}."
+
+
+def indice_invito_parlato(parole, lingua="it"):
+    """L'indice della parola con cui la voce comincia l'invito finale.
+
+    Si cerca solo fra le ultime PAROLE_CODA_INVITO parole, dall'ultima: lo
+    script stesso potrebbe dire "seguici" prima. None se non c'e'.
+    """
+    invito = INVITO_PARLATO.get(lingua, INVITO_PARLATO["it"]).lower()
+    parole = parole or []
+    for i in range(len(parole) - 1, max(len(parole) - PAROLE_CODA_INVITO, 0) - 1, -1):
+        testo = re.sub(r"[^\w]", "", str(parole[i].get("parola", ""))).lower()
+        if testo == invito:
+            return i
+    return None
 
 
 def trova_logo(radice=None):
