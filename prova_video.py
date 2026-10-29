@@ -37,6 +37,26 @@ def main():
     with open(os.path.join("prova", "scheda.txt"), "w", encoding="utf-8") as f:
         f.write(f"{dati['titolo']}\n\nFonte: {dati.get('fonte', '')}\n\n{dati['script']}\n")
 
+    # Per controllare l'allineamento fra voce e scritte: i tempi delle parole
+    # dati dalla voce e quello che Whisper sente nel video finito.
+    import glob
+    import json
+    import config
+    for parole in glob.glob(os.path.join(config.DIR_TEMP, "*.parole.json")):
+        shutil.copy(parole, os.path.join("prova", os.path.basename(parole)))
+    try:
+        import whisper
+        risultato = whisper.load_model("base").transcribe(
+            video, language="it", word_timestamps=True)
+        sentite = [{"parola": w["word"].strip(), "inizio": round(w["start"], 2),
+                    "fine": round(w["end"], 2)}
+                   for s in risultato["segments"] for w in s.get("words", [])]
+        with open(os.path.join("prova", "sentite.json"), "w",
+                  encoding="utf-8") as f:
+            json.dump(sentite, f, ensure_ascii=False, indent=1)
+    except Exception as e:
+        print(f"Trascrizione di controllo saltata: {e}")
+
 
 if __name__ == "__main__":
     main()
