@@ -1,21 +1,5 @@
 [
   {
-    "timestamp": 1793258138,
-    "data": "2026-10-29",
-    "titolo": "MotoGP: Jorge Martin torna a Sepang",
-    "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1793271600,
-    "formato": "short",
-    "estratto_script": "Jorge Martin è stato dichiarato fit e correrà a Sepang. Secondo MotoGrandPrix.it, il pilot",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle track",
-    "fonte": "MotoGP | Jorge Martin torna in pista a Sepang: dichiarato fit, sarà in azione nelle FP1 (MotoGrandPrix.it)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNZHBabFhXc01jMFN4YUZvYUxpdkFEeE9zZzhGZ1cxcDAzMGhnRmhjTklOTGgzeFN0UEpDa3JkMHhQYjlxME5uRFZuWThXNlJ3YmYtcEROOFdQaDB2alpMVGM5SllqOEhkS3FVYUZ4aVZCYURzUlNRd19TVi1IQTFnWmU5dWtqNGdIeG5sM3dXZHR1Q3hYMFJsaFJ1WktyMjJ4aEVvbDZjNndsa2FfOE1qUTQ5T1NITFoxOEUxb1FTYjJqZkZsdGVr?oc=5",
-    "video_id": null
-  },
-  {
     "timestamp": 1793268356,
     "data": "2026-10-29",
     "titolo": "Stellantis: Jefferies ottimista sul caso",
@@ -45,6 +29,22 @@
     "query_video": "factory plant interior",
     "fonte": "Volkswagen perde 5,9 miliardi: il doppio delle attese. Margini giù con le auto elettriche, tagli ai costi per 31 miliardi (Milano Finanza)",
     "fonte_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPS0J2SUdDb01IM3ExVksyVWx2WDlFaHVlU1pXa1R3d1QzTWo5ZG1PdHUxNkJTSjlQMXM3bkdjdTQ4aWVZVUp5WDFCMTJraVdOTnB3UzNtQ3JxdkVwZUo4S191Ulg5NllLX2E0XzhLLXQ1M01QWS1ZOExhNFE5N1JfVFYzRjJNYVpaeXFQbTlFQU9OcGhQeFpEMHlFWmtxMjJuelhmU09ZQWV6dUx1ZnY2LURSSjNERFp6ZkJ1NmJWcUZHYlByYnRxMVN5alhhNEhLYU9KSUxZcnlKempXWVJuX05yV0t5c3E0Wm9j?oc=5",
+    "video_id": null
+  },
+  {
+    "timestamp": 1793279844,
+    "data": "2026-10-29",
+    "titolo": "Stellantis vola del 15,38% e trascina Milano",
+    "lingua": "it",
+    "slot": "18:00",
+    "uscita": 1793293200,
+    "formato": "short",
+    "estratto_script": "Stellantis ha registrato un aumento del 15,38% sul mercato azionario, spingendo Milano al ",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "Stellantis",
+    "query_video": "stock market screen",
+    "fonte": "Stellantis vola del 15,38% e trascina Milano: cosa sta muovendo il Ftse Mib (SoldiOnline.it)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQekdtSDZFY2Z2T1AyZW1rU1otSjdvQTlFLURjQ2JNR1BKZmw4bzBrNEo0ZjMtSWJjSEZmRW96YWFWR0N1RFJVdkZsNGkxV2dTVjBERG8yU05ZaFhhZ3dLRml4UTdDcmx0b2RFZl9OMzhGdk5Sd3F5ZDI0dktyWjBqTFlRVGZGMHBOZzVvX01LdEhZMWFHQVdpbU44dGJRM1VHeVZZaTZEVFBFWmJGMDdkeVM3YjlMb1VOdERtVWhR?oc=5",
     "video_id": null
   }
 ]
