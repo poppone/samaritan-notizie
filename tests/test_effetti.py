@@ -397,6 +397,29 @@ class TestMontaggioInPiccolo:
         assert 0 <= x0 < x1 <= immagine.shape[1] and 0 <= y0 < y1 <= immagine.shape[0]
         assert np.any(immagine[y0:y1, x0:x1, 3] > 0)
 
+    def test_il_salto_non_copre_le_parole_vicine(self, piccolo):
+        # 29/10/2026, video di prova: "ALLA VIGILIA" si leggeva "ALLAVIGILIA"
+        # perche' il bordo e il salto della parola detta coprivano lo spazio.
+        import numpy as np
+        import maker
+        stile = veste.VESTI[0]
+        immagine, (x0, y0, x1, y1) = maker.crea_immagine_riga(
+            ["ALLA", "VIGILIA", "DEL"], 1,
+            [maker.BIANCO, stile["colore_parola"], maker.BIANCO],
+            font_size=80, larghezza_max=2000)
+        larga = x1 - x0
+        sx = x0 - larga * maker.SALTO_PAROLA_DETTA / 2
+        dx = x1 + larga * maker.SALTO_PAROLA_DETTA / 2
+        alfa = immagine[:, :, 3] > 0
+        colonne = np.where(alfa.any(axis=0))[0]
+        # Fuori dalla parola accesa (allargata dal salto) ci sono le altre due,
+        # e non toccano la zona del salto.
+        assert colonne.min() < sx and colonne.max() > dx
+        sinistra = colonne[colonne < x0]
+        destra = colonne[colonne > x1]
+        assert sinistra.max() < sx
+        assert destra.min() > dx
+
     def test_la_parola_detta_ha_sempre_il_suo_colore(self, piccolo):
         import maker
         stile = veste.VESTI[0]

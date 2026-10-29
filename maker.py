@@ -814,10 +814,19 @@ def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None)
     while True:
         font = _carica_font(font_size)
         grande = _carica_font(int(font_size * SCALA_PAROLA_DETTA))
-        spazio = misura.textlength(" ", font=font) * 1.1
+        # Il bordo nero di ogni parola sborda di `bordo` pixel per lato e
+        # mangerebbe lo spazio: lo si aggiunge, altrimenti "ALLA VIGILIA" si
+        # legge "ALLAVIGILIA".
+        spazio = misura.textlength(" ", font=font) * 1.1 + 2 * bordo
         larghezze = [misura.textlength(p, font=grande if i == attiva else font)
                      for i, p in enumerate(parole)]
-        totale = sum(larghezze) + spazio * (len(parole) - 1) + 2 * (bordo + pad_x)
+        # Attorno alla parola detta serve anche il posto per il suo salto, che
+        # la allarga di SALTO_PAROLA_DETTA per un istante.
+        margine = (larghezze[attiva] * SALTO_PAROLA_DETTA / 2
+                   if 0 <= attiva < len(parole) else 0)
+        accanto = sum(1 for j in (attiva - 1, attiva) if 0 <= j < len(parole) - 1)
+        totale = (sum(larghezze) + spazio * (len(parole) - 1) + margine * accanto
+                  + 2 * (bordo + pad_x))
         if totale <= larghezza_max or font_size <= 48:
             break
         font_size -= 6
@@ -839,6 +848,8 @@ def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None)
             riquadro = (max(int(sx[0]) - 2, 0), max(int(sx[1]) - 2, 0),
                         min(int(sx[2]) + 2, img.width), min(int(sx[3]) + 2, img.height))
         x += larghezze[i] + spazio
+        if i in (attiva - 1, attiva):
+            x += margine
 
     # Al corpo minimo una riga puo' restare piu' larga dello schermo: la si
     # rimpicciolisce tutta, perche' una parola tagliata dal bordo non si legge
