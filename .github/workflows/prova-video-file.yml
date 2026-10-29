@@ -26,6 +26,6 @@ jobs:
         run: |
           git config user.name "Finch (stanza)"
           git config user.email "finch@davidedurazzi.it"
-          git add prova
-          git commit -m "Video di prova [skip ci]"
+          git add -f prova
+          git commit -m "Video di prova [skip ci]" || true
           git push
