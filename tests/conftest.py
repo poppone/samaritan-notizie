@@ -50,3 +50,19 @@ def _prenotazioni_isolate(monkeypatch, tmp_path):
     import prenotazione
     monkeypatch.setattr(config, "FILE_PRENOTAZIONI", str(tmp_path / "prenotazioni.json"))
     monkeypatch.setattr(prenotazione, "_IN_CORSO", None)
+
+
+@pytest.fixture(autouse=True)
+def _correttore_spento(monkeypatch, request):
+    """La correzione ortografica e' una chiamata a Groq in piu': i test che
+    contano le chiamate del generatore non la vedono. I suoi test la
+    riaccendono con il marcatore `correttore`."""
+    if request.node.get_closest_marker("correttore"):
+        return
+    import brain
+    monkeypatch.setattr(brain, "correggi_ortografia", lambda testo: testo)
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "correttore: il test usa la correzione ortografica vera")
