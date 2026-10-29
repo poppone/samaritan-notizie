@@ -50,13 +50,16 @@ jobs:
       # Gli artifact stanno su un host che la stanza non raggiunge: il video
       # si copia anche nel branch finch/prova-video-file (raw.githubusercontent).
       - uses: actions/checkout@v4
+        if: always()
         with:
           ref: finch/prova-video-file
           path: copia
       - name: Copia il video nel branch dei file
+        if: always()
         run: |
           mkdir -p copia/prova
-          cp prova/* copia/prova/
+          rm -f copia/prova/*
+          cp prova/* copia/prova/ || true
           cd copia
           git config user.name "Finch (stanza)"
           git config user.email "finch@davidedurazzi.it"
