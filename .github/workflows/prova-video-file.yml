@@ -1,0 +1,31 @@
+name: Copia il video di prova nel branch
+
+# Prende il video dagli artifact della run di prova e lo mette in questo
+# branch, cosi' si scarica da raw.githubusercontent.com.
+on:
+  push:
+    branches: ['finch/prova-video-file']
+    paths: ['.github/workflows/prova-video-file.yml']
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  copia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: video-prova
+          path: prova
+          run-id: '40895017683'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Salva nel branch
+        run: |
+          git config user.name "Finch (stanza)"
+          git config user.email "finch@davidedurazzi.it"
+          git add prova
+          git commit -m "Video di prova [skip ci]"
+          git push
