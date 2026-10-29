@@ -437,6 +437,23 @@ class TestMontaggioInPiccolo:
         assert sinistra.max() < sx
         assert destra.min() > dx
 
+    def test_le_parole_non_ancora_dette_non_si_vedono(self, piccolo):
+        # Davide, 29/10/2026: "non combacia la voce con la scritta". La riga
+        # mostra solo le parole gia' dette, e non cambia larghezza.
+        import numpy as np
+        import maker
+        stile = veste.VESTI[0]
+        colori = [maker.BIANCO, stile["colore_parola"], maker.BIANCO]
+        tutta, (_, _, x1, _) = maker.crea_immagine_riga(
+            ["ALLA", "VIGILIA", "DEL"], 1, colori, font_size=80,
+            larghezza_max=2000)
+        meta, _ = maker.crea_immagine_riga(
+            ["ALLA", "VIGILIA", "DEL"], 1, colori, font_size=80,
+            larghezza_max=2000, visibili=2)
+        assert meta.shape == tutta.shape
+        assert np.any(tutta[:, x1 + 5:, 3] > 0)
+        assert not np.any(meta[:, x1 + 5:, 3] > 0)
+
     def test_la_parola_detta_ha_sempre_il_suo_colore(self, piccolo):
         import maker
         stile = veste.VESTI[0]
