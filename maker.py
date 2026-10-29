@@ -9,6 +9,11 @@ La qualita' visiva nasce dall'EDITING, non da riprese fatte a mano:
   4. Sorgenti di proporzioni diverse dall'uscita inserite su sfondo sfocato
   5. Progress bar, banner del titolo, sottotitoli
 
+Lo Short ha in piu' il montaggio veloce di effetti.py: amo col titolo enorme
+nei primi due secondi, stacchi ogni 1,5-2 secondi a tempo con la voce, lampi
+e zoom a scatto sugli stacchi, sottotitoli con la parola detta accesa, suoni
+generati (whoosh, pop sui numeri) e il finale che invita a seguire il canale.
+
 Lo stesso montaggio produce due formati, e le misure le legge da config:
 lo Short 9:16 da mezzo minuto (sottotitoli una parola per volta, enormi, al
 centro) e il video lungo 16:9 da otto minuti (sottotitoli a frase, in basso).
@@ -32,10 +37,13 @@ from moviepy import (
     ImageClip,
     ColorClip,
     CompositeVideoClip,
+    CompositeAudioClip,
     concatenate_videoclips,
 )
+from moviepy.audio.AudioClip import AudioArrayClip
 
 import config
+import effetti
 import profilo
 import veste
 from stock import scarica_clip_sfondo, scegli_sorgente  # noqa: F401
@@ -194,24 +202,58 @@ def _adatta_al_formato(clip, durata, stile=None):
 _adatta_a_verticale = _adatta_al_formato
 
 
-def _applica_zoom(clip, durata, intensita=0.08, verso="dentro"):
+def _scatto(t, ampiezza, secondi):
+    """Lo zoom "a scatto": parte largo di `ampiezza` e rientra in `secondi`,
+    frenando alla fine. E' l'effetto punch-in dei montaggi veloci."""
+    if ampiezza <= 0 or t >= secondi:
+        return 0.0
+    return ampiezza * (1 - t / secondi) ** 2
+
+
+def _zoom_fotogramma(fotogramma, fattore):
+    """Ingrandisce un fotogramma di `fattore` restando al centro.
+
+    Si ritaglia prima la parte che resta in quadro e la si porta alle misure
+    piene con un ridimensionamento solo: costa come un resize del fotogramma,
+    invece di ingrandirlo tutto e poi comporlo su un fondo e ritagliarlo.
+    """
+    if fattore <= 1.0005:
+        return fotogramma
+    alto, largo = fotogramma.shape[:2]
+    w, h = largo / fattore, alto / fattore
+    x0, y0 = (largo - w) / 2, (alto - h) / 2
+    img = Image.fromarray(fotogramma)
+    return np.array(img.resize((largo, alto), Image.BILINEAR,
+                               box=(x0, y0, x0 + w, y0 + h)))
+
+
+def _applica_zoom(clip, durata, intensita=0.08, verso="dentro",
+                  scatto=0.0, secondi_scatto=0.22):
     """Ken Burns: zoom lento e continuo, il movimento trattiene l'occhio.
 
     Il verso fa piu' differenza di quanta sembri: "dentro" stringe sul
     dettaglio, "fuori" apre sulla scena. Lo stesso spezzone montato nei due
     versi si legge come due inquadrature diverse.
+
+    `scatto` aggiunge in testa allo stacco uno zoom veloce che rientra in
+    `secondi_scatto`: costa niente in piu', e' lo stesso ridimensionamento.
     """
     try:
         if verso == "fuori":
-            def fattore(t):
+            def lento(t):
                 return 1 + intensita * (1 - t / max(durata, 0.01))
         else:
-            def fattore(t):
+            def lento(t):
                 return 1 + intensita * (t / max(durata, 0.01))
-        zoomata = clip.resized(fattore)
-        return CompositeVideoClip(
-            [zoomata.with_position("center")],
-            size=(config.VIDEO_W, config.VIDEO_H),
+
+        def fattore(t):
+            return lento(t) + _scatto(t, scatto, secondi_scatto)
+
+        # Lo spezzone arriva gia' alle misure dell'uscita e pieno: la sua
+        # maschera e' tutta opaca, e portarsela dietro costa a ogni fotogramma.
+        pieno = clip.without_mask() if clip.mask is not None else clip
+        return pieno.transform(
+            lambda prendi, t: _zoom_fotogramma(prendi(t), fattore(t))
         ).with_duration(durata)
     except Exception as e:
         print(f"[Warning Maker] Zoom non applicato ({e}).")
@@ -227,8 +269,14 @@ def _apri_video(percorso):
     return _CACHE_VIDEO[percorso]
 
 
-def _prepara_segmento(sorgente, durata, stile=None, verso="dentro"):
-    """Costruisce un singolo stacco gia' in formato 1080x1920."""
+def _prepara_segmento(sorgente, durata, stile=None, verso="dentro",
+                      scatto=0.0, secondi_scatto=0.22, esatta=False):
+    """Costruisce un singolo stacco gia' in formato 1080x1920.
+
+    Con `esatta` lo stacco dura esattamente `durata` anche se la clip e' piu'
+    corta (la si ripete): gli stacchi a tempo con la voce non possono
+    accorciarsi da soli, altrimenti i tagli scivolano fuori tempo.
+    """
     stile = stile or STILE_BASE
     intensita = stile["intensita_zoom"]
 
@@ -236,27 +284,96 @@ def _prepara_segmento(sorgente, durata, stile=None, verso="dentro"):
         base = ImageClip(sorgente["path"]).with_duration(durata)
         # Sugli screenshot lo zoom e' piu' marcato: senza, sembrerebbero fermi
         return _applica_zoom(_adatta_al_formato(base, durata, stile), durata,
-                             intensita=intensita * 2, verso=verso)
+                             intensita=intensita * 2, verso=verso,
+                             scatto=scatto, secondi_scatto=secondi_scatto)
 
     video = _apri_video(sorgente["path"])
     if video.duration <= durata:
         pezzo = video.subclipped(0, video.duration)
-        durata = video.duration
+        if esatta:
+            from moviepy.video.fx import Loop
+            pezzo = pezzo.with_effects([Loop(duration=durata)])
+        else:
+            durata = video.duration
     else:
         inizio = random.uniform(0, video.duration - durata)
         pezzo = video.subclipped(inizio, inizio + durata)
 
     return _applica_zoom(_adatta_al_formato(pezzo, durata, stile), durata,
-                         intensita=intensita, verso=verso)
+                         intensita=intensita, verso=verso,
+                         scatto=scatto, secondi_scatto=secondi_scatto)
 
 
-def costruisci_sfondo_montato(sorgenti, durata_totale, stile=None):
+def _verso_dello_stacco(stile, numero):
+    # "alternato" cambia verso a ogni stacco: il montaggio respira invece
+    # di spingere sempre nella stessa direzione per tutto il video.
+    if stile["zoom"] == "alternato":
+        return "dentro" if numero % 2 == 0 else "fuori"
+    return stile["zoom"]
+
+
+# Lo scatto dello sfondo: quello d'apertura e' piu' ampio e piu' lungo (fa
+# parte dell'amo), quello sugli stacchi e' un colpo secco.
+SCATTO_APERTURA = (0.22, 0.55)
+SCATTO_STACCO = (0.10, 0.20)
+
+
+def _sfondo_a_tempo(utilizzabili, punti, durata_totale, stile):
+    """Lo sfondo dello Short: uno stacco per ogni punto, mai la stessa
+    sorgente due volte di fila, e lo zoom a scatto dove la veste lo vuole."""
+    segmenti_tempo = effetti.segmenti_da_punti(punti, durata_totale)
+    ordine = effetti.ordine_sorgenti(len(utilizzabili), len(segmenti_tempo))
+    scatta = "scatto" in stile["transizione"]
+
+    segmenti, scartate = [], set()
+    for numero, ((inizio, durata), indice) in enumerate(zip(segmenti_tempo, ordine)):
+        if numero == 0:
+            ampiezza, secondi = SCATTO_APERTURA
+        elif scatta:
+            ampiezza, secondi = SCATTO_STACCO
+        else:
+            ampiezza, secondi = 0.0, 0.2
+        segmento = None
+        # Se la sorgente prevista non si apre si prova la successiva: lo
+        # stacco deve esserci comunque, o i tagli dopo andrebbero fuori tempo.
+        for tentativo in range(len(utilizzabili)):
+            candidata = (indice + tentativo) % len(utilizzabili)
+            if candidata in scartate:
+                continue
+            sorgente = utilizzabili[candidata]
+            try:
+                segmento = _prepara_segmento(
+                    sorgente, durata, stile, _verso_dello_stacco(stile, numero),
+                    scatto=ampiezza, secondi_scatto=secondi, esatta=True)
+                break
+            except Exception as e:
+                print(f"[Warning Maker] Sorgente scartata ({sorgente['path']}): {e}")
+                scartate.add(candidata)
+        if segmento is None:
+            return None
+        segmenti.append(segmento.with_duration(durata))
+
+    print(f"[Samaritan Maker] Veste '{stile['nome']}', stacchi a tempo con la voce: "
+          f"{len(segmenti)} in {durata_totale:.1f}s "
+          f"(media {durata_totale / max(len(segmenti), 1):.1f}s), "
+          f"transizione {stile['transizione']}.")
+    # Gli stacchi sono tutti a misura piena e opachi: si mettono in fila
+    # senza comporli su un fondo, che costerebbe una fusione a fotogramma.
+    return concatenate_videoclips(segmenti, method="chain")
+
+
+def costruisci_sfondo_montato(sorgenti, durata_totale, stile=None, punti=None):
     """Alterna le sorgenti con uno stacco ogni 2-3 secondi.
 
     Video e immagini vengono mescolati: i trailer danno movimento, gli
     screenshot danno inquadrature pulite del gioco. Le clip d'archivio con
     una scena invece non si mescolano: vanno nell'ordine delle frasi. La veste decide quanto
     durano gli stacchi (`ritmo`) e da che verso si muove lo zoom.
+
+    Con `punti` (gli istanti di stacco calcolati sulla voce, vedi
+    effetti.punti_di_stacco) gli stacchi cadono esattamente li': e' il
+    montaggio veloce dello Short. Senza, si taglia a caso fra STACCO_MIN e
+    STACCO_MAX come fa il video lungo.
     """
     stile = stile or STILE_BASE
     utilizzabili = [s for s in sorgenti if os.path.exists(s["path"])]
@@ -274,6 +391,9 @@ def costruisci_sfondo_montato(sorgenti, durata_totale, stile=None):
         # statico
         utilizzabili.sort(key=lambda s: s["tipo"] != "video")
 
+    if punti:
+        return _sfondo_a_tempo(utilizzabili, punti, durata_totale, stile)
+
     segmenti, coperto, indice = [], 0.0, 0
     while coperto < durata_totale:
         if per_scena:
@@ -288,12 +408,7 @@ def costruisci_sfondo_montato(sorgenti, durata_totale, stile=None):
         if durata < 0.4:
             break
 
-        # "alternato" cambia verso a ogni stacco: il montaggio respira invece
-        # di spingere sempre nella stessa direzione per tutto il video.
-        if stile["zoom"] == "alternato":
-            verso = "dentro" if len(segmenti) % 2 == 0 else "fuori"
-        else:
-            verso = stile["zoom"]
+        verso = _verso_dello_stacco(stile, len(segmenti))
 
         try:
             segmento = _prepara_segmento(sorgente, durata, stile, verso)
@@ -598,49 +713,330 @@ def _parole_da_whisper(audio_path):
             for info in segmento.get("words", [])]
 
 
-def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None):
-    stile = stile or STILE_BASE
+def parole_dello_short(audio_path, testo=""):
+    """I tempi delle parole dello Short, con la punteggiatura del testo.
 
-    if config.VIDEO_LUNGO:
-        return _sottotitoli_a_frase(_parole_da_whisper(audio_path), stile)
-
-    # I tempi esatti dati dalla voce stessa (vedi voice.leggi_parole); Whisper
-    # solo se la voce non li ha dati.
+    I tempi esatti li da' la voce stessa (vedi voice.leggi_parole); Whisper
+    solo se la voce non li ha dati. Servono a sottotitoli, stacchi e suoni,
+    quindi si leggono una volta sola.
+    """
     parole = leggi_parole(audio_path)
     if parole:
         print(f"[Samaritan Subtitles] Tempi esatti dalla voce ({len(parole)} parole).")
     else:
         parole = _parole_da_whisper(audio_path)
+    return effetti.ripunteggia(parole, testo) if testo else parole
 
-    parole_chiave = {w.upper() for w in re.findall(r"\b[A-Za-z]{4,}\b",
-                                                   f"{titolo} {gioco}")}
-    clips = []
+
+BIANCO = "#FFFFFF"
+
+# Quanto e' piu' grande la parola detta rispetto alle altre della riga, e
+# di quanto "salta" nel momento in cui viene detta.
+SCALA_PAROLA_DETTA = 1.18
+SALTO_PAROLA_DETTA = 0.20
+SECONDI_SALTO = 0.13
+
+
+def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None,
+                       visibili=None):
+    """Una riga di sottotitolo con la parola detta accesa e piu' grande.
+
+    `parole` sono gia' maiuscole, `colori` e' il colore di ciascuna (bianco,
+    evidenza o accento). Tutte stanno sulla stessa linea di base, cosi' la
+    parola piu' grande non fa ballare la riga. Ritorna l'immagine RGBA e il
+    riquadro (x0, y0, x1, y1) della parola accesa, che serve per farla
+    saltare.
+
+    `visibili` e' quante parole disegnare da sinistra (None = tutte): le
+    altre lasciano il loro posto vuoto, cosi' la riga non si sposta mentre si
+    riempie.
+    """
+    bordo, pad_x, pad_y = 9, 30, 22
+    larghezza_max = larghezza_max or int(config.VIDEO_W * 0.94)
+    misura = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+
+    while True:
+        font = _carica_font(font_size)
+        grande = _carica_font(int(font_size * SCALA_PAROLA_DETTA))
+        # Il bordo nero di ogni parola sborda di `bordo` pixel per lato e
+        # mangerebbe lo spazio: lo si aggiunge, altrimenti "ALLA VIGILIA" si
+        # legge "ALLAVIGILIA".
+        spazio = misura.textlength(" ", font=font) * 1.1 + 2 * bordo
+        larghezze = [misura.textlength(p, font=grande if i == attiva else font)
+                     for i, p in enumerate(parole)]
+        # Attorno alla parola detta serve anche il posto per il suo salto, che
+        # la allarga di SALTO_PAROLA_DETTA per un istante.
+        margine = (larghezze[attiva] * SALTO_PAROLA_DETTA / 2
+                   if 0 <= attiva < len(parole) else 0)
+        accanto = sum(1 for j in (attiva - 1, attiva) if 0 <= j < len(parole) - 1)
+        totale = (sum(larghezze) + spazio * (len(parole) - 1) + margine * accanto
+                  + 2 * (bordo + pad_x))
+        if totale <= larghezza_max or font_size <= 48:
+            break
+        font_size -= 6
+
+    salita, discesa = grande.getmetrics()
+    altezza = salita + discesa + 2 * (bordo + pad_y)
+    img = Image.new("RGBA", (int(totale) + 1, altezza), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    base = pad_y + bordo + salita
+    x = pad_x + bordo
+    riquadro = (0, 0, img.width, img.height)
+    for i, (parola, colore) in enumerate(zip(parole, colori)):
+        f = grande if i == attiva else font
+        if visibili is None or i < visibili:
+            draw.text((x, base), parola, font=f, fill=colore, anchor="ls",
+                      stroke_width=bordo, stroke_fill="black")
+        if i == attiva:
+            sx = draw.textbbox((x, base), parola, font=f, anchor="ls",
+                               stroke_width=bordo)
+            riquadro = (max(int(sx[0]) - 2, 0), max(int(sx[1]) - 2, 0),
+                        min(int(sx[2]) + 2, img.width), min(int(sx[3]) + 2, img.height))
+        x += larghezze[i] + spazio
+        if i in (attiva - 1, attiva):
+            x += margine
+
+    # Al corpo minimo una riga puo' restare piu' larga dello schermo: la si
+    # rimpicciolisce tutta, perche' una parola tagliata dal bordo non si legge
+    # (e un clip fuori quadro manda in errore la composizione).
+    if img.width > larghezza_max:
+        k = larghezza_max / img.width
+        img = img.resize((larghezza_max, max(int(img.height * k), 1)), Image.LANCZOS)
+        riquadro = tuple(int(v * k) for v in riquadro)
+    return np.array(img), riquadro
+
+
+def _colore_parola(tipo, attiva, stile):
+    # La parola detta ha sempre il suo colore, anche se e' un numero o un
+    # nome: altrimenti su quelle righe la si riconoscerebbe solo dal corpo.
+    if attiva:
+        return stile["colore_parola"]
+    return stile["colore_evidenza"] if tipo else BIANCO
+
+
+def _sottotitoli_accesi(parole, titolo, gioco, stile, dopo=0.0):
+    """I sottotitoli dello Short: righe di poche parole, quella detta accesa.
+
+    Una riga resta a schermo finche' la voce la legge; a ogni parola cambia
+    l'immagine (stessa riga, accesa un'altra parola) e la parola detta fa un
+    piccolo salto. Il salto e' un ritaglio della parola stessa ingrandito per
+    un decimo di secondo: si ridimensiona un francobollo, non tutta la riga.
+
+    Prima di `dopo` (la fine dell'amo) non compare niente: in quei secondi a
+    schermo c'e' gia' il titolo enorme, e tre testi insieme non li legge
+    nessuno. Una parola a cavallo entra quando l'amo esce, senza salto.
+    """
+    W = config.VIDEO_W
     y = int(config.VIDEO_H * stile["y_sottotitoli"])
+    corpo = int(stile["corpo_sottotitoli"] * 0.80)
+    chiave_titolo = effetti.parole_del_titolo(titolo, gioco)
+    tempi = tempi_parole(parole)
+    tipi = [effetti.tipo_parola(parole, i, chiave_titolo) for i in range(len(parole))]
 
-    for testo, inizio, durata in tempi_parole(parole):
-        parola = grafia_canale(testo).strip().upper()
-        if not parola:
+    clips = []
+    for riga in effetti.raggruppa_parole(parole):
+        # Punti e virgole servono a capire dove finisce la frase, ma a schermo
+        # una parola per volta sembrano refusi; ? e ! invece si leggono.
+        testi = [grafia_canale(testo).strip().upper().rstrip(".,;:")
+                 for testo in (parole[i]["parola"] for i in riga)]
+        if not any(testi):
             continue
+        for posizione, i in enumerate(riga):
+            _, inizio, durata = tempi[i]
+            salto = True
+            if inizio + durata <= dopo:
+                continue
+            if inizio < dopo:
+                durata -= dopo - inizio
+                inizio, salto = dopo, False
+            colori = [_colore_parola(tipi[j], j == i, stile) for j in riga]
+            try:
+                # La riga si scrive mentre la voce la dice: a schermo ci sono
+                # solo le parole gia' dette e quella che sta dicendo (Davide,
+                # 29/10/2026: "non combacia la voce con la scritta").
+                immagine, (x0, y0, x1, y1) = crea_immagine_riga(
+                    testi, posizione, colori, font_size=corpo,
+                    visibili=posizione + 1)
+            except Exception as e:
+                print(f"[Warning Maker] Sottotitolo saltato: {e}")
+                continue
+            x_riga = (W - immagine.shape[1]) // 2
+            clips.append(ImageClip(immagine).with_start(inizio)
+                         .with_duration(durata).with_position((x_riga, y)))
 
-        nudo = parola.strip(".,!?;:")
-        evidenzia = nudo.isdigit() or nudo in parole_chiave
+            ritaglio = immagine[y0:y1, x0:x1]
+            if ritaglio.size == 0 or not salto:
+                continue
+            cx, cy = x_riga + (x0 + x1) / 2, y + (y0 + y1) / 2
+            larga, alta = x1 - x0, y1 - y0
 
-        colore = (stile["colore_evidenza"] if evidenzia
-                  else stile["colore_testo"])
-        clip = (
-            ImageClip(crea_immagine_parola(
-                parola, font_size=stile["corpo_sottotitoli"], colore=colore))
-            .with_start(inizio).with_duration(durata)
-            .with_position(("center", y))
-        )
-        try:
-            clip = clip.resized(lambda t: min(1.0, 0.80 + 2.2 * t))
-        except Exception:
-            pass
-        clips.append(clip)
+            def scala(t):
+                return 1 + _scatto(t, SALTO_PAROLA_DETTA, SECONDI_SALTO)
 
-    print(f"[Samaritan Subtitles] {len(clips)} parole sincronizzate.")
+            def dove(t, cx=cx, cy=cy, larga=larga, alta=alta):
+                k = scala(t)
+                # Il salto resta dentro lo schermo anche per la parola sul bordo.
+                x = min(max(cx - larga * k / 2, 0), W - larga * k)
+                return (int(x), int(cy - alta * k / 2))
+            try:
+                clips.append(ImageClip(ritaglio).resized(scala)
+                             .with_start(inizio)
+                             .with_duration(min(SECONDI_SALTO, durata))
+                             .with_position(dove))
+            except Exception:
+                pass
+
+    print(f"[Samaritan Subtitles] {len(parole)} parole in "
+          f"{len(effetti.raggruppa_parole(parole))} righe accese.")
     return clips
+
+
+def genera_sottotitoli_clips(audio_path, titolo="", gioco="", stile=None,
+                             parole=None, dopo=0.0):
+    stile = stile or STILE_BASE
+
+    if config.VIDEO_LUNGO:
+        return _sottotitoli_a_frase(_parole_da_whisper(audio_path), stile)
+
+    if parole is None:
+        parole = parole_dello_short(audio_path)
+    return _sottotitoli_accesi(parole, titolo, gioco, stile, dopo)
+
+
+# ===========================================================================
+# EFFETTI DELLO SHORT (amo, lampi, finale, suoni): la logica sta in effetti.py
+# ===========================================================================
+def crea_immagine_testo(righe, colori, corpi, larghezza_max=None, interlinea=1.12):
+    """Righe di testo centrate, ognuna col suo colore e corpo, bordo nero.
+
+    Le righe troppo larghe si rimpiccioliscono finche' non ci stanno: un
+    titolo lungo resta leggibile invece di uscire dallo schermo.
+    """
+    larghezza_max = larghezza_max or int(config.VIDEO_W * 0.90)
+    misura = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    pronte = []
+    for riga, corpo in zip(righe, corpi):
+        while corpo > 40:
+            font = _carica_font(corpo)
+            if misura.textlength(riga, font=font) <= larghezza_max - 40:
+                break
+            corpo -= 6
+        pronte.append((riga, _carica_font(corpo), corpo))
+
+    bordi = [max(5, c // 14) for _, _, c in pronte]
+    alte = [int(c * interlinea) + 2 * b for (_, _, c), b in zip(pronte, bordi)]
+    img = Image.new("RGBA", (larghezza_max, sum(alte) + 20), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    y = 10
+    for (riga, font, corpo), colore, bordo, alta in zip(pronte, colori, bordi, alte):
+        w = draw.textlength(riga, font=font)
+        draw.text(((larghezza_max - w) / 2, y + bordo), riga, font=font,
+                  fill=colore, stroke_width=bordo, stroke_fill="black")
+        y += alta
+    return np.array(img)
+
+
+def _a_scatto(immagine, inizio, durata, centro, ampiezza=0.32, secondi=0.18):
+    """ImageClip che entra grande e si ferma di colpo, centrata in `centro`."""
+    alta, larga = immagine.shape[:2]
+    cx, cy = centro
+
+    def scala(t):
+        return 1 + _scatto(t, ampiezza, secondi)
+
+    def dove(t):
+        k = scala(t)
+        return (int(cx - larga * k / 2), int(cy - alta * k / 2))
+    return (ImageClip(immagine).resized(scala).with_start(inizio)
+            .with_duration(durata).with_position(dove))
+
+
+def crea_amo(titolo, stile):
+    """L'amo dei primi due secondi: il titolo enorme che entra a scatto."""
+    W, H = config.VIDEO_W, config.VIDEO_H
+    testo = (titolo or "").strip().upper()
+    if not testo:
+        return []
+    misura = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    corpo = 150
+    for corpo in range(150, 71, -10):
+        righe = _manda_a_capo(misura, testo, _carica_font(corpo), W * 0.86)
+        if len(righe) <= 3:
+            break
+    righe = righe[:3]
+    # L'ultima riga nel colore d'accento: e' quella che si legge per ultima
+    # ed e' di solito la notizia (il prezzo, il "da oggi").
+    colori = [BIANCO] * (len(righe) - 1) + [stile["colore_parola"]]
+    immagine = crea_immagine_testo(righe, colori, [corpo] * len(righe))
+    # Sta sopra i sottotitoli: il suo fondo resta lontano dalla loro fascia.
+    alto_max = stile["y_sottotitoli"] * H - 40
+    cy = min(H * 0.44, alto_max - immagine.shape[0] / 2)
+    return [_a_scatto(immagine, 0, min(effetti.SECONDI_AMO, 10), (W / 2, cy))]
+
+
+# Opacita' del lampo: abbastanza per sentire il colpo, non uno schermo bianco.
+OPACITA_LAMPO = 0.6
+
+
+def crea_lampi(punti, stile, fps=None):
+    """Il lampo bianco sugli stacchi gia' scelti (effetti.punti_dei_lampi):
+    un solo fotogramma a opacita' 0.6, un colpo di luce e non uno schermo
+    bianco."""
+    if "flash" not in stile["transizione"]:
+        return []
+    fps = fps or config.FPS or 30
+    W, H = config.VIDEO_W, config.VIDEO_H
+    lampi = []
+    for t in punti:
+        if t <= 0:
+            continue
+        lampi.append(ColorClip(size=(W, H), color=(255, 255, 255))
+                     .with_start(t).with_duration(1 / fps)
+                     .with_opacity(OPACITA_LAMPO))
+    return lampi
+
+
+def crea_finale(inizio, durata, stile, nome_canale, handle="", lingua="it"):
+    """Gli ultimi secondi: invito a seguire il canale, col logo se c'e'."""
+    W, H = config.VIDEO_W, config.VIDEO_H
+    clips = [ColorClip(size=(W, H), color=(0, 0, 0)).with_start(inizio)
+             .with_duration(durata).with_opacity(0.62)]
+
+    righe = effetti.testi_finale(nome_canale, handle, lingua)
+    colori = [stile["colore_parola"], BIANCO, (210, 210, 210)][:len(righe)]
+    corpi = [140, 96, 58][:len(righe)]
+    testo = crea_immagine_testo(righe, colori, corpi)
+    cy_testo = H * 0.50
+
+    logo = effetti.trova_logo()
+    if logo:
+        try:
+            immagine = Image.open(logo).convert("RGBA")
+            lato = int(W * 0.30)
+            immagine = immagine.resize(
+                (lato, max(int(immagine.height * lato / immagine.width), 1)),
+                Image.LANCZOS)
+            logo_np = np.array(immagine)
+            cy_logo = cy_testo - testo.shape[0] / 2 - logo_np.shape[0] / 2 - 30
+            clips.append(_a_scatto(logo_np, inizio + 0.12, durata - 0.12,
+                                   (W / 2, cy_logo), ampiezza=0.6, secondi=0.25))
+        except Exception as e:
+            print(f"[Warning Maker] Logo del finale saltato: {e}")
+    clips.append(_a_scatto(testo, inizio, durata, (W / 2, cy_testo)))
+    return clips
+
+
+def mixa_effetti(voce, durata, eventi):
+    """La voce con sotto i suoni degli effetti, a volume basso.
+
+    Gli effetti stanno in una traccia sola, costruita in memoria: un clip
+    audio per ogni pop farebbe lo stesso lavoro molte volte.
+    """
+    if not eventi:
+        return voce
+    traccia = effetti.traccia_effetti(durata, eventi)
+    sotto = AudioArrayClip(traccia, fps=effetti.FREQUENZA_AUDIO).with_start(0)
+    return CompositeAudioClip([voce, sotto]).with_duration(durata)
 
 
 # ===========================================================================
@@ -674,7 +1070,21 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
         gioco = dati.get("gioco", "")
         fonte = dati.get("fonte", "")
 
-    audio_path = audio_pronto or genera_voce_samaritan(testo_per_audio)
+    # Lo Short ha il montaggio veloce (vedi effetti.py): stacchi a tempo con
+    # la voce, amo, lampi, suoni e finale. Il video lungo no: su otto minuti
+    # un lampo ogni due secondi sfinirebbe, e il suo ritmo e' un altro.
+    wow = not config.VIDEO_LUNGO
+
+    # Nello Short la voce chiude con l'invito a seguire il canale, detto
+    # mentre a schermo compare il finale.
+    testo_voce = testo_per_audio or ""
+    if wow and not audio_pronto:
+        invito = effetti.frase_finale_parlata(profilo.attivo().nome_canale,
+                                              config.LINGUA)
+        if invito:
+            testo_voce = f"{testo_voce.rstrip()} {invito}"
+
+    audio_path = audio_pronto or genera_voce_samaritan(testo_voce)
     if not audio_path:
         print("[Errore Maker] Audio non generato: interrompo.")
         return None
@@ -702,18 +1112,71 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
     audio_clip = AudioFileClip(audio_path)
     durata = audio_clip.duration + 0.4
 
-    sfondo = costruisci_sfondo_montato(sorgenti, durata, stile)
+    parole, punti, inizio_finale = [], None, None
+    if wow:
+        try:
+            parole = parole_dello_short(audio_path, testo_voce)
+        except Exception as e:
+            print(f"[Warning Maker] Tempi delle parole non disponibili: {e}")
+        # Il finale parte quando la voce comincia l'invito ("Seguici: ...").
+        # Le parole dell'invito non fanno sottotitoli, stacchi ne' pop: a
+        # schermo c'e' gia' il finale. Senza invito riconosciuto il finale
+        # parte quando la voce ha finito, come prima.
+        k = effetti.indice_invito_parlato(parole, config.LINGUA)
+        if k is not None:
+            inizio_finale = parole[k]["inizio"]
+            parole = parole[:k]
+            durata = max(audio_clip.duration + 0.5,
+                         inizio_finale + effetti.SECONDI_FINALE)
+        else:
+            inizio_finale = audio_clip.duration + 0.1
+            durata = inizio_finale + effetti.SECONDI_FINALE
+        minimo, massimo = stile["stacco"]
+        punti = effetti.punti_di_stacco(parole, durata, minimo, massimo)
+
+    sfondo = costruisci_sfondo_montato(sorgenti, durata, stile, punti)
     if sfondo is None:
         print("[Errore Maker] Montaggio fallito: interrompo.")
         audio_clip.close()
         return None
 
-    sfondo = sfondo.with_duration(durata).with_audio(audio_clip)
+    audio_finale = audio_clip
+    if wow:
+        try:
+            eventi = [(0.0, effetti.suono_whoosh()),
+                      (max(inizio_finale - 0.15, 0),
+                       effetti.suono_whoosh(volume=effetti.VOLUME_WHOOSH * 0.8, seme=11))]
+            eventi += [(max(t - 0.02, 0), effetti.suono_pop())
+                       for t in effetti.momenti_pop(parole)]
+            audio_finale = mixa_effetti(audio_clip, durata, eventi)
+            print(f"[Samaritan Maker] Effetti sonori: {len(eventi)} "
+                  f"({len(eventi) - 2} pop sui numeri).")
+        except Exception as e:
+            print(f"[Warning Maker] Effetti sonori saltati: {e}")
+            audio_finale = audio_clip
+
+    sfondo = sfondo.with_duration(durata).with_audio(audio_finale)
     livelli = [sfondo]
 
+    if wow:
+        try:
+            livelli.extend(crea_lampi(effetti.punti_dei_lampi(punti, parole),
+                                      stile))
+        except Exception as e:
+            print(f"[Warning Maker] Lampi sugli stacchi saltati: {e}")
+
     # Un telegiornale ha il suo cartello fisso al posto del banner: titolo,
-    # testata e "immagini di repertorio" per tutta la durata. Senza l'avviso
+    # testata e "immagini di repertorio" fino alla fine. Senza l'avviso
     # una clip stock sotto una notizia vera sembra il filmato della notizia.
+    # Nello Short il cartello entra quando esce l'amo: nei primi due secondi
+    # il titolo c'e' gia', enorme, e due volte non serve.
+    # L'amo (il titolo enorme dei primi secondi) e' spento: scriveva parole
+    # che la voce non stava dicendo, e accorciate male (Davide, 29/10/2026:
+    # "non combacia la voce con la scritta ed e' scritta male"). A schermo
+    # c'e' solo quello che la voce dice; l'inizio resta vivace con il whoosh
+    # e lo zoom veloce dello sfondo.
+    con_amo = False
+    inizio_cartello = min(effetti.SECONDI_AMO, durata) if con_amo else 0
     telegiornale = profilo.attivo().telegiornale and not config.VIDEO_LUNGO
     if telegiornale and titolo:
         try:
@@ -721,7 +1184,8 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
                 ImageClip(crea_cartello_tg(pulisci_testo(titolo),
                                            testata_della_fonte(fonte),
                                            config.LINGUA))
-                .with_start(0).with_duration(durata)
+                .with_start(inizio_cartello)
+                .with_duration(durata - inizio_cartello)
                 .with_position(("center", int(config.VIDEO_H * Y_CARTELLO_TG)))
             )
         except Exception as e:
@@ -729,7 +1193,9 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
 
     # Banner e barra non ci sono in tutte le vesti: l'assenza e' una scelta,
     # non un errore, ed e' il modo piu' netto per far sembrare diverso il video.
-    if titolo and stile["banner"] and not telegiornale:
+    # Nello Short il titolo lo porta l'amo, enorme, nei primi due secondi:
+    # il banner sarebbe lo stesso titolo due volte.
+    if titolo and stile["banner"] and not telegiornale and not wow:
         altezza_banner, secondi_banner = stile["banner"]
         try:
             banner = (
@@ -750,11 +1216,37 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
         except Exception as e:
             print(f"[Warning Maker] Progress bar saltata: {e}")
 
+    amo_a_schermo = False
+    if con_amo:
+        try:
+            from brain import testo_miniatura
+            amo = testo_miniatura(titolo) or pulisci_testo(titolo)
+        except Exception:
+            amo = pulisci_testo(titolo)
+        try:
+            clip_amo = crea_amo(amo, stile)
+            livelli.extend(clip_amo)
+            amo_a_schermo = bool(clip_amo)
+        except Exception as e:
+            print(f"[Warning Maker] Amo iniziale saltato: {e}")
+
     try:
         livelli.extend(genera_sottotitoli_clips(audio_path, titolo,
-                                                gioco_ufficiale or gioco, stile))
+                                                gioco_ufficiale or gioco, stile,
+                                                parole=parole or None,
+                                                dopo=effetti.SECONDI_AMO
+                                                if amo_a_schermo else 0.0))
     except Exception as e:
         print(f"[Warning Maker] Sottotitoli saltati: {e}")
+
+    if wow:
+        canale = profilo.attivo()
+        try:
+            livelli.extend(crea_finale(inizio_finale, durata - inizio_finale, stile,
+                                       canale.nome_canale, canale.handle,
+                                       config.LINGUA))
+        except Exception as e:
+            print(f"[Warning Maker] Finale saltato: {e}")
 
     finale = CompositeVideoClip(livelli,
                                 size=(config.VIDEO_W, config.VIDEO_H)

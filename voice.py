@@ -308,11 +308,15 @@ def tempi_parole(parole):
     tempi = []
     for i, p in enumerate(parole):
         inizio, fine = p["inizio"], p["fine"]
+        durata = max(fine - inizio, DURATA_MIN_PAROLA)
         if i + 1 < len(parole):
             prossima = parole[i + 1]["inizio"]
             if prossima - fine < PAUSA_SOTTOTITOLI:
-                fine = prossima
-        tempi.append((p["parola"], inizio, max(fine - inizio, DURATA_MIN_PAROLA)))
+                durata = prossima - inizio
+            # Mai oltre l'inizio della successiva: una parola breve a fine
+            # riga resterebbe sopra la riga nuova e le due si accavallano.
+            durata = min(durata, max(prossima - inizio, 0.01))
+        tempi.append((p["parola"], inizio, durata))
     return tempi
 
 

@@ -36,6 +36,14 @@ import prenotazione
 # zoom              : "dentro", "fuori" o "alternato" (un segmento per verso)
 # intensita_zoom    : quanto e' ampio il movimento Ken Burns
 # ritmo             : moltiplicatore della durata degli stacchi (<1 = piu' veloce)
+#                     del video lungo; lo Short taglia a tempo con la voce
+# colore_parola     : la parola detta in quel momento, nei sottotitoli dello
+#                     Short (le altre della riga sono bianche)
+# stacco            : (minimo, massimo) in secondi fra due cambi d'immagine
+#                     dello Short, tagliati a tempo con la voce
+# transizione       : come si passa da una clip all'altra nello Short:
+#                     "flash" (lampo bianco), "scatto" (zoom a scatto) o
+#                     "flash+scatto"
 VESTI = [
     {
         "nome": "notte",
@@ -50,6 +58,9 @@ VESTI = [
         "zoom": "dentro",
         "intensita_zoom": 0.08,
         "ritmo": 1.0,
+        "colore_parola": "#FFE600",
+        "stacco": (1.5, 2.0),
+        "transizione": "flash+scatto",
     },
     {
         "nome": "ghiaccio",
@@ -64,6 +75,9 @@ VESTI = [
         "zoom": "fuori",
         "intensita_zoom": 0.10,
         "ritmo": 1.2,
+        "colore_parola": "#FFD84F",
+        "stacco": (1.7, 2.2),
+        "transizione": "flash",
     },
     {
         "nome": "fuoco",
@@ -78,6 +92,9 @@ VESTI = [
         "zoom": "alternato",
         "intensita_zoom": 0.12,
         "ritmo": 0.85,
+        "colore_parola": "#3DDCFF",
+        "stacco": (1.4, 1.8),
+        "transizione": "flash+scatto",
     },
     {
         "nome": "pulito",
@@ -92,6 +109,9 @@ VESTI = [
         "zoom": "dentro",
         "intensita_zoom": 0.06,
         "ritmo": 1.1,
+        "colore_parola": "#3DDCFF",
+        "stacco": (1.6, 2.1),
+        "transizione": "scatto",
     },
     {
         "nome": "arena",
@@ -106,12 +126,18 @@ VESTI = [
         "zoom": "alternato",
         "intensita_zoom": 0.09,
         "ritmo": 0.95,
+        "colore_parola": "#FFE600",
+        "stacco": (1.5, 1.9),
+        "transizione": "flash",
     },
 ]
 
 # Limiti di leggibilita', non di gusto: vedi il commento in testa al modulo.
 Y_SOTTOTITOLI_MIN = 0.58
 Y_SOTTOTITOLI_MAX = 0.74
+
+# Le transizioni che maker.py sa montare.
+TRANSIZIONI = ("flash", "scatto", "flash+scatto")
 
 
 def _carica_cronologia():

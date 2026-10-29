@@ -16,6 +16,7 @@ import time
 import re
 import html
 import unicodedata
+import difflib
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -1753,7 +1754,8 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
             "'disastroso'), niente previsioni, niente sondaggi presentati come "
             "risultati. In uno scontro fra due parti non dai ragione a "
             "nessuno: dici le posizioni che la fonte riporta.\n"
-            "- Il loop della regola 2 non serve: chiudi con la CTA.\n"
+            "- Il loop della regola 2 non serve: chiudi con l'ultima "
+            "informazione utile.\n"
             "- QUERY VIDEO e QUERY SCENE: immagini di repertorio che "
             "c'entrano con l'argomento di ogni frase ma non sembrano il "
             "filmato del fatto (per una gara di MotoGP 'motorcycle racing "
@@ -1798,8 +1800,9 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
         "2. SEAMLESS LOOP: l'ultima frase deve ricollegarsi in modo naturale alla "
         "prima parola dello script, cosi' il video riparte senza stacco percepibile.\n"
         "3. RITMO: frasi corte. Una informazione per frase. Niente subordinate.\n"
-        f"4. CTA fluida e breve a '{config.NOME_CANALE}', mai piu' di 6 parole, "
-        "mai in apertura.\n"
+        f"4. NIENTE CTA: l'invito a seguire '{config.NOME_CANALE}' lo dice la "
+        "voce in coda allo script, lo aggiunge il montaggio. Non nominare il "
+        "canale e non invitare a seguire o iscriversi.\n"
         f"5. TITOLO: massimo {MAX_CARATTERI_TITOLO} caratteri (oltre viene "
         f"troncato nel feed), nome {p.g('del')} {s} come PRIMA parola, poi i due punti "
         "e l'amo. UNA sola emoji e in FONDO, mai in apertura. Niente '#Shorts'. "
@@ -1989,6 +1992,68 @@ def _dettagli_inventati(titolo_notizia, script, sommario="", testata=""):
     print("[Samaritan Brain] Verifica dei fatti non disponibile: lo script "
           "passa senza.")
     return []
+
+
+def _correzione_accettabile(originale, corretto):
+    """Vero se `corretto` cambia solo la grafia di qualche parola.
+
+    Stesso numero di parole e ogni parola cambiata somiglia all'originale:
+    il correttore sistema "cancelamento", non riscrive la notizia.
+    """
+    prima, dopo = originale.split(), corretto.split()
+    if not dopo or len(prima) != len(dopo):
+        return False
+    cambiate = 0
+    for a, b in zip(prima, dopo):
+        if a == b:
+            continue
+        cambiate += 1
+        if difflib.SequenceMatcher(None, a.lower(), b.lower()).ratio() < 0.7:
+            return False
+    return cambiate <= max(3, len(prima) // 10)
+
+
+def correggi_ortografia(testo):
+    """Il testo con gli errori di ortografia corretti, prima della voce.
+
+    La voce legge e i sottotitoli mostrano esattamente questo testo: un
+    refuso del modello ("cancelamento" invece di "cancellamento", prova del
+    29/10/2026) finiva a schermo. Davide: "fai prima la trascrizione e poi
+    applica la voce". Se il correttore non risponde o cambia piu' della
+    grafia, resta il testo com'era.
+    """
+    if not testo or not testo.strip():
+        return testo
+    modello = config.GROQ_MODELLI[-1]
+    istruzioni = (
+        "Sei un correttore di bozze. Correggi SOLO gli errori di ortografia, "
+        "accenti e apostrofi del testo. Non cambiare parole giuste, ordine, "
+        "punteggiatura, numeri o nomi propri, non aggiungere e non togliere "
+        "niente. Rispondi solo con il testo corretto."
+    )
+    try:
+        risposta = client.chat.completions.create(
+            model=modello,
+            messages=[{"role": "system", "content": istruzioni},
+                      {"role": "user", "content": testo}],
+            temperature=0,
+            max_tokens=2000,
+            **({"reasoning_effort": "low"} if "gpt-oss" in modello else {}),
+        )
+        corretto = (risposta.choices[0].message.content or "").strip()
+    except Exception as e:
+        print(f"[Samaritan Brain] Correzione ortografica non riuscita: {e}")
+        return testo
+    corretto = corretto.strip('"').strip()
+    if corretto == testo.strip():
+        return testo
+    if not _correzione_accettabile(testo, corretto):
+        print("[Samaritan Brain] Correzione ortografica scartata: cambiava "
+              "piu' della grafia.")
+        return testo
+    cambi = [f"{a} -> {b}" for a, b in zip(testo.split(), corretto.split()) if a != b]
+    print(f"[Samaritan Brain] Ortografia corretta: {'; '.join(cambi)}")
+    return corretto
 
 
 def _estrai_json(testo):
@@ -2251,6 +2316,8 @@ def genera_script_samaritan(tema=None):
 
                 motivo_scarto = ""
 
+                script = correggi_ortografia(script)
+                titolo = correggi_ortografia(titolo)
                 query_video = completa_query_video(query_video)
                 query_scene = pulisci_query_scene(data.get("query_scene"),
                                                   query_video)

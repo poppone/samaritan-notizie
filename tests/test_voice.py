@@ -369,6 +369,14 @@ class TestTempiDelleParole:
         tempi = voice.tempi_parole([{"parola": "e", "inizio": 1.0, "fine": 1.05}])
         assert tempi[0][2] == voice.DURATA_MIN_PAROLA
 
+    def test_una_parola_breve_non_copre_la_successiva(self):
+        # "del" a fine riga e "dibattito" a capo: si vedevano insieme.
+        tempi = voice.tempi_parole([
+            {"parola": "del", "inizio": 0.976, "fine": 1.110},
+            {"parola": "dibattito", "inizio": 1.121, "fine": 1.646},
+        ])
+        assert tempi[0][1] + tempi[0][2] <= 1.121 + 1e-9
+
     def test_tempi_vecchi_si_scartano_prima_di_una_nuova_voce(self, monkeypatch, tmp_path):
         audio = str(tmp_path / "audio.mp3")
         voice._salva_parole(audio, [{"parola": "vecchia", "inizio": 0, "fine": 1}])
