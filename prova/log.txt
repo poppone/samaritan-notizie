@@ -12,18 +12,20 @@
 [Samaritan Search] Parole che il pubblico cerca davvero e che questa notizia tocca: motogp.
 [Samaritan Brain] Formato 'MYTH_BUSTING_VIRAL' scelto su dati di retention (peso 1.02).
 [Samaritan Brain] openai/gpt-oss-120b - tentativo 1 (formato MYTH_BUSTING_VIRAL, schema)...
-[Samaritan Brain] SCARTATO: il titolo non nomina 'MotoGP': invisibile nella ricerca. Rigenero.
+[Samaritan Brain] Coda tronca rimossa dallo script.
+[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Ogni punto influisce sulla classifica finale e sulla motivazione di squadra.; La frase nasce dalla lotta mondiale in corso, dove la differenza di pochi punti può decidere il campionato.; I fan si chiedono se questa mentalità cambierà le strategie in pista.). Racconta solo quello che dice il titolo. Rigenero.
 [Samaritan Brain] openai/gpt-oss-120b - tentativo 2 (formato MYTH_BUSTING_VIRAL, testo libero)...
-[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Ogni punto conta in classifica; Moto.it riporta che la gara è ancora aperta e le sorti possono mutare; Per gli appassionati, il valore dei punti è cruciale per seguire la stagione; Il prossimo Gran Premio dirà se 50 punti saranno decisivi). Racconta solo quello che dice il titolo. Rigenero.
+[Samaritan Brain] Coda tronca rimossa dallo script.
+[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Bezzecchi sottolinea che ogni punto conta nella classifica mondiale.; Bezzecchi afferma che i cinquanta punti restano cinquanta, senza sconti.; Il chiarimento ricorda che la lotta per il titolo resta aperta.; Gli appassionati dovranno osservare se la sua visione influenzerà le prossime gare.). Racconta solo quello che dice il titolo. Rigenero.
 [Samaritan Brain] openai/gpt-oss-120b - tentativo 3 (formato MYTH_BUSTING_VIRAL, schema)...
 [Samaritan Brain] Coda tronca rimossa dallo script.
-[Samaritan Brain] SCARTATO: script troppo corto (42 parole). Rigenero.
+[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Le cancellazioni colpiscono chi aveva già versato caparra per il modello elettrico.; Il provvisorio calo delle vendite internazionali mette in dubbio la strategia globale di Tesla.). Racconta solo quello che dice il titolo. Rigenero.
 [Samaritan Brain] openai/gpt-oss-20b - tentativo 1 (formato MYTH_BUSTING_VIRAL, schema)...
-[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Per i fan, la precisione è cruciale: una differenza di un punto può decidere la stagione.; In MotoGP, i punti determinano la classifica mondiale.). Racconta solo quello che dice il titolo. Rigenero.
+[Samaritan Brain] SCARTATO: usa 'trionfo', una parola che prende posizione: un telegiornale riferisce i fatti con parole neutre. Rigenero.
 [Samaritan Brain] openai/gpt-oss-20b - tentativo 2 (formato MYTH_BUSTING_VIRAL, testo libero)...
-[Groq Warning] openai/gpt-oss-20b: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m2sea5gjeknv2hc6vzyf67dw` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 3960, Requested 4546. Please try again in 3.795s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (La corsa finale si gioca in un clima di grande tensione.). Racconta solo quello che dice il titolo. Rigenero.
 [Samaritan Brain] openai/gpt-oss-20b - tentativo 3 (formato MYTH_BUSTING_VIRAL, schema)...
-[Samaritan Brain] SCARTATO: aggiunge alla notizia dettagli che il titolo non dice (Márquez mira a completare la serie 2026; l’evento è parte delle ultime gare del Motomondiale; la competizione tra Márquez, Bezzecchi e Martín è più accesa che mai). Racconta solo quello che dice il titolo. Rigenero.
+[Samaritan Brain] SCARTATO: script troppo corto (41 parole). Rigenero.
 Traceback (most recent call last):
   File "/home/runner/work/samaritan-notizie/samaritan-notizie/prova_video.py", line 62, in <module>
     main()
@@ -32,4 +34,4 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/runner/work/samaritan-notizie/samaritan-notizie/brain.py", line 2290, in genera_script_samaritan
     raise RuntimeError(
-RuntimeError: Tutti i tentativi sono stati scartati, l'ultimo perche' aggiunge alla notizia dettagli che il titolo non dice (Márquez mira a completare la serie 2026; l’evento è parte delle ultime gare del Motomondiale; la competizione tra Márquez, Bezzecchi e Martín è più accesa che mai). Racconta solo quello che dice il titolo. Salto il video: lo recupera la riserva.
+RuntimeError: Tutti i tentativi sono stati scartati, l'ultimo perche' script troppo corto (41 parole). Salto il video: lo recupera la riserva.
