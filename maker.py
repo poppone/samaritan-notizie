@@ -737,7 +737,8 @@ SALTO_PAROLA_DETTA = 0.20
 SECONDI_SALTO = 0.13
 
 
-def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None):
+def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None,
+                       visibili=None):
     """Una riga di sottotitolo con la parola detta accesa e piu' grande.
 
     `parole` sono gia' maiuscole, `colori` e' il colore di ciascuna (bianco,
@@ -745,6 +746,10 @@ def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None)
     parola piu' grande non fa ballare la riga. Ritorna l'immagine RGBA e il
     riquadro (x0, y0, x1, y1) della parola accesa, che serve per farla
     saltare.
+
+    `visibili` e' quante parole disegnare da sinistra (None = tutte): le
+    altre lasciano il loro posto vuoto, cosi' la riga non si sposta mentre si
+    riempie.
     """
     bordo, pad_x, pad_y = 9, 30, 22
     larghezza_max = larghezza_max or int(config.VIDEO_W * 0.94)
@@ -779,8 +784,9 @@ def crea_immagine_riga(parole, attiva, colori, font_size=96, larghezza_max=None)
     riquadro = (0, 0, img.width, img.height)
     for i, (parola, colore) in enumerate(zip(parole, colori)):
         f = grande if i == attiva else font
-        draw.text((x, base), parola, font=f, fill=colore, anchor="ls",
-                  stroke_width=bordo, stroke_fill="black")
+        if visibili is None or i < visibili:
+            draw.text((x, base), parola, font=f, fill=colore, anchor="ls",
+                      stroke_width=bordo, stroke_fill="black")
         if i == attiva:
             sx = draw.textbbox((x, base), parola, font=f, anchor="ls",
                                stroke_width=bordo)
@@ -845,8 +851,12 @@ def _sottotitoli_accesi(parole, titolo, gioco, stile, dopo=0.0):
                 inizio, salto = dopo, False
             colori = [_colore_parola(tipi[j], j == i, stile) for j in riga]
             try:
+                # La riga si scrive mentre la voce la dice: a schermo ci sono
+                # solo le parole gia' dette e quella che sta dicendo (Davide,
+                # 29/10/2026: "non combacia la voce con la scritta").
                 immagine, (x0, y0, x1, y1) = crea_immagine_riga(
-                    testi, posizione, colori, font_size=corpo)
+                    testi, posizione, colori, font_size=corpo,
+                    visibili=posizione + 1)
             except Exception as e:
                 print(f"[Warning Maker] Sottotitolo saltato: {e}")
                 continue
@@ -1160,7 +1170,12 @@ def assembla_video_finale(testo_per_audio=None, query_video="gameplay",
     # una clip stock sotto una notizia vera sembra il filmato della notizia.
     # Nello Short il cartello entra quando esce l'amo: nei primi due secondi
     # il titolo c'e' gia', enorme, e due volte non serve.
-    con_amo = wow and bool(titolo)
+    # L'amo (il titolo enorme dei primi secondi) e' spento: scriveva parole
+    # che la voce non stava dicendo, e accorciate male (Davide, 29/10/2026:
+    # "non combacia la voce con la scritta ed e' scritta male"). A schermo
+    # c'e' solo quello che la voce dice; l'inizio resta vivace con il whoosh
+    # e lo zoom veloce dello sfondo.
+    con_amo = False
     inizio_cartello = min(effetti.SECONDI_AMO, durata) if con_amo else 0
     telegiornale = profilo.attivo().telegiornale and not config.VIDEO_LUNGO
     if telegiornale and titolo:
