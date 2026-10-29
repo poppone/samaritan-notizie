@@ -1,0 +1,292 @@
+[
+ {
+  "parola": "Le",
+  "inizio": 0.0,
+  "fine": 0.3
+ },
+ {
+  "parola": "prenotazioni",
+  "inizio": 0.3,
+  "fine": 0.82
+ },
+ {
+  "parola": "per",
+  "inizio": 0.82,
+  "fine": 1.06
+ },
+ {
+  "parola": "il",
+  "inizio": 1.06,
+  "fine": 1.26
+ },
+ {
+  "parola": "CESO",
+  "inizio": 1.26,
+  "fine": 1.5
+ },
+ {
+  "parola": "CyberTruck",
+  "inizio": 1.5,
+  "fine": 2.06
+ },
+ {
+  "parola": "in",
+  "inizio": 2.06,
+  "fine": 2.28
+ },
+ {
+  "parola": "Australia",
+  "inizio": 2.28,
+  "fine": 2.64
+ },
+ {
+  "parola": "e",
+  "inizio": 2.64,
+  "fine": 2.94
+ },
+ {
+  "parola": "nuova",
+  "inizio": 2.94,
+  "fine": 3.12
+ },
+ {
+  "parola": "Zeelanda",
+  "inizio": 3.12,
+  "fine": 3.56
+ },
+ {
+  "parola": "sono",
+  "inizio": 3.56,
+  "fine": 3.76
+ },
+ {
+  "parola": "state",
+  "inizio": 3.76,
+  "fine": 4.02
+ },
+ {
+  "parola": "annullate,",
+  "inizio": 4.02,
+  "fine": 4.58
+ },
+ {
+  "parola": "riporta",
+  "inizio": 4.96,
+  "fine": 5.24
+ },
+ {
+  "parola": "Automoto",
+  "inizio": 5.24,
+  "fine": 5.72
+ },
+ {
+  "parola": ".it.",
+  "inizio": 5.72,
+  "fine": 6.36
+ },
+ {
+  "parola": "La",
+  "inizio": 6.88,
+  "fine": 7.48
+ },
+ {
+  "parola": "decisione",
+  "inizio": 7.48,
+  "fine": 8.0
+ },
+ {
+  "parola": "arriva",
+  "inizio": 8.0,
+  "fine": 8.28
+ },
+ {
+  "parola": "dopo",
+  "inizio": 8.28,
+  "fine": 8.48
+ },
+ {
+  "parola": "anni",
+  "inizio": 8.48,
+  "fine": 8.82
+ },
+ {
+  "parola": "di",
+  "inizio": 8.82,
+  "fine": 8.98
+ },
+ {
+  "parola": "attesa",
+  "inizio": 8.98,
+  "fine": 9.3
+ },
+ {
+  "parola": "da",
+  "inizio": 9.3,
+  "fine": 9.46
+ },
+ {
+  "parola": "parte",
+  "inizio": 9.46,
+  "fine": 9.68
+ },
+ {
+  "parola": "dei",
+  "inizio": 9.68,
+  "fine": 9.92
+ },
+ {
+  "parola": "clienti.",
+  "inizio": 9.92,
+  "fine": 10.48
+ },
+ {
+  "parola": "Tesla",
+  "inizio": 11.34,
+  "fine": 11.64
+ },
+ {
+  "parola": "non",
+  "inizio": 11.64,
+  "fine": 11.86
+ },
+ {
+  "parola": "fornisce",
+  "inizio": 11.86,
+  "fine": 12.28
+ },
+ {
+  "parola": "ulteriori",
+  "inizio": 12.28,
+  "fine": 12.8
+ },
+ {
+  "parola": "dettagli",
+  "inizio": 12.8,
+  "fine": 13.26
+ },
+ {
+  "parola": "sul",
+  "inizio": 13.26,
+  "fine": 13.46
+ },
+ {
+  "parola": "futuro",
+  "inizio": 13.46,
+  "fine": 13.78
+ },
+ {
+  "parola": "del",
+  "inizio": 13.78,
+  "fine": 14.02
+ },
+ {
+  "parola": "modello",
+  "inizio": 14.02,
+  "fine": 14.36
+ },
+ {
+  "parola": "in",
+  "inizio": 14.36,
+  "fine": 14.48
+ },
+ {
+  "parola": "questi",
+  "inizio": 14.48,
+  "fine": 14.72
+ },
+ {
+  "parola": "mercati.",
+  "inizio": 14.72,
+  "fine": 15.24
+ },
+ {
+  "parola": "Per",
+  "inizio": 16.08,
+  "fine": 16.32
+ },
+ {
+  "parola": "chi",
+  "inizio": 16.32,
+  "fine": 16.46
+ },
+ {
+  "parola": "segue",
+  "inizio": 16.46,
+  "fine": 16.72
+ },
+ {
+  "parola": "l",
+  "inizio": 16.72,
+  "fine": 16.88
+ },
+ {
+  "parola": "'elettrico,",
+  "inizio": 16.88,
+  "fine": 17.34
+ },
+ {
+  "parola": "è",
+  "inizio": 17.62,
+  "fine": 17.72
+ },
+ {
+  "parola": "un",
+  "inizio": 17.72,
+  "fine": 17.84
+ },
+ {
+  "parola": "segnale",
+  "inizio": 17.84,
+  "fine": 18.24
+ },
+ {
+  "parola": "di",
+  "inizio": 18.24,
+  "fine": 18.38
+ },
+ {
+  "parola": "difficoltà",
+  "inizio": 18.38,
+  "fine": 18.9
+ },
+ {
+  "parola": "nelle",
+  "inizio": 18.9,
+  "fine": 19.16
+ },
+ {
+  "parola": "espansioni",
+  "inizio": 19.16,
+  "fine": 19.68
+ },
+ {
+  "parola": "internazionali.",
+  "inizio": 19.68,
+  "fine": 20.56
+ },
+ {
+  "parola": "Seguici,",
+  "inizio": 20.56,
+  "fine": 21.92
+ },
+ {
+  "parola": "motori",
+  "inizio": 22.14,
+  "fine": 22.58
+ },
+ {
+  "parola": "in",
+  "inizio": 22.58,
+  "fine": 22.66
+ },
+ {
+  "parola": "60",
+  "inizio": 22.66,
+  "fine": 22.98
+ },
+ {
+  "parola": "secondi.",
+  "inizio": 22.98,
+  "fine": 23.72
+ }
+]
