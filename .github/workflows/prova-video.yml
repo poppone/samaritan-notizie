@@ -1,0 +1,46 @@
+name: Video di prova (non pubblica)
+
+# Parte solo sui branch di prova: monta uno Short e lo lascia fra gli
+# artifact, senza caricarlo da nessuna parte.
+on:
+  push:
+    branches: ['finch/prova-video']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Installa FFmpeg
+        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg fonts-dejavu-core
+      - name: Installa dipendenze Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Monta il video di prova
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          VOCE_TTS_IT: ${{ vars.VOCE_TTS || 'it-IT-DiegoNeural' }}
+          VOCE_TTS_EN: ${{ vars.VOCE_TTS_EN || 'en-US-AndrewNeural' }}
+          ELEVENLABS_VOCE: ${{ vars.ELEVENLABS_VOCE }}
+          ELEVENLABS_MODELLO: ${{ vars.ELEVENLABS_MODELLO }}
+          WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'base' }}
+          GROQ_MODELLI: ${{ vars.GROQ_MODELLI }}
+          NOME_CANALE: ${{ vars.NOME_CANALE }}
+        run: python prova_video.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-prova
+          path: prova/
+          if-no-files-found: warn
