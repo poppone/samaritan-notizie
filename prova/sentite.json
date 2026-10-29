@@ -1,0 +1,277 @@
+[
+ {
+  "parola": "Tesla",
+  "inizio": 0.0,
+  "fine": 0.42
+ },
+ {
+  "parola": "annullato",
+  "inizio": 0.42,
+  "fine": 0.96
+ },
+ {
+  "parola": "le",
+  "inizio": 0.96,
+  "fine": 1.1
+ },
+ {
+  "parola": "prenotazioni",
+  "inizio": 1.1,
+  "fine": 1.58
+ },
+ {
+  "parola": "del",
+  "inizio": 1.58,
+  "fine": 1.86
+ },
+ {
+  "parola": "cybertrak",
+  "inizio": 1.86,
+  "fine": 2.46
+ },
+ {
+  "parola": "in",
+  "inizio": 2.46,
+  "fine": 2.66
+ },
+ {
+  "parola": "Australia",
+  "inizio": 2.66,
+  "fine": 3.04
+ },
+ {
+  "parola": "e",
+  "inizio": 3.04,
+  "fine": 3.34
+ },
+ {
+  "parola": "nuova",
+  "inizio": 3.34,
+  "fine": 3.52
+ },
+ {
+  "parola": "Zelanda.",
+  "inizio": 3.52,
+  "fine": 4.0
+ },
+ {
+  "parola": "I",
+  "inizio": 4.84,
+  "fine": 5.06
+ },
+ {
+  "parola": "clienti,",
+  "inizio": 5.06,
+  "fine": 5.62
+ },
+ {
+  "parola": "in",
+  "inizio": 5.88,
+  "fine": 6.04
+ },
+ {
+  "parola": "attesa",
+  "inizio": 6.04,
+  "fine": 6.34
+ },
+ {
+  "parola": "dal",
+  "inizio": 6.34,
+  "fine": 6.58
+ },
+ {
+  "parola": "2019,",
+  "inizio": 6.58,
+  "fine": 7.34
+ },
+ {
+  "parola": "hanno",
+  "inizio": 7.96,
+  "fine": 8.1
+ },
+ {
+  "parola": "ricevuto",
+  "inizio": 8.1,
+  "fine": 8.54
+ },
+ {
+  "parola": "una",
+  "inizio": 8.54,
+  "fine": 8.74
+ },
+ {
+  "parola": "mail",
+  "inizio": 8.74,
+  "fine": 8.92
+ },
+ {
+  "parola": "di",
+  "inizio": 8.92,
+  "fine": 9.16
+ },
+ {
+  "parola": "cancellazione.",
+  "inizio": 9.16,
+  "fine": 9.96
+ },
+ {
+  "parola": "La",
+  "inizio": 10.84,
+  "fine": 11.06
+ },
+ {
+  "parola": "decisione",
+  "inizio": 11.06,
+  "fine": 11.58
+ },
+ {
+  "parola": "arriva",
+  "inizio": 11.58,
+  "fine": 11.86
+ },
+ {
+  "parola": "mentre",
+  "inizio": 11.86,
+  "fine": 12.16
+ },
+ {
+  "parola": "le",
+  "inizio": 12.16,
+  "fine": 12.34
+ },
+ {
+  "parola": "vendite",
+  "inizio": 12.34,
+  "fine": 12.72
+ },
+ {
+  "parola": "globali",
+  "inizio": 12.72,
+  "fine": 13.16
+ },
+ {
+  "parola": "di",
+  "inizio": 13.16,
+  "fine": 13.26
+ },
+ {
+  "parola": "Tesla",
+  "inizio": 13.26,
+  "fine": 13.54
+ },
+ {
+  "parola": "mostrano",
+  "inizio": 13.54,
+  "fine": 14.04
+ },
+ {
+  "parola": "un",
+  "inizio": 14.04,
+  "fine": 14.2
+ },
+ {
+  "parola": "netto",
+  "inizio": 14.2,
+  "fine": 14.4
+ },
+ {
+  "parola": "calo.",
+  "inizio": 14.4,
+  "fine": 14.8
+ },
+ {
+  "parola": "Il",
+  "inizio": 15.64,
+  "fine": 15.84
+ },
+ {
+  "parola": "Pec",
+  "inizio": 15.84,
+  "fine": 16.06
+ },
+ {
+  "parola": "-Up,",
+  "inizio": 16.06,
+  "fine": 16.26
+ },
+ {
+  "parola": "presentato",
+  "inizio": 16.56,
+  "fine": 17.06
+ },
+ {
+  "parola": "nel",
+  "inizio": 17.06,
+  "fine": 17.22
+ },
+ {
+  "parola": "2019,",
+  "inizio": 17.22,
+  "fine": 18.02
+ },
+ {
+  "parola": "non",
+  "inizio": 18.56,
+  "fine": 18.62
+ },
+ {
+  "parola": "arriverà",
+  "inizio": 18.62,
+  "fine": 19.04
+ },
+ {
+  "parola": "più",
+  "inizio": 19.04,
+  "fine": 19.22
+ },
+ {
+  "parola": "nei",
+  "inizio": 19.22,
+  "fine": 19.38
+ },
+ {
+  "parola": "due",
+  "inizio": 19.38,
+  "fine": 19.6
+ },
+ {
+  "parola": "mercati",
+  "inizio": 19.6,
+  "fine": 19.98
+ },
+ {
+  "parola": "dell",
+  "inizio": 19.98,
+  "fine": 20.22
+ },
+ {
+  "parola": "'Oceania.",
+  "inizio": 20.22,
+  "fine": 20.66
+ },
+ {
+  "parola": "Seguici,",
+  "inizio": 21.56,
+  "fine": 22.16
+ },
+ {
+  "parola": "motori",
+  "inizio": 22.34,
+  "fine": 22.78
+ },
+ {
+  "parola": "in",
+  "inizio": 22.78,
+  "fine": 22.86
+ },
+ {
+  "parola": "60",
+  "inizio": 22.86,
+  "fine": 23.22
+ },
+ {
+  "parola": "secondi.",
+  "inizio": 23.22,
+  "fine": 23.92
+ }
+]
