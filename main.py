@@ -110,6 +110,7 @@ def _scrivi_e_monta(tema):
         video = assembla_video_finale(
             testo_per_audio=dati["script"],
             query_video=dati["query_video"],
+            query_scene=dati.get("query_scene"),
             titolo=dati["titolo"],
             gioco=dati.get("gioco", ""),
             tema=tema or "Gaming",
@@ -130,6 +131,7 @@ def _scrivi_e_monta(tema):
     video = assembla_video_finale(
         testo_per_audio=dati["script"],
         query_video=dati["query_video"],
+        query_scene=dati.get("query_scene"),
         titolo=dati["titolo"],
         gioco=dati.get("gioco", ""),
         tema=tema or "Gaming",
