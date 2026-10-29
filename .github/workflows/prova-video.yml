@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir -p prova
           set -o pipefail
-          python prova_video.py 2>&1 | tee prova/log.txt
+          python prova_video.py "Tesla" 2>&1 | tee prova/log.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
