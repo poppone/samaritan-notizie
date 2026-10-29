@@ -28,7 +28,8 @@ def _memoria(monkeypatch, tmp_path, contenuto):
 CHIAVI = {
     "nome", "colore_testo", "colore_evidenza", "y_sottotitoli",
     "corpo_sottotitoli", "y_gameplay", "luminosita_sfondo", "banner",
-    "barra", "zoom", "intensita_zoom", "ritmo",
+    "barra", "zoom", "intensita_zoom", "ritmo", "colore_parola", "stacco",
+    "transizione",
 }
 
 # Altezza generosa del banner del titolo: tre righe da 64px con interlinea e
@@ -50,7 +51,7 @@ class TestFormaDelleVesti:
 
     @pytest.mark.parametrize("stile", veste.VESTI, ids=lambda v: v["nome"])
     def test_i_colori_sono_esadecimali(self, stile):
-        for chiave in ("colore_testo", "colore_evidenza"):
+        for chiave in ("colore_testo", "colore_evidenza", "colore_parola"):
             assert re.fullmatch(r"#[0-9A-Fa-f]{6}", stile[chiave]), chiave
 
     @pytest.mark.parametrize("stile", veste.VESTI, ids=lambda v: v["nome"])
@@ -58,6 +59,25 @@ class TestFormaDelleVesti:
         # maker.py tratta qualunque altro valore come "dentro": un refuso
         # passerebbe inosservato invece di cambiare qualcosa.
         assert stile["zoom"] in ("dentro", "fuori", "alternato")
+
+
+class TestEffettiDelloShort:
+    @pytest.mark.parametrize("stile", veste.VESTI, ids=lambda v: v["nome"])
+    def test_la_parola_detta_si_distingue_dalle_altre(self, stile):
+        # Le altre parole della riga sono bianche, le parole chiave hanno il
+        # colore di evidenza: la parola detta deve staccare da entrambe.
+        parola = stile["colore_parola"].upper()
+        assert parola != "#FFFFFF"
+        assert parola != stile["colore_evidenza"].upper()
+
+    @pytest.mark.parametrize("stile", veste.VESTI, ids=lambda v: v["nome"])
+    def test_gli_stacchi_sono_veloci_ma_non_frenetici(self, stile):
+        minimo, massimo = stile["stacco"]
+        assert 1.2 <= minimo < massimo <= 2.5
+
+    @pytest.mark.parametrize("stile", veste.VESTI, ids=lambda v: v["nome"])
+    def test_la_transizione_e_una_di_quelle_gestite(self, stile):
+        assert stile["transizione"] in veste.TRANSIZIONI
 
 
 class TestLeggibilita:
