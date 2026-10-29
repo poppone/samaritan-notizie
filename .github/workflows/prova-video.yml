@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   prova:
@@ -44,3 +44,19 @@ jobs:
           name: video-prova
           path: prova/
           if-no-files-found: warn
+      # Gli artifact stanno su un host che la stanza non raggiunge: il video
+      # si copia anche nel branch finch/prova-video-file (raw.githubusercontent).
+      - uses: actions/checkout@v4
+        with:
+          ref: finch/prova-video-file
+          path: copia
+      - name: Copia il video nel branch dei file
+        run: |
+          mkdir -p copia/prova
+          cp prova/* copia/prova/
+          cd copia
+          git config user.name "Finch (stanza)"
+          git config user.email "finch@davidedurazzi.it"
+          git add -f prova
+          git commit -m "Video di prova ${GITHUB_SHA::7} [skip ci]" || true
+          git push
