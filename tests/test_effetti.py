@@ -37,15 +37,55 @@ TESTO = ("La nuova Panda arriva in Italia. Costa 18.900 euro e con gli incentivi
 # STACCHI A TEMPO
 # ===========================================================================
 class TestPuntiDiStacco:
-    def test_gli_stacchi_restano_nella_finestra(self):
+    def test_gli_stacchi_restano_nella_finestra_allargata(self):
         parole = effetti.ripunteggia(_parole(TESTO), TESTO)
         durata = parole[-1]["fine"] + 2.0
         punti = effetti.punti_di_stacco(parole, durata, 1.5, 2.0)
         assert punti[0] == 0.0
-        distanze = [b - a for a, b in zip(punti, punti[1:])]
-        assert distanze and all(1.5 - 1e-6 <= d <= 2.0 + 1e-6 for d in distanze)
+        da = 1.5 - effetti.ANTICIPO_TAGLIO
+        a = 2.0 + effetti.RITARDO_TAGLIO
+        distanze = [b - x for x, b in zip(punti, punti[1:])]
+        assert distanze and all(da - 1e-6 <= d <= a + 1e-6 for d in distanze)
         # l'ultimo pezzo non e' ne' un frammento ne' troppo lungo
         assert effetti.STACCO_MINIMO_FINALE <= durata - punti[-1] <= 2.0 + 1e-6
+
+    def test_va_a_prendere_la_fine_frase_appena_fuori_finestra(self):
+        # "Italia." finisce a 1.0 s dal taglio precedente, prima del minimo
+        # di 1.4: con la finestra rigida si taglierebbe su una parola a caso.
+        testo = "Panda ibrida arriva in Italia. Il prezzo parte da poco"
+        parole = effetti.ripunteggia(_parole(testo, passo=0.18, inizio=0.0), testo)
+        fine_frase, dopo = parole[4]["fine"], parole[5]["inizio"]
+        punti = effetti.punti_di_stacco(parole, 6.0, minimo=1.4, massimo=1.8)
+        assert fine_frase <= punti[1] <= dopo
+
+    def test_quasi_tutti_i_tagli_cadono_su_punti_o_virgole(self):
+        testo = ("Fiat Grande Panda ibrida arriva in Italia. Il prezzo parte da "
+                 "18.900 euro, e con gli incentivi scende del 20 per cento. "
+                 "Stellantis vuole vendere 100 mila auto entro il 2027. "
+                 "Tu la compreresti?")
+        parole = effetti.ripunteggia(_parole(testo, passo=0.33), testo)
+        punti = effetti.punti_di_stacco(parole, parole[-1]["fine"] + 2.5, 1.4, 1.8)
+        a_tempo = 0
+        for t in punti[1:]:
+            prima = [p for p in parole if p["fine"] <= t + 1e-6]
+            if prima and prima[-1]["parola"][-1] in ".,!?" and (
+                    prima[-1] is parole[-1]
+                    or t <= parole[parole.index(prima[-1]) + 1]["inizio"] + 1e-6):
+                a_tempo += 1
+        assert a_tempo >= len(punti[1:]) // 2
+
+    @pytest.mark.parametrize("coppia", [("18.900", "euro"), ("20", "per"),
+                                        ("per", "cento"), ("100", "mila")])
+    def test_non_spezza_prezzi_e_quantita(self, coppia):
+        testo = ("Il prezzo parte da 18.900 euro poi scende del 20 per cento "
+                 "e vendono 100 mila auto nel mondo intero ogni anno")
+        parole = _parole(testo, pausa_frase=0)
+        indice = next(i for i, p in enumerate(parole)
+                      if p["parola"] == coppia[1] and parole[i - 1]["parola"] == coppia[0])
+        vietato = parole[indice]["inizio"]
+        assert (vietato, 0) not in effetti._candidati_di_taglio(parole)
+        for minimo, massimo in [(1.0, 1.4), (1.4, 1.8), (1.5, 2.0)]:
+            assert vietato not in effetti.punti_di_stacco(parole, 20.0, minimo, massimo)
 
     def test_taglia_a_fine_frase_quando_cade_nella_finestra(self):
         parole = effetti.ripunteggia(_parole("Uno due tre quattro. Cinque sei sette otto nove dieci"),
@@ -86,6 +126,28 @@ class TestPuntiDiStacco:
         segmenti = effetti.segmenti_da_punti(punti, 9.3)
         assert abs(sum(d for _, d in segmenti) - 9.3) < 1e-6
         assert segmenti[0][0] == 0.0
+
+
+class TestLampi:
+    def test_pochi_lampi_lontani_e_il_primo_chiude_l_amo(self):
+        parole = effetti.ripunteggia(_parole(TESTO * 3), TESTO * 3)
+        punti = effetti.punti_di_stacco(parole, parole[-1]["fine"] + 2, 1.4, 1.8)
+        lampi = effetti.punti_dei_lampi(punti, parole)
+        assert lampi and lampi[0] == punti[1]
+        assert len(lampi) <= effetti.MAX_LAMPI
+        assert all(b - a >= effetti.DISTANZA_MIN_LAMPI for a, b in zip(lampi, lampi[1:]))
+        assert len(lampi) < len(punti) - 1
+
+    def test_dopo_il_primo_solo_a_fine_frase(self):
+        parole = effetti.ripunteggia(_parole(TESTO * 3), TESTO * 3)
+        punti = effetti.punti_di_stacco(parole, parole[-1]["fine"] + 2, 1.4, 1.8)
+        fini = [p["fine"] for p in parole if p["parola"][-1] in ".!?"]
+        for t in effetti.punti_dei_lampi(punti, parole)[1:]:
+            assert any(f - 1e-6 <= t <= f + 0.5 for f in fini), t
+
+    def test_senza_parole_un_lampo_solo(self):
+        punti = effetti.punti_di_stacco([], 30.0, 1.5, 2.0)
+        assert effetti.punti_dei_lampi(punti, []) == [punti[1]]
 
 
 class TestOrdineSorgenti:
@@ -142,11 +204,22 @@ class TestParoleChiave:
         parole[1]["inizio"] += 0.5
         assert effetti.tipo_parola(parole, 1) == ""
 
-    def test_le_parole_del_titolo_contano_come_chiave(self):
+    def test_i_nomi_propri_del_titolo_contano_come_chiave(self):
         titolo = effetti.parole_del_titolo("Grande Panda: arriva l'ibrida")
-        assert "PANDA" in titolo and "IBRIDA" in titolo
+        assert "PANDA" in titolo and "GRANDE" in titolo
         parole = _parole("La grande novita e la panda")
         assert effetti.tipo_parola(parole, 5, titolo) == "nome"
+
+    def test_le_parole_comuni_del_titolo_non_si_accendono(self):
+        titolo = effetti.parole_del_titolo("Fiat Grande Panda: l'ibrida costa 18.900 euro")
+        assert "IBRIDA" not in titolo and "COSTA" not in titolo
+        parole = _parole("La nuova ibrida costa poco")
+        assert effetti.tipo_parola(parole, 2, titolo) == ""
+        assert effetti.tipo_parola(parole, 3, titolo) == ""
+
+    def test_un_titolo_tutto_maiuscolo_non_dice_quali_sono_i_nomi(self):
+        assert effetti.parole_del_titolo("L'IBRIDA COSTA POCO") == set()
+        assert effetti.parole_del_titolo("Tesla Cuts Model Prices Again") == set()
 
 
 class TestRipunteggia:
@@ -323,6 +396,32 @@ class TestMontaggioInPiccolo:
         assert immagine.shape[2] == 4
         assert 0 <= x0 < x1 <= immagine.shape[1] and 0 <= y0 < y1 <= immagine.shape[0]
         assert np.any(immagine[y0:y1, x0:x1, 3] > 0)
+
+    def test_la_parola_detta_ha_sempre_il_suo_colore(self, piccolo):
+        import maker
+        stile = veste.VESTI[0]
+        assert maker._colore_parola("numero", True, stile) == stile["colore_parola"]
+        assert maker._colore_parola("nome", True, stile) == stile["colore_parola"]
+        assert maker._colore_parola("numero", False, stile) == stile["colore_evidenza"]
+        assert maker._colore_parola("", False, stile) == maker.BIANCO
+
+    def test_durante_l_amo_niente_sottotitoli(self, piccolo):
+        import maker
+        testo = "Fiat Grande Panda ibrida arriva in Italia. Costa poco davvero"
+        parole = effetti.ripunteggia(_parole(testo), testo)
+        clips = maker._sottotitoli_accesi(parole, "", "", veste.VESTI[0],
+                                          dopo=effetti.SECONDI_AMO)
+        assert clips
+        assert min(c.start for c in clips) >= effetti.SECONDI_AMO - 1e-6
+        senza = maker._sottotitoli_accesi(parole, "", "", veste.VESTI[0])
+        assert min(c.start for c in senza) < effetti.SECONDI_AMO
+
+    def test_lampi_di_un_fotogramma(self, piccolo):
+        import maker
+        stile = next(v for v in veste.VESTI if "flash" in v["transizione"])
+        lampi = maker.crea_lampi([0.0, 2.0, 8.0], stile)
+        assert len(lampi) == 2
+        assert all(c.duration == pytest.approx(1 / config.FPS) for c in lampi)
 
     def test_short_completo_con_effetti(self, piccolo, monkeypatch):
         """assembla_video_finale da capo a fondo, senza rete: sorgenti finte,

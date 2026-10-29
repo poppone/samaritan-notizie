@@ -39,6 +39,18 @@ STACCO_MINIMO_FINALE = 0.8
 # Una pausa fra due parole oltre questa soglia e' un buon posto per tagliare.
 PAUSA_DI_TAGLIO = 0.12
 
+# Di quanto si allarga la finestra di taglio [minimo, massimo] per andare a
+# prendere una fine frase o una virgola: uno stacco un po' piu' corto o piu'
+# lungo si nota meno di uno stacco che spezza la frase.
+ANTICIPO_TAGLIO = 0.4
+RITARDO_TAGLIO = 0.6
+
+# I lampi bianchi: pochi e sugli stacchi che contano (la fine dell'amo e
+# qualche fine frase), lontani fra loro. Su ogni stacco stancano e tolgono
+# peso proprio agli stacchi importanti: per gli altri basta lo scatto di zoom.
+MAX_LAMPI = 3
+DISTANZA_MIN_LAMPI = 5.0
+
 # Volumi degli effetti, in frazione del fondo scala. La voce resta sopra:
 # gli effetti si sentono, non coprono.
 VOLUME_WHOOSH = 0.30
@@ -93,11 +105,29 @@ def _nudo(parola):
 # ===========================================================================
 # STACCHI A TEMPO CON LA VOCE
 # ===========================================================================
+def _continua_un_numero(parole, i):
+    """True se la parola i e' il seguito di una cifra appena detta ("18.900
+    | euro", "20 | per | cento", "100 | mila"): li' non si taglia."""
+    if i <= 0:
+        return False
+    nuda = _nudo(parole[i].get("parola") or "").lower()
+    prima = _nudo(parole[i - 1].get("parola") or "").lower()
+    dopo = (_nudo(parole[i + 1].get("parola") or "").lower()
+            if i + 1 < len(parole) else "")
+    prima_numero = e_numero(prima) or prima in _UNITA
+    if nuda == "per":
+        return prima_numero and dopo == "cento"
+    if nuda == "cento" and prima == "per":
+        return True
+    return prima_numero and (e_numero(nuda) or nuda in _UNITA)
+
+
 def _candidati_di_taglio(parole):
     """[(istante, peso)]: i punti dove tagliare non si nota.
 
     Peso 3 a fine frase, 2 su una virgola, 1 su una pausa, 0 all'inizio di
-    una parola qualunque (sempre meglio che in mezzo a una parola).
+    una parola qualunque (sempre meglio che in mezzo a una parola), ma non
+    dentro un prezzo o una quantita' ("18.900 euro" non si spezza).
     """
     candidati = []
     for i, p in enumerate(parole):
@@ -114,7 +144,7 @@ def _candidati_di_taglio(parole):
             candidati.append((istante, 2))
         elif pausa >= PAUSA_DI_TAGLIO:
             candidati.append((istante, 1))
-        if i > 0:
+        if i > 0 and not _continua_un_numero(parole, i):
             candidati.append((float(p["inizio"]), 0))
     return candidati
 
@@ -122,14 +152,18 @@ def _candidati_di_taglio(parole):
 def punti_di_stacco(parole, durata_totale, minimo=1.5, massimo=2.0):
     """Gli istanti in cui cambiare immagine, 0 compreso.
 
-    Dall'ultimo stacco si guarda la finestra [minimo, massimo] e ci si taglia
-    nel punto migliore (fine frase > virgola > pausa > inizio parola); a pari
-    merito, il piu' vicino al centro della finestra. Senza parole, o in un
-    tratto senza voce, si taglia a ritmo fisso.
+    Dall'ultimo stacco si cerca prima una fine frase o una virgola nella
+    finestra allargata [minimo - ANTICIPO_TAGLIO, massimo + RITARDO_TAGLIO]:
+    e' li' che il taglio cade a tempo con la voce. Se non c'e', si prende il
+    punto migliore della finestra [minimo, massimo] (pausa > inizio parola);
+    se nemmeno li' c'e' niente, l'inizio parola o la pausa piu' vicina al
+    centro nella finestra allargata. A pari merito vince il piu' vicino al
+    centro. Il ritmo fisso resta solo dove la voce manca davvero.
     """
     minimo = max(float(minimo), 0.3)
     massimo = max(float(massimo), minimo)
-    candidati = _candidati_di_taglio(parole or [])
+    parole = parole or []
+    candidati = _candidati_di_taglio(parole)
     punti = [0.0]
     while True:
         ultimo = punti[-1]
@@ -137,15 +171,56 @@ def punti_di_stacco(parole, durata_totale, minimo=1.5, massimo=2.0):
             break
         da, a = ultimo + minimo, ultimo + massimo
         centro = (da + a) / 2
-        nella_finestra = [(t, peso) for t, peso in candidati if da <= t <= a]
-        if nella_finestra:
-            scelto = max(nella_finestra, key=lambda c: (c[1], -abs(c[0] - centro)))[0]
+        largo_da = ultimo + max(minimo - ANTICIPO_TAGLIO, 0.3)
+        largo_a = ultimo + massimo + RITARDO_TAGLIO
+
+        def migliore(scelta):
+            return max(scelta, key=lambda c: (c[1], -abs(c[0] - centro)))[0]
+
+        nel_largo = [(t, peso) for t, peso in candidati if largo_da <= t <= largo_a]
+        forti = [c for c in nel_largo if c[1] >= 2]
+        stretti = [c for c in nel_largo if da <= c[0] <= a]
+        if forti:
+            scelto = migliore(forti)
+        elif stretti:
+            scelto = migliore(stretti)
+        elif nel_largo:
+            scelto = min(nel_largo, key=lambda c: abs(c[0] - centro))[0]
         else:
             scelto = centro
+            # Senza candidati la voce tace (o e' un'unica parola lunghissima):
+            # in ogni caso mai a meta' parola, si sposta alla sua fine.
+            for p in parole:
+                if float(p["inizio"]) < scelto < float(p["fine"]):
+                    scelto = float(p["fine"])
+                    break
         if durata_totale - scelto < STACCO_MINIMO_FINALE:
             break
         punti.append(round(scelto, 3))
     return punti
+
+
+def punti_dei_lampi(punti, parole, massimo=MAX_LAMPI,
+                    distanza=DISTANZA_MIN_LAMPI):
+    """Gli stacchi su cui mettere il lampo bianco: pochi, scelti.
+
+    Il primo stacco (quello che chiude l'amo) e poi solo stacchi caduti a
+    fine frase, almeno `distanza` secondi dopo il lampo precedente, al
+    massimo `massimo` in tutto. Senza parole resta solo il primo.
+    """
+    fini_frase = [t for t, peso in _candidati_di_taglio(parole or []) if peso >= 3]
+    scelti = []
+    for t in punti or []:
+        if t <= 0:
+            continue
+        if not scelti:
+            scelti.append(t)
+        elif (t - scelti[-1] >= distanza
+              and any(abs(t - f) < 0.01 for f in fini_frase)):
+            scelti.append(t)
+        if len(scelti) >= massimo:
+            break
+    return scelti
 
 
 def segmenti_da_punti(punti, durata_totale):
@@ -185,7 +260,7 @@ def tipo_parola(parole, indice, parole_titolo=()):
     - numero: cifre, percentuali, prezzi, e le unita' subito dopo un numero
       ("18 MILA EURO" si accende tutto, non solo il 18);
     - nome: parola con l'iniziale maiuscola che non apre la frase (Ferrari,
-      Stellantis), o una parola lunga del titolo.
+      Stellantis), o un nome proprio del titolo (scritto maiuscolo li').
     """
     testo = (parole[indice].get("parola") or "").strip()
     nuda = _nudo(testo)
@@ -243,8 +318,24 @@ def ripunteggia(parole, testo):
 
 
 def parole_del_titolo(*testi):
-    """Le parole lunghe di titolo e soggetto, in maiuscolo."""
-    return {w.upper() for w in re.findall(r"\b[^\W\d_]{4,}\b", " ".join(testi))}
+    """I nomi propri di titolo e soggetto, in maiuscolo.
+
+    Conta solo chi nel titolo e' scritto con l'iniziale maiuscola (Fiat,
+    Panda), non "costa" o "ibrida": se si accendesse ogni parola del titolo
+    l'evidenza sarebbe sempre accesa e non direbbe piu' niente. Un testo
+    tutto in maiuscolo o con tutte le iniziali maiuscole non dice quali sono
+    i nomi, e non conta.
+    """
+    nomi = set()
+    for testo in testi:
+        parole = re.findall(r"\b[^\W\d_]{3,}\b", testo or "")
+        if not parole:
+            continue
+        maiuscole = [w for w in parole if w[0].isupper()]
+        if testo.upper() == testo or len(maiuscole) > len(parole) * 0.6:
+            continue
+        nomi.update(w.upper() for w in maiuscole)
+    return nomi
 
 
 def raggruppa_parole(parole, max_parole=3, max_caratteri=16, pausa=0.35):
