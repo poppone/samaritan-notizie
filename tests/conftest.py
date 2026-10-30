@@ -66,3 +66,11 @@ def _correttore_spento(monkeypatch, request):
 def pytest_configure(config):
     config.addinivalue_line(
         "markers", "correttore: il test usa la correzione ortografica vera")
+
+
+@pytest.fixture(autouse=True)
+def _niente_articoli_dalla_rete(monkeypatch):
+    """Gli articoli del sito si scaricano da davidedurazzi.it: nei test
+    niente rete. I test sul link all'articolo ne mettono di finti."""
+    import brain
+    monkeypatch.setattr(brain, "_articoli_sito", [])
