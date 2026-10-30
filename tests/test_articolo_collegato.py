@@ -145,6 +145,28 @@ class TestArticoloCollegato:
                             lambda *a, **kw: _Risposta({"non": "una lista"}))
         assert "/articoli/" not in brain.articolo_collegato(VOLVO)
 
+    def test_una_voce_storta_non_spegne_le_altre(self, rete, motori, monkeypatch):
+        storte = [{"slug": "a", "titolo": 5, "sezione": ["motori"],
+                   "data": None, "pubblicato": True},
+                  {"slug": "b", "titolo": ["x"], "sezione": "motori",
+                   "data": _giorni_fa(0), "pubblicato": True}]
+        monkeypatch.setattr(brain, "_articoli_sito", storte + _articoli())
+        assert "/articoli/volvo-prepara-un-nuovo-elettrico-compatto-per-il-2027?" in (
+            brain.articolo_collegato(VOLVO))
+
+    def test_slug_strano_non_finisce_nell_indirizzo(self, rete, motori, monkeypatch):
+        articoli = _articoli()
+        articoli[0]["slug"] = "x y/../\u00e9?a=b"
+        monkeypatch.setattr(brain, "_articoli_sito", articoli)
+        url = brain.articolo_collegato(VOLVO)
+        assert url.startswith("https://www.davidedurazzi.it/?")
+
+    def test_senza_fusi_orari_usa_utc(self, rete, motori, monkeypatch):
+        def manca(nome):
+            raise brain.ZoneInfoNotFoundError(nome)
+        monkeypatch.setattr(brain, "ZoneInfo", manca)
+        assert "/articoli/volvo-" in brain.articolo_collegato(VOLVO)
+
 
 class TestNeiTesti:
     def test_descrizione_porta_l_articolo_in_alto(self, rete, motori):

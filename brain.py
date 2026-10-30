@@ -18,7 +18,7 @@ import html
 import unicodedata
 import difflib
 import xml.etree.ElementTree as ET
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from urllib.parse import quote, urlencode
 
@@ -1437,6 +1437,22 @@ def _scarica_articoli_sito():
     return _articoli_sito
 
 
+def _adesso_a_roma():
+    """L'ora di Roma; in UTC se manca il database dei fusi (Windows senza
+    tzdata): sui 5 giorni della finestra un'ora di scarto non cambia niente."""
+    try:
+        return datetime.now(ZoneInfo("Europe/Rome"))
+    except (ZoneInfoNotFoundError, ValueError):
+        print("[Warning Sito] Fuso Europe/Rome non trovato, uso UTC")
+        return datetime.now(timezone.utc)
+
+
+def _slug_valido(slug):
+    """Vero se lo slug puo' stare nell'indirizzo cosi' com'e': il sito accetta
+    solo /articoli/[a-z0-9-]+, il resto darebbe un link rotto."""
+    return isinstance(slug, str) and re.fullmatch(r"[a-z0-9-]+", slug) is not None
+
+
 def _slug(testo, massimo=60):
     """'Nuova Panda: prezzi' -> 'nuova-panda-prezzi'. Per utm_campaign."""
     return "-".join(_impronta_notizia(testo).split())[:massimo].strip("-")
@@ -1458,18 +1474,20 @@ def _articolo_del_video(dati, adesso=None):
     parole_video = _parole_tema(testo_video)
     if not parole_video:
         return None
-    oggi = (adesso or datetime.now(ZoneInfo("Europe/Rome"))).date()
+    oggi = (adesso or _adesso_a_roma()).date()
     limite = (oggi - timedelta(days=GIORNI_ARTICOLI_SITO)).isoformat()
 
     migliore, punti_migliore = None, 0.0
     for a in _scarica_articoli_sito():
-        if a.get("pubblicato") is not True or not a.get("slug"):
+        # Il json arriva dalla rete: una voce storta si salta da sola, senza
+        # portare alla home i video di tutti gli altri articoli.
+        if a.get("pubblicato") is not True or not _slug_valido(a.get("slug")):
             continue
-        if (a.get("sezione") or "").lower() not in sezioni:
+        if str(a.get("sezione") or "").lower() not in sezioni:
             continue
         if str(a.get("data") or "") < limite:
             continue
-        parole = _parole_tema(a.get("titolo") or "")
+        parole = _parole_tema(str(a.get("titolo") or ""))
         comuni = parole & parole_video
         if not parole or len(comuni) < MIN_PAROLE_ARTICOLO:
             continue
