@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1793306677,
-    "data": "2026-10-29",
-    "titolo": "Cybertruck: sogno svanito",
+    "timestamp": 1793404711,
+    "data": "2026-10-30",
+    "titolo": "Stellantis: LFP su molte BEV dal 2027, 500 prima",
     "lingua": "it",
-    "slot": "",
-    "uscita": null,
+    "slot": "14:00",
+    "uscita": 1793365200,
     "formato": "short",
-    "estratto_script": "Tesla ha liquidato due clienti dopo sette anni di attesa per il Cybertruck. I clienti avev",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Tesla Cybertruck",
-    "query_video": "email inbox notification",
-    "fonte": "Sogno Cybertruck svanito: dopo 7 anni di attesa Tesla liquida due clienti con una mail (HDmotori)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFA1OGpFZHgwLUtRTHZ0UlVhNS1KVm1vaG14Rm5ZSDlIMEZrdGZvbjVCaU5XRUdldmlmVDZmUVJ2U0o1aE94TTh5Tk1FUllCVzBhM2J3bGIzUzU0eVRRQlktWEhGempXdw?oc=5",
+    "estratto_script": "Stellantis ha confermato il passaggio al litio ferro fosfato per le sue BEV. La nuova chim",
+    "stile": "MYTH_BUSTING_VIRAL",
+    "gioco": "Stellantis",
+    "query_video": "electric car battery production",
+    "fonte": "Stellantis, svolta LFP sulle auto elettriche: dal 2027 tocca a molti modelli europei, Fiat 500 in prima fila (Automoto.it)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNVTJKT0did2x4V05xV0tvTXZGbTkxOUFFYnptV0g3bm9WSVoydXgyc2JULURJdWkyeHVRZGRSLTJEZlZPM0RQeDhxbWtKZEY4ODlHQ0pzRHlpMERNMzNFbDJzYWZLZ0FtcXlZUVoxSS1objR1bU5KcWIyajJfekVwQk8tZUs1bVdHSzd4bUxlclNkMmVCWTJZRC1tZm5SV29rOWVMSjQ2NFllWlZmemRZVk9yaTNuSkhtOFA3NVozUE5YWU9oT1huN0N0NDJKU0NQRHhVS0dR?oc=5",
     "video_id": null
   }
 ]
