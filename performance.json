@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-31",
+  "aggiornato": "2026-11-01",
   "video": {
     "m9P_aSYgovE": {
       "views": 1703,
@@ -121,19 +121,19 @@
       "comments": 0,
       "subscribersGained": 1
     },
-    "SFaNHz7Mhzo": {
-      "views": 1046,
-      "averageViewPercentage": 67.24,
-      "averageViewDuration": 18,
-      "likes": 3,
-      "comments": 0,
-      "subscribersGained": 2
-    },
     "IfX5K3ljf8A": {
       "views": 1044,
       "averageViewPercentage": 60.61,
       "averageViewDuration": 14,
       "likes": 7,
+      "comments": 0,
+      "subscribersGained": 2
+    },
+    "SFaNHz7Mhzo": {
+      "views": 1038,
+      "averageViewPercentage": 67.07,
+      "averageViewDuration": 18,
+      "likes": 3,
       "comments": 0,
       "subscribersGained": 2
     },
@@ -274,7 +274,7 @@
       "subscribersGained": 1
     },
     "yVOsykjEevk": {
-      "views": 550,
+      "views": 548,
       "averageViewPercentage": 50.78,
       "averageViewDuration": 11,
       "likes": 3,
