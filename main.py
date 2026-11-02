@@ -226,6 +226,11 @@ def esegui_pipeline_samaritan(tema=None):
                     aggiungi_alla_voce(video_id, **campi)
             except Exception as e:
                 print(f"[Warning Copia] Copia pubblica saltata: {e}")
+            # Una copia per il riassunto del sabato (riassunto.py): il
+            # workflow la conserva come artifact "short-<video_id>". Non
+            # solleva mai.
+            import riassunto
+            riassunto.archivia_short(video_path, video_id, config.DIR_PROGETTO)
 
     notifier.notifica_pubblicazione(dati, video_id, video_path)
 

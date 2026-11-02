@@ -1,0 +1,145 @@
+name: Riassunto del sabato
+
+# "Motori della settimana": ogni sabato un video lungo 16:9 che mette in fila
+# gli Short usciti negli ultimi sette giorni (riassunto.py). Esce sullo stesso
+# canale come video normale, perche' per il programma partner contano le ore
+# di visione dei video lunghi e non quelle degli Short.
+#
+# Gli Short li prende dagli artifact "short-<video_id>" che il workflow degli
+# Short conserva per dieci giorni (samaritan.yml); se un artifact manca prova
+# la copia su Vercel Blob, finche' non scade. Con meno di cinque Short non
+# pubblica niente e lo scrive nel log.
+#
+# Non tocca gli Short: coda sua, nessun file in comune tranne la sola lettura
+# di cronologia_trend.json e performance.json.
+
+on:
+  schedule:
+    # Sabato verso le 05:17 UTC (06:17 italiane d'inverno). L'ora a cui il
+    # video compare sul canale non e' questa: sale privato e YouTube lo rende
+    # pubblico alle 11:00 (RIASSUNTO_ORA), come fanno gli Short con publishAt.
+    - cron: '17 4 * * 6'
+  workflow_dispatch:
+    inputs:
+      modalita:
+        description: 'prova = monta il video senza caricarlo (si scarica dagli artifact); private/unlisted/public = carica su YouTube'
+        required: false
+        default: 'prova'
+        type: choice
+        options: [prova, private, unlisted, public]
+
+permissions:
+  contents: write     # salva riassunti_settimanali.json
+  actions: read       # scarica gli artifact degli Short
+
+concurrency:
+  group: samaritan-riassunto
+  cancel-in-progress: false
+
+jobs:
+  riassunto:
+    if: github.repository != 'poppone/samaritan-template'
+    runs-on: ubuntu-latest
+    # Dieci minuti di 1080p con preset veryfast: di solito 10-20 minuti.
+    timeout-minutes: 75
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Installa FFmpeg e font
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      # Le librerie leggere bastano (YouTube, requests): niente Whisper ne'
+      # moviepy, il montaggio lo fa ffmpeg da riga di comando.
+      - name: Installa dipendenze Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Ripristina credenziali YouTube
+        if: (inputs.modalita || 'public') != 'prova'
+        env:
+          CLIENT_SECRET_B64: ${{ secrets.CLIENT_SECRET_B64 }}
+          YOUTUBE_TOKEN_B64: ${{ secrets.YOUTUBE_TOKEN_B64 }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "$CLIENT_SECRET_B64" ] && [ -n "$YOUTUBE_TOKEN_B64" ]; then
+            echo "$CLIENT_SECRET_B64" | base64 -d > client_secret.json
+            echo "$YOUTUBE_TOKEN_B64" | base64 -d > token.pickle
+            exit 0
+          fi
+          if [ -n "$YOUTUBE_CLIENT_ID" ] && [ -n "$YOUTUBE_CLIENT_SECRET" ] && [ -n "$YOUTUBE_REFRESH_TOKEN" ]; then
+            exit 0
+          fi
+          echo "::error::Mancano le credenziali YouTube (vedi samaritan.yml)."
+          exit 1
+
+      - name: Monta e pubblica il riassunto
+        env:
+          # config.py le vuole all'avvio; il riassunto non chiama ne' Groq ne' Pexels.
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          NOME_CANALE: ${{ vars.NOME_CANALE }}
+          RIASSUNTO_MODALITA: ${{ inputs.modalita || 'public' }}
+          RIASSUNTO_ORA: ${{ vars.RIASSUNTO_ORA }}
+        run: python riassunto.py
+
+      - name: Cancella le credenziali dal runner
+        if: always()
+        run: rm -f client_secret.json token.pickle
+
+      - name: Salva il registro dei riassunti
+        if: success()
+        run: |
+          # Il registro esiste solo dopo un upload riuscito: in prova o con
+          # meno di cinque Short non c'e' niente da salvare.
+          if [ ! -f riassunti_settimanali.json ]; then
+            echo "Nessun registro da salvare."
+            exit 0
+          fi
+          git config --global user.name "Samaritan Bot"
+          git config --global user.email "bot@samaritan.local"
+          cp riassunti_settimanali.json "$RUNNER_TEMP/registro.json"
+          for tentativo in 1 2 3 4; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            git reset --hard "origin/${GITHUB_REF_NAME}"
+            cp "$RUNNER_TEMP/registro.json" riassunti_settimanali.json
+            git add riassunti_settimanali.json
+            git diff --staged --quiet && exit 0
+            git commit -m "Registro riassunto del sabato [skip ci]"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            sleep $((RANDOM % 10 + 2))
+          done
+          echo "::error::Registro dei riassunti non salvato."
+          exit 1
+
+      - name: Conserva il riassunto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: riassunto-settimanale
+          path: |
+            output_videos/riassunto_settimanale.mp4
+            output_videos/riassunto_miniatura.jpg
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: ignore
