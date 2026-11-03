@@ -960,8 +960,9 @@ def _pulisci_titolo(titolo):
 
     Sistema meccanicamente quello che si puo' sistemare senza rigenerare:
     l'hashtag inutile, le emoji in eccesso e soprattutto l'emoji in apertura,
-    che ruba il posto alla keyword del gioco. Quello che non si puo' aggiustare
-    da fuori (titolo troppo lungo, tutto maiuscolo) lo rifiuta valida_titolo().
+    che ruba il posto alla keyword del gioco. Il titolo troppo lungo lo
+    accorcia accorcia_titolo(); quello che non si puo' aggiustare da fuori
+    (tutto maiuscolo, accorciamento illeggibile) lo rifiuta valida_titolo().
     """
     t = titolo.strip().strip('"').strip("'")
     # "#Shorts" nel titolo non serve piu' dal 2023 e ruba caratteri utili
@@ -1074,6 +1075,183 @@ def _parola_di_parte(testo):
     """La prima parola di parte che compare nel testo, o ""."""
     lingua = (config.LINGUA or "it").lower()
     return _tema_escluso(testo, PAROLE_DI_PARTE.get(lingua, []))
+
+
+# ---------------------------------------------------------------------------
+# Accorciamento del titolo
+# ---------------------------------------------------------------------------
+# Il 1 e il 2 novembre 2026 diverse uscite sono saltate con "titolo troppo
+# lungo (63 caratteri, max 60)": script buoni, fonte giusta, buttati per tre
+# caratteri. Quando il titolo sfora di poco lo si accorcia qui, togliendo
+# solo parole (mai aggiungendone o cambiandole), e si scarta come prima
+# soltanto se quello che resta non si capisce piu'.
+MIN_CARATTERI_TITOLO_ACCORCIATO = 20
+
+# Parole che non dicono niente sulla notizia: si tolgono prima di tagliare.
+_PAROLE_RIEMPITIVE = {
+    "davvero", "addirittura", "praticamente", "letteralmente", "veramente",
+    "assolutamente", "ecco",
+    "really", "actually", "literally", "totally",
+}
+
+# Parole che non possono chiudere un titolo: articoli, preposizioni,
+# congiunzioni e ausiliari rimasti senza il resto della frase.
+_CODE_VIETATE = {
+    # articoli
+    "il", "lo", "la", "i", "gli", "le", "l", "un", "uno", "una",
+    # preposizioni semplici e articolate
+    "di", "a", "da", "in", "con", "su", "per", "tra", "fra",
+    "del", "dello", "della", "dei", "degli", "delle", "dell",
+    "al", "allo", "alla", "ai", "agli", "alle", "all",
+    "dal", "dallo", "dalla", "dai", "dagli", "dalle", "dall",
+    "nel", "nello", "nella", "nei", "negli", "nelle", "nell",
+    "sul", "sullo", "sulla", "sui", "sugli", "sulle", "sull",
+    "col", "coi", "verso", "contro", "senza", "dopo", "prima",
+    # congiunzioni e subordinate
+    "e", "ed", "o", "od", "ma", "pero", "che", "cui", "chi", "se",
+    "perche", "poiche", "quando", "mentre", "dove", "come", "cosi",
+    "anche", "ne", "non", "piu",
+    # ausiliari
+    "ha", "hanno", "ho", "sono", "era", "viene", "vengono", "sara",
+    # inglese
+    "the", "an", "of", "to", "and", "or", "for", "with", "on", "at", "by",
+    "from", "as", "but", "that", "which", "who", "when", "while", "if",
+    "is", "are", "was", "were", "has", "have", "will", "its", "their",
+}
+
+# Parole che aprono una frase subordinata: se il taglio la lascia a meta',
+# si toglie dalla subordinata in poi ("il boss che quasi nessuno ha").
+_SUBORDINANTI = {
+    "che", "cui", "chi", "perche", "poiche", "quando", "mentre", "dove",
+    "se", "ma", "pero", "cosi", "that", "which", "who", "when", "while",
+    "because", "but", "if",
+}
+
+_PUNTEGGIATURA_DI_CODA = " -–—:;,.!…/|\"'«“‘("
+
+
+def _nuda(parola):
+    """'Perché,' -> 'perche': la parola senza accenti, maiuscole e segni."""
+    return _senza_accenti(parola).lower().strip(".,;:!?…\"'«»“”‘’()[]-–—")
+
+
+def _pulisci_coda(parole):
+    """Toglie da fondo lista parole deboli e segni che lasciano il titolo appeso."""
+    parole = list(parole)
+    while parole:
+        ultima = parole[-1].rstrip(_PUNTEGGIATURA_DI_CODA)
+        if not ultima or ultima.endswith(("'", "’")) \
+                or _nuda(ultima) in _CODE_VIETATE:
+            parole.pop()
+            continue
+        parole[-1] = ultima
+        break
+    return parole
+
+
+def _bilancia_parentesi(testo, massimo):
+    """Se il taglio ha lasciato una parentesi aperta la chiude, se c'e' posto,
+    altrimenti toglie l'inciso."""
+    for apre, chiude in (("(", ")"), ("[", "]"), ("«", "»"), ("“", "”")):
+        if testo.count(apre) > testo.count(chiude):
+            if len(testo) + 1 <= massimo and not testo.endswith(apre):
+                testo += chiude
+            else:
+                testo = testo[:testo.rfind(apre)].rstrip()
+    if testo.count('"') % 2:
+        testo = testo[:testo.rfind('"')].rstrip()
+    return testo
+
+
+def accorcia_titolo(titolo, massimo=None):
+    """Riporta il titolo entro `massimo` caratteri togliendo solo parole.
+
+    In ordine: emoji e punteggiatura finale superflua, parole riempitive,
+    poi taglio a confine di parola senza lasciare in coda articoli,
+    preposizioni, congiunzioni, trattini o due punti. Se il taglio spezza
+    una frase, si torna all'ultimo punto in cui la frase era completa.
+    Ritorna "" se il risultato sarebbe troppo corto per capirsi: in quel
+    caso il titolo va scartato come prima.
+    """
+    massimo = massimo or MAX_CARATTERI_TITOLO
+    t = re.sub(r"\s+", " ", (titolo or "")).strip()
+    if len(t) <= massimo:
+        return t
+
+    # 1. Emoji e punteggiatura finale che non porta informazione. Il punto
+    #    di domanda resta: cambierebbe il senso del titolo.
+    t = re.sub(r"\s+", " ", _RE_EMOJI.sub(" ", t)).strip()
+    t = re.sub(r"(\s*[!.…]+)+$", "", t).rstrip(" -–—:;,")
+    if len(t) <= massimo:
+        return _accettabile(t)
+
+    # 2. Parole riempitive.
+    parole = []
+    for parola in t.split(" "):
+        if _nuda(parola) in _PAROLE_RIEMPITIVE:
+            segni = parola[len(parola.rstrip(",;:!?.")):]
+            if segni and parole:
+                parole[-1] += segni
+            continue
+        parole.append(parola)
+    if parole and parole[0][:1].islower() and t[:1].isupper():
+        parole[0] = parole[0][:1].upper() + parole[0][1:]
+    t = " ".join(parole)
+    if len(t) <= massimo:
+        return _accettabile(t)
+
+    # 3. Taglio a confine di parola.
+    tenute = []
+    for parola in parole:
+        if len(" ".join(tenute + [parola])) > massimo:
+            break
+        tenute.append(parola)
+    tolte = parole[len(tenute):]
+
+    confine_pulito = (
+        not tenute or not tolte
+        or tenute[-1][-1:] in ",;:.!?-–—"
+        or _nuda(tolte[0]) in _CODE_VIETATE
+    )
+    if not confine_pulito:
+        # La frase e' stata spezzata a meta' ("con un nuovo | pacchetto"):
+        # si torna indietro fino a prima della subordinata o del complemento
+        # rimasto senza la sua parola principale.
+        tenute = _arretra(tenute)
+
+    t = _bilancia_parentesi(" ".join(_pulisci_coda(tenute)), massimo)
+    t = " ".join(_pulisci_coda(t.split(" ")))
+    return _accettabile(t)
+
+
+def _arretra(tenute):
+    """Le parole fino all'ultimo punto in cui la frase era completa."""
+    # Mai prima dei due punti: "Marca: notizia" deve tenere la notizia.
+    inizio = 0
+    for i, parola in enumerate(tenute):
+        if parola.endswith((":", ",", ";")) or parola in ("-", "–", "—"):
+            inizio = i + 1
+    for insieme in (_SUBORDINANTI, _CODE_VIETATE):
+        for i in range(len(tenute) - 1, inizio, -1):
+            if _nuda(tenute[i]) in insieme:
+                candidato = _pulisci_coda(tenute[:i])
+                if len(" ".join(candidato)) >= MIN_CARATTERI_TITOLO_ACCORCIATO:
+                    return candidato
+                break
+    # Dopo i due punti c'e' solo un frammento ("Torino: nuovo"): meglio
+    # fermarsi prima dei due punti che lasciarlo appeso.
+    if inizio:
+        candidato = _pulisci_coda(tenute[:inizio])
+        if len(" ".join(candidato)) >= MIN_CARATTERI_TITOLO_ACCORCIATO:
+            return candidato
+    return tenute
+
+
+def _accettabile(titolo):
+    titolo = titolo.strip()
+    if len(titolo) < MIN_CARATTERI_TITOLO_ACCORCIATO:
+        return ""
+    return titolo
 
 
 def valida_titolo(titolo, gioco=""):
@@ -2410,6 +2588,16 @@ def genera_script_samaritan(tema=None):
                 data = json.loads(contenuto) if con_schema \
                     else _estrai_json(contenuto)
                 titolo = _pulisci_titolo(str(data.get("titolo", "")))
+                # Un titolo che sfora di pochi caratteri si accorcia invece di
+                # buttare via uno script buono. Se non si riesce a farlo in
+                # modo leggibile resta lungo, e valida_titolo() lo scarta.
+                if len(titolo) > MAX_CARATTERI_TITOLO:
+                    accorciato = accorcia_titolo(titolo)
+                    if accorciato:
+                        print(f"[Samaritan Brain] Titolo accorciato "
+                              f"({len(titolo)} -> {len(accorciato)} caratteri): "
+                              f"'{titolo}' -> '{accorciato}'")
+                        titolo = accorciato
                 script = str(data.get("script", "")).strip()
                 intero = script
                 script = _senza_coda_troncata(script)
@@ -2492,7 +2680,11 @@ def genera_script_samaritan(tema=None):
                 motivo_scarto = ""
 
                 script = correggi_ortografia(script)
-                titolo = correggi_ortografia(titolo)
+                corretto = correggi_ortografia(titolo)
+                # La correzione non deve riportare il titolo oltre il limite.
+                if len(corretto) > MAX_CARATTERI_TITOLO:
+                    corretto = accorcia_titolo(corretto) or titolo
+                titolo = corretto
                 query_video = completa_query_video(query_video)
                 query_scene = pulisci_query_scene(data.get("query_scene"),
                                                   query_video)
