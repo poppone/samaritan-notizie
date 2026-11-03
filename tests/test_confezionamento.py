@@ -274,10 +274,11 @@ class TestRigenerazioneInformata:
     def test_il_motivo_dello_scarto_arriva_al_tentativo_dopo(self, monkeypatch):
         import json as _json
 
-        # Primo titolo: 70 caratteri, viene scartato. Secondo: valido.
+        # Primo titolo: tutto maiuscolo, viene scartato. Secondo: valido.
+        # (Un titolo solo troppo lungo non si scarta piu': si accorcia, vedi
+        # tests/test_titoli_accorciati.py.)
         scartato = _json.dumps({
-            "titolo": "Elden Ring: il boss segreto che quasi nessun giocatore "
-                      "ha mai battuto davvero",
+            "titolo": "ELDEN RING: IL BOSS SEGRETO DIETRO LA CASCATA",
             "script": self._SCRIPT,
             "gioco": "Elden Ring", "query_video": "elden ring gameplay",
             "descrizione": "Un segreto.", "indice_notizia": -1,
@@ -300,7 +301,7 @@ class TestRigenerazioneInformata:
 
         assert len(prompt_visti) == 2
         assert "scartato" not in prompt_visti[0].lower()
-        assert "troppo lungo" in prompt_visti[1], prompt_visti[1]
+        assert "maiuscolo" in prompt_visti[1], prompt_visti[1]
         assert risultato["titolo"] == "Elden Ring: il boss dietro la cascata"
 
 
