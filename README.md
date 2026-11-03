@@ -78,6 +78,26 @@ trailer e screenshot ufficiali degli store, e le registrazioni di popponetv in
 Per provarlo a mano: tab Actions, **Run workflow**, spunta `lungo` e metti
 `privacy` su `private`.
 
+## Il riassunto del sabato
+
+Ogni sabato `riassunto.yml` pubblica "Motori della settimana": un video lungo
+16:9 (non uno Short) che mette in fila gli Short usciti negli ultimi sette
+giorni, perche' per il programma partner contano le ore dei video lunghi.
+
+- Ogni Short, appena caricato, viene conservato come artifact
+  `short-<video_id>` per dieci giorni (`main.py` + `samaritan.yml`). Il
+  sabato `riassunto.py` li riprende da li' (ripiego: la copia su Vercel Blob,
+  finche' non scade). Niente download da YouTube.
+- Montaggio con ffmpeg: Short a sinistra su sfondo sfocato, pannello con
+  numero, titolo, fonte e giorno; apertura e chiusura di pochi secondi;
+  nessuna musica. Oltre i 10 minuti escono le notizie meno viste.
+- Capitoli e fonti nella descrizione, dichiarazione AI (flag
+  `containsSyntheticMedia` e testo). Sale privato e diventa pubblico alle
+  11:00 (`RIASSUNTO_ORA`).
+- Con meno di 5 Short non pubblica e lo scrive nel log.
+- Per provarlo: Actions, "Riassunto del sabato", Run workflow con
+  `modalita = prova` (monta senza caricare, il video e' negli artifact).
+
 ## E su TikTok?
 
 Su TikTok Samaritan **non** pubblica da solo: servirebbe un'app registrata su

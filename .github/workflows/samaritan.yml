@@ -337,6 +337,21 @@ jobs:
           echo "::error::Memoria non salvata dopo quattro tentativi."
           exit 1
 
+      # Lo Short appena uscito, conservato per il riassunto del sabato
+      # (riassunto.py, riassunto.yml). Il nome contiene il video_id, cosi' il
+      # sabato si prende il file giusto senza scaricarlo da YouTube. Dieci
+      # giorni bastano a coprire la settimana; l'mp4 e' gia' compresso, quindi
+      # niente compressione dello zip.
+      - name: Conserva lo Short per il riassunto del sabato
+        if: always() && steps.pipeline.outputs.short_id != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: short-${{ steps.pipeline.outputs.short_id }}
+          path: output_videos/settimana/${{ steps.pipeline.outputs.short_id }}.mp4
+          retention-days: 10
+          compression-level: 0
+          if-no-files-found: ignore
+
       - name: Conserva il video prodotto
         if: always()
         uses: actions/upload-artifact@v4
