@@ -1,21 +1,5 @@
 [
   {
-    "timestamp": 1793673191,
-    "data": "2026-11-02",
-    "titolo": "Ducati: nuova Desmo250 EDS amplifica la famiglia Enduro",
-    "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1793638800,
-    "formato": "short",
-    "estratto_script": "La Ducati ha svelato la nuova Desmo250 EDS, ampliando la famiglia Enduro. Lo riporta Media",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Ducati Desmo250 EDS",
-    "query_video": "motorcycle showroom",
-    "fonte": "La famiglia Enduro si allarga: svelata la nuova Ducati Desmo250 EDS (Mediaset Infinity)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9QQmRtMjQtcmFDWVVYTGJBXy1SNGtPQ3NTdG05MDltdnA0UXZGY2ozOTBEVjluWm9HTlJNVlExNVZSbFlPY2RIcUZGTFJoNmRLdE9oZEtHbnlpcnd4WU9rV3R1ZWtwRmxZZG1hR0R4SU1XOFFjb3hXM9IBeEFVX3lxTE9QQmRtMjQtcmFDWVVYTGJBXy1SNGtPQ3NTdG05MDltdnA0UXZGY2ozOTBEVjluWm9HTlJNVlExNVZSbFlPY2RIcUZGTFJoNmRLdE9oZEtHbnlpcnd4WU9rV3R1ZWtwRmxZZG1hR0R4SU1XOFFjb3hXMw?oc=5",
-    "video_id": null
-  },
-  {
     "timestamp": 1793692912,
     "data": "2026-11-03",
     "titolo": "Kimi Antonelli campione di Formula 1 a 20 anni",
@@ -29,6 +13,22 @@
     "query_video": "f1 race",
     "fonte": "Il campione di Formula 1 più giovane di sempre: Kimi Antonelli fa la Storia a 20 anni (Radio Popolare)",
     "fonte_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPR3BCMUt3Z2lRRUVlZkVVUW00NkczUWQ3R3ZmNDEtMFdieUZXbFB5TzhscXdqaWpXaTVXVFI2U3NXYzRNMURpZVpqMjFsU1hLWV9UTzhVdy10dmFYaHZTNXVzUkR0b1RIOFZfbDQtdmxpZzJ5QUI4NnR5S3hrdXNPbHJuMDV1VmhJRW5Rb3kzeUdlWi1SZlVBTTBQUmNGalFRMTNVTllwYVZ1b1BqcXNUSWJVTQ?oc=5",
+    "video_id": null
+  },
+  {
+    "timestamp": 1793710243,
+    "data": "2026-11-03",
+    "titolo": "MotoGP, in Qatar potrebbero correre solo 13 piloti su 22",
+    "lingua": "it",
+    "slot": "16:00",
+    "uscita": 1793718000,
+    "formato": "short",
+    "estratto_script": "MotoGP, in Qatar potrebbero correre solo 13 piloti su 22. La testata Moto.it riporta che i",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "MotoGP",
+    "query_video": "moto racing",
+    "fonte": "MotoGP, in Qatar potrebbero correre solo 13 piloti su 22 (Moto.it)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9PNnZRUi1UcXBrSVJOcWdZcXpIWHI5OXlUa0Rod1lhRGpITExUalhqTGU2NUU5WGQtZ1VPWnlzSDUzTHF0RWxfNjdiTy1uSUM3NGMzT19oVUpTNXJRWjl6eU5hUE1EMjlUVUFoZTFORFRmdFhoT1VmUW9PelYxQQ?oc=5",
     "video_id": null
   }
 ]
