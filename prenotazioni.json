@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1793753238,
-    "data": "2026-11-03",
-    "titolo": "Stellantis: calo immatricolazioni e impatto in Borsa",
+    "timestamp": 1793790150,
+    "data": "2026-11-04",
+    "titolo": "Allarme Qatar: paura MotoGP e calma tiratori",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1793710800,
+    "uscita": 1793797200,
     "formato": "short",
-    "estratto_script": "Stellantis registra un netto calo delle immatricolazioni a ottobre, secondo Borsa&Finanza.",
+    "estratto_script": "Allarme in Qatar: la MotoGP è al centro di timori. La Gazzetta dello Sport riporta che la ",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Stellantis",
-    "query_video": "stock market floor",
-    "fonte": "Azioni Stellantis: quali risvolti in Borsa con il calo delle immatricolazioni? (Borsa&Finanza)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNTkFOc1Q2X09PNlk0ZTJuLXZhWW1aYjBjSXZiRjBKZDdRbjJSeU15Rkw0TE5jZzNiLXJYbU9XTXZTbmxCbUY0cU1OVjFjQ2JYZmNaNUc2ZElXcE9VSnlTTEpiejB5M2NFUjBEUHJiclc2MzJKQ0NJTDA3WVVYMms1U0dTYThWX3ZqeUlFaGpBU1JJUmlLWmVOVVZEcGduRDFJNzVfag?oc=5",
+    "gioco": "MotoGP Qatar",
+    "query_video": "Qatar stadium exterior",
+    "fonte": "Lo strano caso dell'allarme in Qatar: la paura della MotoGP, la serenità dei tiratori (La Gazzetta dello Sport)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQcXZLTHhNbE5NdVZwYXkxWV9aZ3BDUVdoN0RaMFhnb2dRMHdJR3BBaE5qb0Y0NUVNZEtUbVlKRmpLSXVQNFlGRGt3RGsza0puRy1uNXdGbGhJcUt6TWk2V0JiTUppMUxiaFpxQlhEajFWdDJZMEdnaGs2N1FUeTk1Z1NnMlBIem1GLUZEQm1rVm9rSUVJUEhR?oc=5",
     "video_id": null
   }
 ]
