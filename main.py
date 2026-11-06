@@ -20,6 +20,7 @@ import os
 import traceback
 
 import config
+import brain
 from brain import (
     genera_script_samaritan,
     registra_video_caricato,
@@ -252,6 +253,22 @@ if __name__ == "__main__":
     tema_video = sys.argv[1] if len(sys.argv) > 1 else None
     try:
         esegui_pipeline_samaritan(tema=tema_video)
+    except brain.VideoSaltato as e:
+        # Saltato apposta: tutti gli script scartati dal controllo
+        # anti-invenzioni. Se questa non e' gia' la riserva, l'uscita la
+        # recupera lei stasera: avviso giallo, non errore rosso. La riserva
+        # che salta e' invece un buco vero, e resta rossa.
+        print(f"[Samaritan] {e}")
+        if config.RECUPERO:
+            notifier.notifica_errore(
+                f"Anche la riserva ha saltato il video: {e}")
+            print("::error::Video saltato anche dalla riserva: l'uscita "
+                  "resta scoperta.")
+            sys.exit(1)
+        notifier.notifica_salto(str(e))
+        print("::warning::Video saltato apposta (tutti gli script scartati): "
+              "lo recupera la riserva di fine giornata.")
+        sys.exit(0)
     except Exception:
         traccia = traceback.format_exc()
         print(traccia)
