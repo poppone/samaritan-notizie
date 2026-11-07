@@ -12,12 +12,14 @@
   "materiale": "stock",
   "ricerche": {
     "it": [
+      "\"GP\" AND (gara OR qualifiche OR sprint OR podio OR vittoria) when:1d",
+      "\"record di velocità\" OR \"record mondiale\" OR \"km/h\" OR hypercar OR supercar when:2d",
       "\"nuova auto\" OR \"nuove auto\" OR \"anteprima mondiale\" OR debutta when:2d",
       "\"auto elettriche\" OR \"auto elettrica\" OR \"auto ibride\" OR colonnine when:2d",
-      "\"incentivi auto\" OR \"mercato auto\" OR immatricolazioni OR \"prezzi auto\" when:3d",
+      "\"incentivi auto\" OR \"prezzi auto\" OR \"mercato auto\" when:3d",
       "\"prezzo benzina\" OR \"prezzo diesel\" OR \"prezzi carburanti\" OR \"accise carburanti\" when:2d",
       "\"codice della strada\" OR autovelox OR \"bollo auto\" OR patente when:3d",
-      "\"Formula 1\" OR F1 OR MotoGP when:1d",
+      "\"Formula 1\" OR F1 OR MotoGP OR \"qualifiche\" OR \"pole position\" OR \"sprint race\" when:1d",
       "Ferrari OR Ducati OR Stellantis OR Tesla when:2d"
     ]
   },
@@ -31,7 +33,17 @@
       "incentivi",
       "da oggi",
       "cambia",
-      "arriva"
+      "arriva",
+      "vince",
+      "pole",
+      "gara",
+      "qualifiche",
+      "podio",
+      "km/h",
+      "record mondiale",
+      "più veloce",
+      "virale",
+      "video"
     ]
   },
   "uscite": [
@@ -41,10 +53,6 @@
     },
     {
       "orario": "14:00",
-      "lingua": "it"
-    },
-    {
-      "orario": "16:00",
       "lingua": "it"
     },
     {
@@ -77,7 +85,26 @@
     "motogp",
     "stellantis",
     "bmw",
-    "volkswagen"
+    "volkswagen",
+    "antonelli",
+    "verstappen",
+    "leclerc",
+    "hamilton",
+    "marquez",
+    "bagnaia",
+    "bezzecchi",
+    "rally",
+    "dakar",
+    "le mans",
+    "byd",
+    "yangwang",
+    "bugatti",
+    "porsche",
+    "mclaren",
+    "maserati",
+    "koenigsegg",
+    "rimac",
+    "pagani"
   ],
   "tag_fissi": [
     "motori",
@@ -150,7 +177,25 @@
       "frontale",
       "ribaltato",
       "ribaltata",
-      "carambola"
+      "carambola",
+      "immatricolazioni",
+      "trimestrale",
+      "trimestrali",
+      "borsa",
+      "piazza affari",
+      "azioni",
+      "utile netto",
+      "fatturato",
+      "ricavi",
+      "nomina",
+      "nominato",
+      "nominata",
+      "coo",
+      "ceo",
+      "amministratore delegato",
+      "consiglio di amministrazione",
+      "dividendo",
+      "bilancio"
     ]
   }
 }
