@@ -13,6 +13,7 @@
   "ricerche": {
     "it": [
       "\"GP\" AND (gara OR qualifiche OR sprint OR podio OR vittoria) when:1d",
+      "\"record di velocità\" OR \"record mondiale\" OR \"km/h\" OR hypercar OR supercar when:2d",
       "\"nuova auto\" OR \"nuove auto\" OR \"anteprima mondiale\" OR debutta when:2d",
       "\"auto elettriche\" OR \"auto elettrica\" OR \"auto ibride\" OR colonnine when:2d",
       "\"incentivi auto\" OR \"prezzi auto\" OR \"mercato auto\" when:3d",
@@ -37,7 +38,12 @@
       "pole",
       "gara",
       "qualifiche",
-      "podio"
+      "podio",
+      "km/h",
+      "record mondiale",
+      "più veloce",
+      "virale",
+      "video"
     ]
   },
   "uscite": [
@@ -89,7 +95,16 @@
     "bezzecchi",
     "rally",
     "dakar",
-    "le mans"
+    "le mans",
+    "byd",
+    "yangwang",
+    "bugatti",
+    "porsche",
+    "mclaren",
+    "maserati",
+    "koenigsegg",
+    "rimac",
+    "pagani"
   ],
   "tag_fissi": [
     "motori",
