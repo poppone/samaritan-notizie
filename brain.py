@@ -32,6 +32,137 @@ from unisci_memoria import unisci_cronologie
 
 client = Groq(api_key=config.GROQ_API_KEY)
 
+
+class VideoSaltato(RuntimeError):
+    """La lavorazione rinuncia al video apposta, con tutti gli script scartati.
+
+    Non e' un guasto del codice: e' il controllo anti-invenzioni che ha fatto
+    il suo lavoro fino in fondo. main.py la distingue da un errore vero: se
+    la riserva di fine giornata puo' ancora coprire l'uscita, il job chiude
+    con un avviso e non con un errore (chiesto da Davide il 6 novembre 2026,
+    dopo quattro run rosse in un giorno su Motori in 60 secondi).
+    """
+
+
+# Parole che non dicono niente sul fatto: servono a misurare quanto un
+# "dettaglio inventato" e' solo una riformulazione del titolo.
+_PAROLE_VUOTE = frozenset("""
+della delle dello degli dell nella nelle nello negli alla alle allo agli
+dalla dalle dallo dagli sulla sulle sullo sugli come dove quando anche
+questo questa questi queste quello quella quelli quelle essere stato stata
+stati state sono viene vengono fatto fatta hanno avere aveva erano
+nuovo nuova nuovi nuove grande grandi molto molti ancora dopo prima
+contro verso tra fra per con una uno gli che non piu gia
+the and for with from this that these those been will would about
+""".split())
+
+
+def _parole_chiave(testo):
+    """Le parole con un contenuto proprio, senza accenti ne' maiuscole."""
+    testo = unicodedata.normalize("NFKD", testo or "")
+    testo = "".join(c for c in testo if not unicodedata.combining(c)).lower()
+    parole = re.findall(r"[a-z0-9]+", testo)
+    return [w for w in parole if len(w) >= 4 and w not in _PAROLE_VUOTE]
+
+
+def _stessa_radice(parola, riferimento):
+    """Vero se `parola` e' nel riferimento anche con un'altra desinenza
+    (chiusa/chiusura, debutta/debutto, immatricolazioni/immatricolazione)."""
+    if parola in riferimento:
+        return True
+    radice = parola[:5]
+    return any(r.startswith(radice) or parola.startswith(r[:5])
+               for r in riferimento if len(r) >= 4)
+
+
+def _nomi_propri(testo):
+    """Le parole con la maiuscola non a inizio frase: nomi, marchi, luoghi."""
+    nomi = set()
+    for frase in re.split(r"[.!?;:]\s+", testo or ""):
+        for parola in re.findall(r"\b[A-ZÀ-Ý][\w'-]+", frase)[1:] \
+                if frase[:1].isupper() else re.findall(r"\b[A-ZÀ-Ý][\w'-]+", frase):
+            nomi.add(parola)
+    return nomi
+
+
+def e_riformulazione(dettaglio, titolo, sommario=""):
+    """Vero se il "dettaglio inventato" dice solo cio' che titolo e sommario
+    gia' dicono, con altre parole.
+
+    Il 5 novembre 2026 il fact-checker ha bocciato "Brembo ha lanciato la
+    nuova generazione di freni a Eicma" sotto il titolo "Brembo, dalla MotoGP
+    alla strada: a Eicma debutta la nuova generazione di freni": stessa
+    notizia, verbo diverso, e l'uscita delle 14:00 e' saltata. Un dettaglio
+    e' nuovo davvero solo se porta qualcosa che non c'e' nel riferimento: un
+    numero, un nome proprio, o abbastanza parole di contenuto da non essere
+    una parafrasi.
+    """
+    riferimento = f"{titolo}\n{sommario or ''}"
+    rif = set(_parole_chiave(riferimento))
+    parole = _parole_chiave(dettaglio)
+    if not parole:
+        return True
+    # Un numero che il riferimento non ha e' un fatto nuovo (date, prezzi,
+    # quantita').
+    numeri_rif = set(re.findall(r"\d+", riferimento))
+    if any(n not in numeri_rif for n in re.findall(r"\d+", dettaglio)):
+        return False
+    # Un nome proprio che il riferimento non nomina e' un fatto nuovo (un
+    # sindacato, una persona, un luogo).
+    nomi_rif = {n.lower() for n in _nomi_propri(riferimento)} | rif
+    for nome in _nomi_propri(dettaglio):
+        if not _stessa_radice(nome.lower(), nomi_rif):
+            return False
+    coperte = sum(1 for w in parole if _stessa_radice(w, rif))
+    return coperte / len(parole) >= 0.6
+
+
+def senza_riformulazioni(dettagli, titolo, sommario=""):
+    """I dettagli segnalati dal fact-checker che sono davvero nuovi."""
+    tenuti, scartati = [], []
+    for d in dettagli:
+        (scartati if e_riformulazione(d, titolo, sommario) else tenuti).append(d)
+    if scartati:
+        print("[Samaritan Brain] Verifica dei fatti: ignoro "
+              f"{len(scartati)} riformulazion{'e' if len(scartati) == 1 else 'i'} "
+              f"del titolo ({'; '.join(scartati)}).")
+    return tenuti
+
+
+def _ripara_json(testo):
+    """Prova a leggere un JSON scritto male dal modello.
+
+    Il 5 novembre 2026 gpt-oss-120b ha risposto con una chiave senza
+    virgolette ("Expecting property name enclosed in double quotes") e il
+    tentativo e' andato perso. Qui si tolgono le recinzioni ```json, le
+    virgole finali, le virgolette tipografiche e le chiavi fra apici o nude;
+    se non basta, solleva ValueError e il chiamante ripete la richiesta.
+    """
+    testo = (testo or "").strip()
+    try:
+        return _estrai_json(testo)
+    except (ValueError, json.JSONDecodeError):
+        pass
+    if testo.startswith("```"):
+        testo = re.sub(r"^```[a-zA-Z]*\s*", "", testo)
+        testo = re.sub(r"```\s*$", "", testo).strip()
+    inizio, fine = testo.find("{"), testo.rfind("}")
+    if inizio == -1 or fine <= inizio:
+        raise ValueError("nessun oggetto JSON nella risposta")
+    t = testo[inizio:fine + 1]
+    t = t.replace("\u201c", '"').replace("\u201d", '"').replace("\u2019", "'")
+    # chiavi fra apici singoli o senza virgolette: {titolo: ...} / {'titolo': ...}
+    t = re.sub(r"(?m)^(\s*)'([^'\n]+)'\s*:", r'\1"\2":', t)
+    t = re.sub(r"(?m)^(\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', t)
+    # valori fra apici singoli: 'B' -> "B" (solo se dentro non ci sono
+    # virgolette doppie, che li renderebbero ambigui)
+    t = re.sub(r":\s*'([^'\"\n]*)'(\s*[,}\n])", r': "\1"\2', t)
+    t = re.sub(r",\s*([}\]])", r"\1", t)
+    try:
+        return json.loads(t)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"JSON non riparabile: {e}") from e
+
 # ---------------------------------------------------------------------------
 # Formati video. `richiede_fatto` = ha bisogno di una notizia vera per esistere.
 # Se non ci sono notizie fresche, Samaritan ripiega su un formato che non ne
@@ -2289,7 +2420,8 @@ def _dettagli_inventati(titolo_notizia, script, sommario="", testata=""):
     istruzioni = (
         f"Sei un fact-checker. Ricevi il TITOLO di una notizia {p.argomento}, a "
         "volte il suo SOMMARIO, e lo SCRIPT di uno Short che la racconta. "
-        "Della notizia si conosce SOLO cio' che dicono titolo e sommario. "
+        "Della notizia si conosce SOLO cio' che dicono titolo e sommario: "
+        "un fatto scritto nel SOMMARIO non e' inventato. "
         "Elenca i dettagli sull'EVENTO della notizia che lo script afferma "
         "come fatti ma che titolo e sommario non dicono, compreso "
         f"attribuire la notizia a {p.g('un')} {s} divers{p.g('o')} da "
@@ -2338,7 +2470,8 @@ def _dettagli_inventati(titolo_notizia, script, sommario="", testata=""):
             dettagli = dati.get("dettagli_inventati", [])
             if not isinstance(dettagli, list):
                 return []
-            return [str(d).strip() for d in dettagli if str(d).strip()][:4]
+            dettagli = [str(d).strip() for d in dettagli if str(d).strip()]
+            return senza_riformulazioni(dettagli, titolo_notizia, sommario)[:4]
         except Exception as e:
             print(f"[Samaritan Brain] Verifica dei fatti non riuscita "
                   f"(ragionamento {ragionamento}): {e}")
@@ -2579,14 +2712,34 @@ def genera_script_samaritan(tema=None):
                     # Meno ragionamento, piu' token per la risposta vera.
                     parametri["reasoning_effort"] = "low"
 
-                response = client.chat.completions.create(**parametri)
-                contenuto = response.choices[0].message.content
-                if not contenuto:
-                    print("[Samaritan Brain] Risposta vuota, riprovo.")
+                # Una risposta che non si legge (JSON storto) non e' uno
+                # script scartato: si ripete la richiesta una volta, senza
+                # consumare il tentativo. Prima pero' si prova a ripararla.
+                data = None
+                for ripetizione in (1, 2):
+                    response = client.chat.completions.create(**parametri)
+                    contenuto = response.choices[0].message.content
+                    if not contenuto:
+                        print("[Samaritan Brain] Risposta vuota, riprovo.")
+                        continue
+                    try:
+                        data = json.loads(contenuto) if con_schema \
+                            else _estrai_json(contenuto)
+                        break
+                    except (json.JSONDecodeError, ValueError) as e:
+                        try:
+                            data = _ripara_json(contenuto)
+                            print("[Samaritan Brain] JSON riparato "
+                                  f"({str(e)[:60]}).")
+                            break
+                        except ValueError:
+                            if ripetizione == 1:
+                                print("[Samaritan Brain] JSON illeggibile "
+                                      f"({str(e)[:60]}): ripeto la richiesta.")
+                                continue
+                            raise
+                if data is None:
                     continue
-
-                data = json.loads(contenuto) if con_schema \
-                    else _estrai_json(contenuto)
                 titolo = _pulisci_titolo(str(data.get("titolo", "")))
                 # Un titolo che sfora di pochi caratteri si accorcia invece di
                 # buttare via uno script buono. Se non si riesce a farlo in
@@ -2719,7 +2872,7 @@ def genera_script_samaritan(tema=None):
     # accorgeva perche' la pipeline chiudeva verde. Meglio saltare il video:
     # l'eccezione fa fallire il workflow, cosi' il problema si vede subito.
     if motivo_scarto:
-        raise RuntimeError(
+        raise VideoSaltato(
             "Tutti i tentativi sono stati scartati, l'ultimo perche' "
             f"{motivo_scarto}. Salto il video: lo recupera la riserva.")
     raise RuntimeError(
