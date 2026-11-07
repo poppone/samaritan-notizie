@@ -3,7 +3,7 @@
   "video": {
     "4Fu-UaJTvbg": {
       "views": 3145,
-      "averageViewPercentage": 107.56000000000002,
+      "averageViewPercentage": 107.47,
       "averageViewDuration": 25,
       "likes": 23,
       "comments": 0,
@@ -67,7 +67,7 @@
     },
     "STdvDga1uqs": {
       "views": 1246,
-      "averageViewPercentage": 58.51,
+      "averageViewPercentage": 58.53,
       "averageViewDuration": 14,
       "likes": 23,
       "comments": 0,
@@ -651,19 +651,19 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 50208
+      "views": 50175
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 2553
+      "views": 2556
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 119
+      "views": 117
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 66
+      "views": 68
     },
     {
       "sorgente": "SUBSCRIBER",
@@ -687,7 +687,7 @@
     },
     {
       "sorgente": "NO_LINK_OTHER",
-      "views": 3
+      "views": 0
     }
   ]
 }
