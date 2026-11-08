@@ -1,8 +1,8 @@
 {
-  "aggiornato": "2026-11-07",
+  "aggiornato": "2026-11-08",
   "video": {
     "4Fu-UaJTvbg": {
-      "views": 3171,
+      "views": 3169,
       "averageViewPercentage": 107.01,
       "averageViewDuration": 25,
       "likes": 23,
@@ -26,7 +26,7 @@
       "subscribersGained": 4
     },
     "S5jW3dWWLqU": {
-      "views": 1402,
+      "views": 1400,
       "averageViewPercentage": 64.98,
       "averageViewDuration": 17,
       "likes": 1,
@@ -34,7 +34,7 @@
       "subscribersGained": 1
     },
     "STdvDga1uqs": {
-      "views": 1336,
+      "views": 1328,
       "averageViewPercentage": 58.650000000000006,
       "averageViewDuration": 14,
       "likes": 26,
@@ -210,7 +210,7 @@
       "subscribersGained": 0
     },
     "2wa49EBEs7I": {
-      "views": 1009,
+      "views": 1008,
       "averageViewPercentage": 49.57,
       "averageViewDuration": 12,
       "likes": 9,
@@ -305,14 +305,6 @@
       "comments": 0,
       "subscribersGained": 0
     },
-    "N71mpfeWoCo": {
-      "views": 792,
-      "averageViewPercentage": 36.29,
-      "averageViewDuration": 10,
-      "likes": 6,
-      "comments": 0,
-      "subscribersGained": 1
-    },
     "pfnqRB4CHus": {
       "views": 781,
       "averageViewPercentage": 39.27,
@@ -320,6 +312,14 @@
       "likes": 1,
       "comments": 0,
       "subscribersGained": 2
+    },
+    "N71mpfeWoCo": {
+      "views": 779,
+      "averageViewPercentage": 36.29,
+      "averageViewDuration": 10,
+      "likes": 6,
+      "comments": 0,
+      "subscribersGained": 1
     },
     "u9F9RG0_Hzg": {
       "views": 702,
@@ -346,7 +346,7 @@
       "subscribersGained": 0
     },
     "xH0ZjsdQ9E4": {
-      "views": 600,
+      "views": 598,
       "averageViewPercentage": 45.38,
       "averageViewDuration": 12,
       "likes": 0,
@@ -410,7 +410,7 @@
       "subscribersGained": 0
     },
     "Wmd6afJmlVk": {
-      "views": 432,
+      "views": 429,
       "averageViewPercentage": 53.459999999999994,
       "averageViewDuration": 12,
       "likes": 1,
@@ -514,7 +514,7 @@
       "subscribersGained": 0
     },
     "6pSUfwqTCM8": {
-      "views": 45,
+      "views": 43,
       "averageViewPercentage": 52.72,
       "averageViewDuration": 16,
       "likes": 0,
@@ -659,7 +659,7 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 51292
+      "views": 51288
     },
     {
       "sorgente": "YT_SEARCH",
