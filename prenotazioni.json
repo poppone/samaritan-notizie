@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1794095341,
-    "data": "2026-11-07",
-    "titolo": "Formula 1: Lando Norris conquista la pole in Brasile",
+    "timestamp": 1794139146,
+    "data": "2026-11-08",
+    "titolo": "MotoGP, oggi la gara che può assegnare il titolo",
     "lingua": "it",
-    "slot": "14:00",
-    "uscita": 1794056400,
+    "slot": "18:00",
+    "uscita": 1794157200,
     "formato": "short",
-    "estratto_script": "Lando Norris ha conquistato la pole position al Gran Premio del Brasile. Sky TG24 riporta ",
+    "estratto_script": "MotoGP, oggi la gara che può assegnare il titolo. Orari, griglia di partenza e news sul me",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Formula 1",
-    "query_video": "formula one qualifying",
-    "fonte": "Formula 1, Gp di Interlagos. Gli highlights delle qualifiche (Sky TG24)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTVJBUF9VSlhsY05pYU9EbUE0SE43RjdEVkV0ZEp0T29qTTFXRHNkSEF6YjNhN1dNdFNhRXN1M09QQjMzSUc5SlRkeG53ZDktX3ZBU0pRTWZ0NGsxX1F1eWdJUENSTzFNZk5UQTNISGtPVV9qbE9oM0lJNW9GbDJ1V1lFeWFrWkFLbktKUk92bldWTDh5T0tvNFJ6TUMweDR6d2Z2VmZHZw?oc=5",
+    "gioco": "MotoGP",
+    "query_video": "motorcycle racing track",
+    "fonte": "MotoGP, oggi la gara che può assegnare il titolo: orari, griglia di partenza e news sul meteo (Sky Sport)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5sSlJ4azh4c3BqMGp0bkphQl9nOEZsR2h6OGtBN2tORXFwRjBYUWNMNG02NmVzTXlWYll5STZMTTE1dFFVX0pJQjZ4X1dzSzBITzJCTllWVlVCalJrN1Y0RnhFaWlJOGhwNjRXZjBSQU5sd2c2WjdMR2c5cw?oc=5",
     "video_id": null
   }
 ]
