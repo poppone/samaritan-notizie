@@ -54,10 +54,6 @@
     {
       "orario": "14:00",
       "lingua": "it"
-    },
-    {
-      "orario": "18:00",
-      "lingua": "it"
     }
   ],
   "fuso": "Europe/Rome",
