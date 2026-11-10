@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1794139146,
-    "data": "2026-11-08",
-    "titolo": "MotoGP, oggi la gara che può assegnare il titolo",
+    "timestamp": 1794294950,
+    "data": "2026-11-10",
+    "titolo": "Stellantis cede a Roshel lo stabilimento di Brampton",
     "lingua": "it",
-    "slot": "18:00",
-    "uscita": 1794157200,
+    "slot": "14:00",
+    "uscita": 1794315600,
     "formato": "short",
-    "estratto_script": "MotoGP, oggi la gara che può assegnare il titolo. Orari, griglia di partenza e news sul me",
-    "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle racing track",
-    "fonte": "MotoGP, oggi la gara che può assegnare il titolo: orari, griglia di partenza e news sul meteo (Sky Sport)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5sSlJ4azh4c3BqMGp0bkphQl9nOEZsR2h6OGtBN2tORXFwRjBYUWNMNG02NmVzTXlWYll5STZMTTE1dFFVX0pJQjZ4X1dzSzBITzJCTllWVlVCalJrN1Y0RnhFaWlJOGhwNjRXZjBSQU5sd2c2WjdMR2c5cw?oc=5",
+    "estratto_script": "Stellantis ha ceduto lo stabilimento di Brampton al canadese Roshel. Lo stabilimento era s",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "Stellantis",
+    "query_video": "industrial factory exterior",
+    "fonte": "Stellantis cede a Roshel lo stabilimento canadese di Brampton (MarketScreener Italia)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQYkpOUXFoOVlGTTJuMU01cjJmRWdodGh5aEQ2SV9UanhzR0F0RXo5dS1XVXB5eVJiNUVVdktxY1N3U0VRMXZ2TUNrS0h5MkNPV2puTUxfeVprN0dyeXdCV3BEZUw4MGZNRjNFN0xLSy13bElJVnVEVkdqX2pOWUhYdmhtVjBvU2F5V2ZydUJhWHZZTDhVM0N6SWl4S3E3ZmUta3ZmUzdTUFVRbVplZVA2d2lqcl9IV0E?oc=5",
     "video_id": null
   }
 ]
