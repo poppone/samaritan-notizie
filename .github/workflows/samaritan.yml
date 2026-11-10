@@ -27,7 +27,7 @@ on:
     # delle quattro uscite di oggi sono rimaste scoperte e rifa' la piu'
     # vecchia, una sola, nel formato che quell'uscita voleva. Se sono tutte a
     # posto termina subito senza fare niente.
-    - cron: '30 20 * * *'         # riserva, verso le 22:30 italiane
+    - cron: '45 13 * * *'         # riserva, verso le 14:45 italiane (15:45 con l'ora legale): anche con 6-8 ore di ritardo arriva entro la sera, quando le uscite di oggi si possono ancora recuperare
   workflow_dispatch:
     inputs:
       tema:
@@ -115,7 +115,7 @@ jobs:
     # Short da mezzo minuto. La riserva rientra nel tempo lungo perche' puo'
     # ritrovarsi a rifare proprio il video lungo: quale uscita le tocchi lo
     # scopre solo a lavorazione iniziata.
-    timeout-minutes: ${{ ((github.event.schedule == '30 20 * * *') || inputs.lungo || inputs.recupero) && 120 || 45 }}
+    timeout-minutes: ${{ ((github.event.schedule == '45 13 * * *') || inputs.lungo || inputs.recupero) && 120 || 45 }}
 
     steps:
       - name: Checkout
@@ -201,7 +201,7 @@ jobs:
           VIDEO_LUNGO: ${{ (inputs.lungo && '1') || '' }}
           MINUTI_VIDEO_LUNGO: ${{ vars.MINUTI_VIDEO_LUNGO }}
           SEZIONI_VIDEO_LUNGO: ${{ vars.SEZIONI_VIDEO_LUNGO }}
-          RECUPERO: ${{ (github.event.schedule == '30 20 * * *' && '1') || (inputs.recupero && '1') || '' }}
+          RECUPERO: ${{ (github.event.schedule == '45 13 * * *' && '1') || (inputs.recupero && '1') || '' }}
           # La lingua la decide l'uscita coperta (per Poppone TV le 20:00 e le
           # 21:00 sono in inglese: stesso canale, pubblico diverso). Solo le
           # run lanciate a mano senza 'slot' la scelgono dal menu.

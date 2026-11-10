@@ -62,7 +62,7 @@ def prepara_uscita():
         scelta = orari.slot_da_recuperare(carica_cronologia())
         if not scelta:
             print("[Recupero] Le uscite di oggi sono tutte a posto: non faccio niente.")
-            notifier.notifica_salto("Riserva delle 22:30: le uscite di oggi sono "
+            notifier.notifica_salto("Riserva del pomeriggio: le uscite di oggi sono "
                                     "tutte a posto, non serve recuperare niente.")
             return False
         slot, lingua, formato = scelta

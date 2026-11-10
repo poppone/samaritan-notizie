@@ -352,8 +352,8 @@ class TestWorkflowCollegato:
 
 # Il cron della riserva, scritto una volta sola perche' i test sopra lo
 # citano piu' volte: le 20:30 UTC, cioe' le 22:30 italiane d'estate.
-CRON_RISERVA_MIN = "30"
-CRON_RISERVA_ORA = "20"
+CRON_RISERVA_MIN = "45"
+CRON_RISERVA_ORA = "13"
 
 
 def _voce(slot, quando, video_id="VIDEOFINTO1"):
@@ -491,6 +491,18 @@ class TestQualeUscitaRecuperare:
             _voce("21:00", ADESSO.replace(hour=21, minute=30)),
         ]
         assert orari.slot_da_recuperare(cronologia, ADESSO) is None
+
+    def test_la_riserva_del_pomeriggio_recupera_anche_con_sei_ore_di_ritardo(self):
+        """Il 9/11/2026 la riserva delle 22:30 e' arrivata alle 3:49 del
+        giorno dopo e non ha recuperato niente. Partendo alle 14:45, anche con
+        sei ore di ritardo arriva in serata e l'uscita delle 14:00 si recupera."""
+        sera = ADESSO.replace(hour=20, minute=45)
+        cronologia = [
+            _voce("18:00", sera.replace(hour=19)),
+            _voce("20:00", sera.replace(hour=20, minute=30)),
+        ]
+        assert orari.slot_da_recuperare(cronologia, sera) == (
+            "14:00", "it", "short")
 
     def test_recupera_quella_che_manca(self):
         cronologia = [
