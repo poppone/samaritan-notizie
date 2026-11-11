@@ -1,34 +1,18 @@
 [
   {
-    "timestamp": 1794294950,
-    "data": "2026-11-10",
-    "titolo": "Stellantis cede a Roshel lo stabilimento di Brampton",
+    "timestamp": 1794395227,
+    "data": "2026-11-11",
+    "titolo": "Verstappen domina dal primo all'ultimo giro in Singapore",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1794315600,
+    "uscita": 1794402000,
     "formato": "short",
-    "estratto_script": "Stellantis ha ceduto lo stabilimento di Brampton al canadese Roshel. Lo stabilimento era s",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Stellantis",
-    "query_video": "industrial factory exterior",
-    "fonte": "Stellantis cede a Roshel lo stabilimento canadese di Brampton (MarketScreener Italia)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQYkpOUXFoOVlGTTJuMU01cjJmRWdodGh5aEQ2SV9UanhzR0F0RXo5dS1XVXB5eVJiNUVVdktxY1N3U0VRMXZ2TUNrS0h5MkNPV2puTUxfeVprN0dyeXdCV3BEZUw4MGZNRjNFN0xLSy13bElJVnVEVkdqX2pOWUhYdmhtVjBvU2F5V2ZydUJhWHZZTDhVM0N6SWl4S3E3ZmUta3ZmUzdTUFVRbVplZVA2d2lqcl9IV0E?oc=5",
-    "video_id": null
-  },
-  {
-    "timestamp": 1794299534,
-    "data": "2026-11-10",
-    "titolo": "Mercedes: campione al GP Brasile, Ferrari delude",
-    "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1794308400,
-    "formato": "short",
-    "estratto_script": "Mercedes vince il Gran Premio del Brasile. La Ferrari, invece, non riesce a competere. Sec",
+    "estratto_script": "Verstappen domina dal primo all'ultimo giro in Singapore. Secondo MotorBox, Max Verstappen",
     "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Mercedes",
-    "query_video": "formula 1 race highlights",
-    "fonte": "F1 GP BRASILE: Mercedes campione, Ferrari delude! Piola e Maglienti analizzano la gara (OA Sport)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOQW9vRnhVNFZuMGJhM01FcUV0ejl2YklVc05XTWd5dnozbDVQS1IybFlOQWZ3Z09UaVZQSWF5SjdEaWJlaHJnZ1BNUWFlaXNtVXU4alpfeWlmMFI2QU54SFJjX0hvZHFWLXc5NzFuQ2VSRUR1bTNQR1REdEJPYV9DcVJTSV9oeU9VeXJRVDJVYlBwYkdHdXRxOHZQenhMUk5yTmVIU2M1b3FsVk01VTVhb2YxZDNOUQ?oc=5",
+    "gioco": "F1 Singapore",
+    "query_video": "formula one singapore race",
+    "fonte": "F1 GP Singapore: Verstappen domina dal primo all'ultimo giro, Leclerc e Antonelli sul podio (MotorBox)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPUG1hTU90ZXhYT1dFaEZpZUc5SzVldmZtMDktMGZiNF9XVHIzeEtlMlEyakNiMUdLSXdHNTNlazMyR0lWVkMzamdnSGlsY0cwZTdFVmhpaVJyU2VmUUVpOWhWS2pFaWZUUXNTMnJmaEFqLVdvVzJXUlZzdWN4NFBfX2wzVmpkc01ycTI4T3hDYXN3OTQxcjRSQUcyUEwyOGlVaklSWGVkeHVVN3J2dGNWamtULXA?oc=5",
     "video_id": null
   }
 ]
