@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1794602478,
-    "data": "2026-11-13",
-    "titolo": "Formula 1: penalità post‑gara a Interlagos, Leclerc scivola",
+    "timestamp": 1794652428,
+    "data": "2026-11-14",
+    "titolo": "MotoGP Sprint Malesia: Acosta trionfa",
     "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1794567600,
+    "slot": "14:00",
+    "uscita": 1794661200,
     "formato": "short",
-    "estratto_script": "Penalità post‑gara hanno modificato la classifica a Interlagos. Il collegio giudicante ha ",
+    "estratto_script": "Pedro Acosta ha vinto la gara Sprint del Gran Premio di Malesia di MotoGP. La vittoria è s",
     "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Formula 1",
-    "query_video": "Brazil race track",
-    "fonte": "F1 GP Brasile 2026: Penalita post-gara a Interlagos, Leclerc scivola all’ottavo posto (sport2u.tv)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNNFp5WktFZ2FITGZCQXNjYUhGQ1VSdnAwa2dWcUFfUUk2dTY4bFc1UXpLRUVqRGhnWFNwWEJTbV92cE1HQnBrSmdvZjhIM05iQ3hYMV9YV1ROYUdRT3FiNk1FYjB2bTdfemRlTVNkeUtueVhSekhiYzJXdC02NHc3ZUFFdGRyWElHVmVPdWdka3BhYmZzZXd2Y1plRnItODc5V19Eaw?oc=5",
+    "gioco": "MotoGP",
+    "query_video": "motorcycle sprint race",
+    "fonte": "MotoGp, ordine d’arrivo gara Sprint del Gp Malesia e classifica Mondiale (Espressione24)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPOWhOUkwtV2dwRmhCZW9mX0lCb3ZtX0swSWJrZ0FLVlJ2RzB6NXZHSjd6WFVvVlR1WktvbzAxMnF2MkN5NzF1dHlrWUY1QmRNS2NXZk9UeVZOREphVzdoTHNWTDlaZUF2Z21CSXNuZXduZVhnakF1QXNIdTZOZWdoWXFkTkFkM3B6dzJWYmtJNGRzWFNvNDlTcS0ybDdXVlZYUlE?oc=5",
     "video_id": null
   }
 ]
