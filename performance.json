@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-11-14",
+  "aggiornato": "2026-11-15",
   "video": {
     "4Fu-UaJTvbg": {
       "views": 3179,
@@ -10,12 +10,20 @@
       "subscribersGained": 2
     },
     "0vnUNPK19-g": {
-      "views": 2704,
-      "averageViewPercentage": 59.74,
+      "views": 2706,
+      "averageViewPercentage": 59.699999999999996,
       "averageViewDuration": 17,
-      "likes": 23,
+      "likes": 24,
       "comments": 0,
       "subscribersGained": 5
+    },
+    "SeZLq2sfS3M": {
+      "views": 2017,
+      "averageViewPercentage": 73.32,
+      "averageViewDuration": 20,
+      "likes": 4,
+      "comments": 0,
+      "subscribersGained": 0
     },
     "m9P_aSYgovE": {
       "views": 1703,
@@ -25,17 +33,9 @@
       "comments": 0,
       "subscribersGained": 3
     },
-    "SeZLq2sfS3M": {
-      "views": 1683,
-      "averageViewPercentage": 75.92,
-      "averageViewDuration": 21,
-      "likes": 2,
-      "comments": 0,
-      "subscribersGained": 0
-    },
     "S5jW3dWWLqU": {
-      "views": 1603,
-      "averageViewPercentage": 63.6,
+      "views": 1608,
+      "averageViewPercentage": 63.580000000000005,
       "averageViewDuration": 17,
       "likes": 1,
       "comments": 0,
@@ -137,6 +137,14 @@
       "comments": 0,
       "subscribersGained": 1
     },
+    "SFaNHz7Mhzo": {
+      "views": 1098,
+      "averageViewPercentage": 67.26,
+      "averageViewDuration": 18,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 2
+    },
     "1Pdez4fE-hM": {
       "views": 1098,
       "averageViewPercentage": 42.95,
@@ -144,14 +152,6 @@
       "likes": 6,
       "comments": 0,
       "subscribersGained": 1
-    },
-    "SFaNHz7Mhzo": {
-      "views": 1096,
-      "averageViewPercentage": 67.18,
-      "averageViewDuration": 18,
-      "likes": 3,
-      "comments": 0,
-      "subscribersGained": 2
     },
     "vscKl6JxGdQ": {
       "views": 1082,
@@ -162,8 +162,8 @@
       "subscribersGained": 0
     },
     "oMvT_lx5M9w": {
-      "views": 1076,
-      "averageViewPercentage": 51.17,
+      "views": 1082,
+      "averageViewPercentage": 51.12,
       "averageViewDuration": 13,
       "likes": 9,
       "comments": 1,
@@ -202,12 +202,20 @@
       "subscribersGained": 0
     },
     "2tbxSfom4cM": {
-      "views": 1048,
-      "averageViewPercentage": 42.15,
+      "views": 1050,
+      "averageViewPercentage": 42.1,
       "averageViewDuration": 10,
       "likes": 2,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "kiz3E_CSHzg": {
+      "views": 1046,
+      "averageViewPercentage": 33,
+      "averageViewDuration": 9,
+      "likes": 10,
+      "comments": 1,
+      "subscribersGained": 1
     },
     "IfX5K3ljf8A": {
       "views": 1044,
@@ -290,7 +298,7 @@
       "subscribersGained": 1
     },
     "boHYvGN6Ers": {
-      "views": 996,
+      "views": 997,
       "averageViewPercentage": 41.14,
       "averageViewDuration": 11,
       "likes": 8,
@@ -337,6 +345,14 @@
       "comments": 0,
       "subscribersGained": 0
     },
+    "5Vtu4RdD6KQ": {
+      "views": 984,
+      "averageViewPercentage": 43.83,
+      "averageViewDuration": 10,
+      "likes": 10,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "-i6Z434jcUA": {
       "views": 983,
       "averageViewPercentage": 66.89,
@@ -370,16 +386,16 @@
       "subscribersGained": 4
     },
     "8ERKPkzRtv8": {
-      "views": 964,
-      "averageViewPercentage": 49.29,
+      "views": 966,
+      "averageViewPercentage": 49.25,
       "averageViewDuration": 11,
       "likes": 9,
       "comments": 0,
       "subscribersGained": 0
     },
     "dumhV58lk3M": {
-      "views": 936,
-      "averageViewPercentage": 77.85,
+      "views": 963,
+      "averageViewPercentage": 76.79,
       "averageViewDuration": 22,
       "likes": 3,
       "comments": 0,
@@ -458,8 +474,8 @@
       "subscribersGained": 1
     },
     "yVOsykjEevk": {
-      "views": 552,
-      "averageViewPercentage": 51.190000000000005,
+      "views": 553,
+      "averageViewPercentage": 50.95,
       "averageViewDuration": 11,
       "likes": 3,
       "comments": 0,
@@ -673,7 +689,7 @@
     },
     {
       "termine": "gp brasile 2026",
-      "views": 229
+      "views": 230
     },
     {
       "termine": "f1 brasile 2026",
@@ -685,11 +701,11 @@
     },
     {
       "termine": "stellantis",
-      "views": 58
+      "views": 60
     },
     {
       "termine": "motogp oggi",
-      "views": 32
+      "views": 33
     },
     {
       "termine": "f1 mexico 2026",
@@ -744,6 +760,10 @@
       "views": 15
     },
     {
+      "termine": "motogp",
+      "views": 15
+    },
+    {
       "termine": "shari amici",
       "views": 15
     },
@@ -762,28 +782,24 @@
     {
       "termine": "gran premio del brasile",
       "views": 12
-    },
-    {
-      "termine": "inter news",
-      "views": 12
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 64151
+      "views": 66481
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 4763
+      "views": 4836
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 173
+      "views": 185
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 80
+      "views": 83
     },
     {
       "sorgente": "EXT_URL",
@@ -791,7 +807,7 @@
     },
     {
       "sorgente": "SUBSCRIBER",
-      "views": 34
+      "views": 35
     },
     {
       "sorgente": "SOUND_PAGE",
