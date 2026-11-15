@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1794652428,
-    "data": "2026-11-14",
-    "titolo": "MotoGP Sprint Malesia: Acosta trionfa",
+    "timestamp": 1794740518,
+    "data": "2026-11-15",
+    "titolo": "F1: Linea Verde per il GP di Las Vegas",
     "lingua": "it",
     "slot": "14:00",
-    "uscita": 1794661200,
+    "uscita": 1794747600,
     "formato": "short",
-    "estratto_script": "Pedro Acosta ha vinto la gara Sprint del Gran Premio di Malesia di MotoGP. La vittoria è s",
-    "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle sprint race",
-    "fonte": "MotoGp, ordine d’arrivo gara Sprint del Gp Malesia e classifica Mondiale (Espressione24)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPOWhOUkwtV2dwRmhCZW9mX0lCb3ZtX0swSWJrZ0FLVlJ2RzB6NXZHSjd6WFVvVlR1WktvbzAxMnF2MkN5NzF1dHlrWUY1QmRNS2NXZk9UeVZOREphVzdoTHNWTDlaZUF2Z21CSXNuZXduZVhnakF1QXNIdTZOZWdoWXFkTkFkM3B6dzJWYmtJNGRzWFNvNDlTcS0ybDdXVlZYUlE?oc=5",
+    "estratto_script": "La F1 presenta il GP di Las Vegas più come una Linea Verde che come una gara sportiva. Sec",
+    "stile": "MYTH_BUSTING_VIRAL",
+    "gioco": "F1 GP Las Vegas",
+    "query_video": "city lights skyline",
+    "fonte": "La F1 come Linea Verde: la guida inutile per il GP di Las Vegas (Formulacritica)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPdTBFSW5BazU2cXNiRUxoZmRDMHFDQi1WbVp5WmI5YzdvVXRFMS1VQndNLWJhWFhCZ0NqQ2FMNTdabFZFTGVrbkV1Ukw3R3FnNFVyeDcybktmUVNLWm00QmtSYzhLYzBpbkRsa0ZQVWpQbEItMXl0dHI4M1dEMEZuR0dPMGJqOFBnRENuX1VWUXJUUHpyV1pMTE5MdTMtd3VwUDh2eEM4MjZQUGc?oc=5",
     "video_id": null
   }
 ]
