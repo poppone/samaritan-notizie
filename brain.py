@@ -2251,6 +2251,18 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
             "(un'azienda, un paese, un'istituzione), mai una persona "
             "privata.\n\n"
         )
+        if not notizie:
+            # La curiosita' di riserva (genera_script_samaritan(curiosita=True)):
+            # niente notizia, quindi niente testata da nominare.
+            blocco_tg += (
+                "CURIOSITA' AL POSTO DELLA NOTIZIA: oggi non c'e' una notizia "
+                f"sicura. Racconta UN fatto {p.argomento} storico, noto e "
+                "verificabile (come funziona una tecnologia, da dove viene un "
+                "nome, un record ufficiale), con lo stesso tono asciutto. "
+                "Non nominare testate, non parlare di fatti di oggi o di "
+                "questa settimana, niente cifre di cui non sei certo. Apri con "
+                "un'affermazione, per esempio 'Pochi lo sanno, ma...'.\n\n"
+            )
 
     return (
         f"Sei il Lead Social Media Manager di '{config.NOME_CANALE}', canale YouTube "
@@ -2559,10 +2571,22 @@ def _estrai_json(testo):
     return json.loads(testo[inizio:fine + 1])
 
 
-def genera_script_samaritan(tema=None):
+# Il formato della curiosita' di riserva: un fatto storico e verificabile,
+# senza notizia dietro. Vedi genera_script_samaritan(curiosita=True).
+FORMATO_CURIOSITA = "SEAMLESS_LOOP_FACTS"
+
+
+def genera_script_samaritan(tema=None, curiosita=False):
     """Genera il pacchetto contenuto completo.
 
     Ritorna un dict: titolo, script, query_video, descrizione, fonte, stile.
+
+    Con `curiosita` lo Short non racconta una notizia ma un fatto storico e
+    verificabile (formato FORMATO_CURIOSITA). Serve solo alla riserva di un
+    telegiornale: il 14 e il 16 novembre 2026 le uscite di Motori sono
+    saltate tutte perche' con notizie scarne il modello inventava, e Davide
+    il 17/11 ha scelto che la riserva, invece di lasciare il buco, faccia una
+    curiosita' auto vera.
     """
     tema = (tema or "").strip()
     # Le notizie scelte da lavorazioni partite insieme a questa: vedi
@@ -2579,8 +2603,15 @@ def genera_script_samaritan(tema=None):
     ultima_voce = cronologia[-1] if cronologia else {}
     gioco_precedente = "" if tema else ultima_voce.get("gioco", "")
 
-    notizie = recupera_trend_gaming_online(tema=tema, gioco_da_evitare=gioco_precedente)
-    formato = scegli_formato(notizie)
+    if curiosita:
+        notizie = []
+        formato = FORMATO_CURIOSITA
+        print("[Samaritan Brain] Riserva: curiosita' vera al posto della "
+              "notizia.")
+    else:
+        notizie = recupera_trend_gaming_online(
+            tema=tema, gioco_da_evitare=gioco_precedente)
+        formato = scegli_formato(notizie)
     ultimi_titoli = [v.get("titolo", "") for v in cronologia[-12:]]
 
     # Due liste dalla stessa fonte: al modello servono aperture leggibili da
@@ -2792,7 +2823,8 @@ def genera_script_samaritan(tema=None):
                 if ok and profilo.attivo().telegiornale:
                     motivo = _fuori_stile_tg(titolo, script)
                     ok = not motivo
-                if ok and profilo.attivo().telegiornale and not fonte:
+                if ok and profilo.attivo().telegiornale and not fonte \
+                        and not curiosita:
                     ok = False
                     motivo = ("non racconta nessuna delle notizie elencate, e "
                               "un telegiornale racconta solo quelle: metti in "
