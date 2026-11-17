@@ -290,3 +290,66 @@ class TestPoliticaNeutra:
             ricerche = json.load(f)["ricerche"]
         assert any("governo" in r.lower() for r in ricerche["it"])
         assert any("politics" in r.lower() for r in ricerche["en"])
+
+
+class TestCuriositaDiRiserva:
+    """14 e 16/11/2026: uscite di Motori saltate perche' con notizie scarne
+    il modello inventava. Il 17/11 Davide ha scelto che la riserva faccia una
+    curiosita' vera invece di lasciare il buco."""
+
+    def _finto(self, monkeypatch, errore):
+        # main importa maker (moviepy) e uploader (Google): qui servono solo
+        # i nomi, cosi' il test gira anche nella CI leggera.
+        import sys
+        import types
+        for nome, attr in (("maker", "assembla_video_finale"),
+                           ("uploader", "carica_short")):
+            try:
+                __import__(nome)
+            except ImportError:
+                finto = types.ModuleType(nome)
+                setattr(finto, attr, lambda *a, **k: None)
+                monkeypatch.setitem(sys.modules, nome, finto)
+        monkeypatch.delitem(sys.modules, "main", raising=False)
+        import main
+        chiamate = []
+
+        def genera(tema=None, curiosita=False):
+            chiamate.append(curiosita)
+            if not curiosita:
+                raise errore
+            return {"titolo": "Curiosita'"}
+        monkeypatch.setattr(main, "genera_script_samaritan", genera)
+        return main, chiamate
+
+    def test_la_riserva_ripiega_sulla_curiosita(self, tg, monkeypatch):
+        main, chiamate = self._finto(monkeypatch, brain.VideoSaltato("scartati"))
+        monkeypatch.setattr(config, "RECUPERO", True)
+        assert main._scrivi_short(None) == {"titolo": "Curiosita'"}
+        assert chiamate == [False, True]
+
+    def test_anche_senza_notizie(self, tg, monkeypatch):
+        main, chiamate = self._finto(monkeypatch, RuntimeError(
+            "Nessuna notizia utilizzabile per il telegiornale: salto"))
+        monkeypatch.setattr(config, "RECUPERO", True)
+        main._scrivi_short(None)
+        assert chiamate == [False, True]
+
+    def test_le_uscite_normali_restano_solo_notizie(self, tg, monkeypatch):
+        main, chiamate = self._finto(monkeypatch, brain.VideoSaltato("scartati"))
+        monkeypatch.setattr(config, "RECUPERO", False)
+        with pytest.raises(brain.VideoSaltato):
+            main._scrivi_short(None)
+        assert chiamate == [False]
+
+    def test_un_guasto_vero_non_diventa_curiosita(self, tg, monkeypatch):
+        main, chiamate = self._finto(monkeypatch, RuntimeError("Groq giu'"))
+        monkeypatch.setattr(config, "RECUPERO", True)
+        with pytest.raises(RuntimeError):
+            main._scrivi_short(None)
+        assert chiamate == [False]
+
+    def test_il_prompt_della_curiosita_non_chiede_testate(self, tg):
+        prompt = brain._costruisci_system_prompt(
+            brain.FORMATO_CURIOSITA, [], [], [])
+        assert "CURIOSITA' AL POSTO DELLA NOTIZIA" in prompt

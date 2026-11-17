@@ -32,6 +32,7 @@ from brain import (
 from maker import assembla_video_finale
 from uploader import carica_short
 import autoprofilo
+import profilo
 import copia_pubblica
 import notifier
 import orari
@@ -90,6 +91,28 @@ def prepara_uscita():
     return True
 
 
+def _scrivi_short(tema):
+    """Lo script dello Short. Sulla riserva di un telegiornale, se nessuna
+    notizia regge (tutti gli script scartati o nessuna notizia), ripiega su
+    una curiosita' vera invece di lasciare l'uscita scoperta: scelta di
+    Davide del 17/11/2026, dopo le uscite saltate del 14 e del 16 novembre.
+    Le uscite normali restano solo notizie: se saltano, le recupera la
+    riserva.
+    """
+    try:
+        return genera_script_samaritan(tema)
+    except (brain.VideoSaltato, RuntimeError) as e:
+        if not (config.RECUPERO and profilo.attivo().telegiornale):
+            raise
+        if not isinstance(e, brain.VideoSaltato) and \
+                "Nessuna notizia utilizzabile" not in str(e):
+            raise
+        print(f"[Samaritan] {e}")
+        print("[Samaritan] Riserva: nessuna notizia sicura, faccio una "
+              "curiosita' vera.")
+        return genera_script_samaritan(tema, curiosita=True)
+
+
 def _scrivi_e_monta(tema):
     """FASE 1 e 2. Ritorna (dati, percorso_video, materiale, capitoli).
 
@@ -121,7 +144,7 @@ def _scrivi_e_monta(tema):
         return dati, video, materiale, lungo.formatta_capitoli(capitoli)
 
     print("\n[FASE 1/3] Generazione contenuto...")
-    dati = genera_script_samaritan(tema)
+    dati = _scrivi_short(tema)
     _stampa_scheda(dati)
 
     print("\n[FASE 2/3] Gameplay, voce, montaggio e sottotitoli...")
