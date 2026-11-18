@@ -206,7 +206,7 @@ class TestWorkflowCollegato:
         import re
         cron = re.findall(r"cron: '(\d+) (\d+) \* \* \*'", self._workflow())
         produzione = [(int(o), int(m)) for m, o in cron
-                      if (m, o) != (CRON_RISERVA_MIN, CRON_RISERVA_ORA)]
+                      if (m, o) not in CRON_RISERVE]
         assert tuple(produzione) == profilo.CRON_USCITE
 
     def test_senza_profilo_le_uscite_sono_quelle_di_poppone_tv(self, monkeypatch):
@@ -255,14 +255,15 @@ class TestWorkflowCollegato:
 
     def test_la_riserva_di_fine_giornata_e_collegata(self):
         testo = self._workflow()
-        assert f"cron: '{CRON_RISERVA_MIN} {CRON_RISERVA_ORA} * * *'" in testo
-        riga = self._righe("RECUPERO:")
-        assert riga, "il workflow non passa RECUPERO"
-        assert f"'{CRON_RISERVA_MIN} {CRON_RISERVA_ORA} * * *'" in riga[0], riga
-        # La riserva non e' una partenza numerata: non deve finire fermata
-        # dal job che scarta le partenze senza uscita.
-        for riga in self._righe("USCITA_CRON:"):
-            assert f"'{CRON_RISERVA_MIN} {CRON_RISERVA_ORA} * * *'" not in riga
+        for minuto, ora in CRON_RISERVE:
+            assert f"cron: '{minuto} {ora} * * *'" in testo
+            riga = self._righe("RECUPERO:")
+            assert riga, "il workflow non passa RECUPERO"
+            assert f"'{minuto} {ora} * * *'" in riga[0], riga
+            # La riserva non e' una partenza numerata: non deve finire
+            # fermata dal job che scarta le partenze senza uscita.
+            for riga in self._righe("USCITA_CRON:"):
+                assert f"'{minuto} {ora} * * *'" not in riga
 
     def test_ogni_lavorazione_dichiara_quale_uscita_copre(self, monkeypatch):
         """Senza SLOT la cronologia non sa a quale uscita appartiene il video,
@@ -354,6 +355,9 @@ class TestWorkflowCollegato:
 # citano piu' volte: le 20:30 UTC, cioe' le 22:30 italiane d'estate.
 CRON_RISERVA_MIN = "45"
 CRON_RISERVA_ORA = "13"
+# Dal 18/11/2026 le riserve sono due: ognuna rifa' una sola uscita, e il
+# 17/11 ne erano saltate due.
+CRON_RISERVE = ((CRON_RISERVA_MIN, CRON_RISERVA_ORA), ("45", "16"))
 
 
 def _voce(slot, quando, video_id="VIDEOFINTO1"):
