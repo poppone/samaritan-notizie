@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1794991878,
+    "timestamp": 1795037980,
     "data": "2026-11-18",
-    "titolo": "Furto clamoroso: camion di batterie Stellantis rubato",
+    "titolo": "Auto storica: la prima macchina a combustione",
     "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1794999600,
+    "slot": "14:00",
+    "uscita": 1795006800,
     "formato": "short",
-    "estratto_script": "Un camion pieno di celle per batterie ibride è stato sottratto davanti a una fabbrica Stel",
-    "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Stellantis",
-    "query_video": "truck theft",
-    "fonte": "Furto clamoroso: rubato un camion di batterie Stellantis per auto ibride, danno da 500.000 euro (Everyeye Auto)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPMHNQZy15Nk5qblVKTXR4WVktWk9Wa2lJSFprQmdkU3I2b2swRnhCY2hzR3hZTzF0NnZqZllndVlLaVpHN0thUWdHVVUtX2xydG9WMWFvdFItWEpCamxIOTFwdFIteGtXNGYwc2l2THZNdGw2cEpGSnF3OUxzUTR0LW5UTmdYWjgxc3ppSS01Um1HbXpDQnRla2NUb2R0ZURKR09QaVVXOG5HUGFLRl9saUlidFdlUDVORlVOUFRSVHJ4YWs?oc=5",
+    "estratto_script": "Pochi lo sanno, ma la prima auto a combustione fu un modello sperimentale del 1860. Fu cos",
+    "stile": "SEAMLESS_LOOP_FACTS",
+    "gioco": "auto storica",
+    "query_video": "vintage car prototype",
+    "fonte": "",
+    "fonte_url": "",
     "video_id": null
   }
 ]
