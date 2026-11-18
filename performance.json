@@ -733,7 +733,7 @@
     },
     {
       "termine": "f1 brasile 2026",
-      "views": 220
+      "views": 219
     },
     {
       "termine": "f1 messico 2026",
@@ -784,6 +784,10 @@
       "views": 17
     },
     {
+      "termine": "gran premio brasile 2026",
+      "views": 17
+    },
+    {
       "termine": "legge elettorale",
       "views": 17
     },
@@ -797,7 +801,7 @@
     },
     {
       "termine": "f1 highlights",
-      "views": 15
+      "views": 16
     },
     {
       "termine": "gran premio del messico 2026",
@@ -808,8 +812,8 @@
       "views": 15
     },
     {
-      "termine": "gran premio brasile 2026",
-      "views": 14
+      "termine": "gran premio del brasile",
+      "views": 13
     },
     {
       "termine": "f1 brasile",
@@ -818,24 +822,20 @@
     {
       "termine": "formula 1 mexico 2026",
       "views": 12
-    },
-    {
-      "termine": "gran premio del brasile",
-      "views": 12
     }
   ],
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 70706
+      "views": 70677
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 5037
+      "views": 5049
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 193
+      "views": 187
     },
     {
       "sorgente": "YT_CHANNEL",
@@ -850,11 +850,11 @@
       "views": 37
     },
     {
-      "sorgente": "RELATED_VIDEO",
-      "views": 11
+      "sorgente": "SOUND_PAGE",
+      "views": 12
     },
     {
-      "sorgente": "SOUND_PAGE",
+      "sorgente": "RELATED_VIDEO",
       "views": 11
     },
     {
