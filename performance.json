@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-11-17",
+  "aggiornato": "2026-11-18",
   "video": {
     "4Fu-UaJTvbg": {
       "views": 3181,
@@ -273,14 +273,6 @@
       "comments": 0,
       "subscribersGained": 1
     },
-    "xa9PQv4w0Fw": {
-      "views": 1025,
-      "averageViewPercentage": 48.41,
-      "averageViewDuration": 14,
-      "likes": 6,
-      "comments": 0,
-      "subscribersGained": 2
-    },
     "myb9Zy5qO-U": {
       "views": 1025,
       "averageViewPercentage": 54.83,
@@ -288,6 +280,14 @@
       "likes": 2,
       "comments": 0,
       "subscribersGained": 0
+    },
+    "xa9PQv4w0Fw": {
+      "views": 1025,
+      "averageViewPercentage": 48.41,
+      "averageViewDuration": 14,
+      "likes": 6,
+      "comments": 0,
+      "subscribersGained": 2
     },
     "Bm132SjWDwM": {
       "views": 1021,
@@ -827,7 +827,7 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 70713
+      "views": 70706
     },
     {
       "sorgente": "YT_SEARCH",
@@ -835,11 +835,11 @@
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 194
+      "views": 193
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 84
+      "views": 85
     },
     {
       "sorgente": "EXT_URL",
