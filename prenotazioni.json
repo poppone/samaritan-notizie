@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1795037980,
-    "data": "2026-11-18",
-    "titolo": "Auto storica: la prima macchina a combustione",
+    "timestamp": 1795125185,
+    "data": "2026-11-19",
+    "titolo": "ABS: perché le ruote non si bloccano",
     "lingua": "it",
-    "slot": "14:00",
-    "uscita": 1795006800,
+    "slot": "12:00",
+    "uscita": 1795086000,
     "formato": "short",
-    "estratto_script": "Pochi lo sanno, ma la prima auto a combustione fu un modello sperimentale del 1860. Fu cos",
-    "stile": "SEAMLESS_LOOP_FACTS",
-    "gioco": "auto storica",
-    "query_video": "vintage car prototype",
-    "fonte": "",
-    "fonte_url": "",
+    "estratto_script": "L'ABS esiste per non far bloccare le ruote in frenata. Lo sviluppa Bosch e lo introduce in",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "ABS",
+    "query_video": "brake system animation",
+    "fonte": "L'ABS esiste per non far bloccare le ruote in frenata (Wikipedia)",
+    "fonte_url": "https://it.wikipedia.org/wiki/Sistema_anti_bloccaggio",
     "video_id": null
   }
 ]
