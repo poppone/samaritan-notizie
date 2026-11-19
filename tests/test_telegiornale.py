@@ -350,6 +350,49 @@ class TestCuriositaDiRiserva:
         assert chiamate == [False]
 
     def test_il_prompt_della_curiosita_non_chiede_testate(self, tg):
+        voce = brain.curiosita_da_usare(cronologia=[])
         prompt = brain._costruisci_system_prompt(
-            brain.FORMATO_CURIOSITA, [], [], [])
+            "VIRAL_HOOK_NEWS", [voce], [], [])
         assert "CURIOSITA' AL POSTO DELLA NOTIZIA" in prompt
+        assert voce["titolo"] in prompt
+
+    def test_una_notizia_vera_non_riceve_il_blocco_curiosita(self, tg):
+        notizia = {"titolo": "Ferrari, nuova livrea", "fonte": "ANSA",
+                   "link": "", "sommario": ""}
+        prompt = brain._costruisci_system_prompt(
+            "VIRAL_HOOK_NEWS", [notizia], [], [])
+        assert "CURIOSITA' AL POSTO DELLA NOTIZIA" not in prompt
+
+
+class TestCuriositaVerificate:
+    """18/11/2026: la curiosita' scritta a memoria sulla 'prima auto a
+    combustione' aveva date e fatti sbagliati. Ora si sceglie da un file."""
+
+    def test_il_file_e_valido(self):
+        with open(brain.FILE_CURIOSITA, encoding="utf-8") as f:
+            voci = json.load(f)["curiosita"]
+        assert len(voci) >= 10
+        titoli = [v["titolo"] for v in voci]
+        assert len(set(titoli)) == len(titoli)
+        for v in voci:
+            assert v["titolo"].strip() and v["sommario"].strip()
+            assert v["fonte"].strip() and v["link"].startswith("https://")
+
+    def test_salta_quelle_gia_usate(self):
+        prima = brain.curiosita_da_usare(cronologia=[])
+        usata = [{"fonte": f"{prima['titolo']} ({prima['fonte']})"}]
+        seconda = brain.curiosita_da_usare(cronologia=usata)
+        assert seconda and seconda["titolo"] != prima["titolo"]
+        assert seconda["curiosita"] is True
+
+    def test_senza_file_niente_curiosita(self, tmp_path):
+        assert brain.curiosita_da_usare(
+            cronologia=[], percorso=str(tmp_path / "manca.json")) is None
+
+    def test_finite_tutte_niente_curiosita(self, tmp_path):
+        file = tmp_path / "c.json"
+        file.write_text(json.dumps({"curiosita": [
+            {"titolo": "Uno", "sommario": "x", "fonte": "W", "link": "https://a"}]}),
+            encoding="utf-8")
+        assert brain.curiosita_da_usare(
+            cronologia=[{"fonte": "Uno (W)"}], percorso=str(file)) is None

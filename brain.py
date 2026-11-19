@@ -2251,17 +2251,16 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
             "(un'azienda, un paese, un'istituzione), mai una persona "
             "privata.\n\n"
         )
-        if not notizie:
-            # La curiosita' di riserva (genera_script_samaritan(curiosita=True)):
-            # niente notizia, quindi niente testata da nominare.
+        if notizie and notizie[0].get("curiosita"):
+            # La curiosita' di riserva (genera_script_samaritan(curiosita=True)).
             blocco_tg += (
-                "CURIOSITA' AL POSTO DELLA NOTIZIA: oggi non c'e' una notizia "
-                f"sicura. Racconta UN fatto {p.argomento} storico, noto e "
-                "verificabile (come funziona una tecnologia, da dove viene un "
-                "nome, un record ufficiale), con lo stesso tono asciutto. "
-                "Non nominare testate, non parlare di fatti di oggi o di "
-                "questa settimana, niente cifre di cui non sei certo. Apri con "
-                "un'affermazione, per esempio 'Pochi lo sanno, ma...'.\n\n"
+                "CURIOSITA' AL POSTO DELLA NOTIZIA (vince sulle regole sopra): "
+                "la notizia [0] non e' di oggi, e' una curiosita' storica "
+                "verificata. Raccontala con lo stesso tono asciutto usando "
+                "SOLO quello che dicono titolo e sommario: nessun altro "
+                "fatto, data o cifra. Non nominare testate e non dire che e' "
+                "successo oggi. Apri con un'affermazione, per esempio 'Pochi "
+                "lo sanno, ma...'. In 'indice_notizia' metti 0.\n\n"
             )
 
     return (
@@ -2571,9 +2570,40 @@ def _estrai_json(testo):
     return json.loads(testo[inizio:fine + 1])
 
 
-# Il formato della curiosita' di riserva: un fatto storico e verificabile,
-# senza notizia dietro. Vedi genera_script_samaritan(curiosita=True).
+# Il formato della curiosita' di riserva. Vedi genera_script_samaritan(curiosita=True).
 FORMATO_CURIOSITA = "SEAMLESS_LOOP_FACTS"
+# Le curiosita' verificate fra cui sceglie la riserva. Il 18/11/2026 la
+# curiosita' scritta a memoria dal modello ('la prima auto a combustione')
+# conteneva errori: da allora il modello racconta solo una voce di questo
+# file, e il controllo anti-invenzioni la verifica come una notizia.
+FILE_CURIOSITA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "curiosita.json")
+
+
+def curiosita_da_usare(cronologia=None, percorso=None):
+    """La prima curiosita' verificata non ancora usata, come notizia.
+
+    None se il file manca o sono state usate tutte: meglio saltare che
+    lasciar scrivere al modello un fatto a memoria.
+    """
+    percorso = percorso or FILE_CURIOSITA
+    try:
+        with open(percorso, encoding="utf-8") as f:
+            voci = json.load(f).get("curiosita", [])
+    except (OSError, ValueError):
+        return None
+    if cronologia is None:
+        cronologia = carica_cronologia()
+    usate = " ".join(str(_normalizza(v).get("fonte", "")) for v in cronologia).lower()
+    for voce in voci:
+        titolo = str(voce.get("titolo", "")).strip()
+        if titolo and titolo.lower() not in usate:
+            return {"titolo": titolo,
+                    "fonte": str(voce.get("fonte", "")).strip(),
+                    "link": str(voce.get("link", "")).strip(),
+                    "sommario": str(voce.get("sommario", "")).strip(),
+                    "curiosita": True}
+    return None
 
 
 def genera_script_samaritan(tema=None, curiosita=False):
@@ -2604,10 +2634,16 @@ def genera_script_samaritan(tema=None, curiosita=False):
     gioco_precedente = "" if tema else ultima_voce.get("gioco", "")
 
     if curiosita:
-        notizie = []
-        formato = FORMATO_CURIOSITA
-        print("[Samaritan Brain] Riserva: curiosita' vera al posto della "
-              "notizia.")
+        voce = curiosita_da_usare(cronologia)
+        if not voce:
+            raise VideoSaltato(
+                "Nessuna curiosita' verificata ancora da usare in "
+                "curiosita.json: salto il video invece di scriverne una a "
+                "memoria.")
+        notizie = [voce]
+        formato = "VIRAL_HOOK_NEWS"
+        print(f"[Samaritan Brain] Riserva: curiosita' verificata al posto "
+              f"della notizia: {voce['titolo']}")
     else:
         notizie = recupera_trend_gaming_online(
             tema=tema, gioco_da_evitare=gioco_precedente)
