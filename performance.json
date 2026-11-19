@@ -18,8 +18,8 @@
       "subscribersGained": 5
     },
     "SeZLq2sfS3M": {
-      "views": 2158,
-      "averageViewPercentage": 73.08,
+      "views": 2169,
+      "averageViewPercentage": 72.96,
       "averageViewDuration": 20,
       "likes": 5,
       "comments": 0,
@@ -34,8 +34,8 @@
       "subscribersGained": 3
     },
     "S5jW3dWWLqU": {
-      "views": 1678,
-      "averageViewPercentage": 63.1,
+      "views": 1688,
+      "averageViewPercentage": 63.23,
       "averageViewDuration": 17,
       "likes": 1,
       "comments": 0,
@@ -138,7 +138,7 @@
       "subscribersGained": 1
     },
     "SFaNHz7Mhzo": {
-      "views": 1106,
+      "views": 1107,
       "averageViewPercentage": 66.81,
       "averageViewDuration": 18,
       "likes": 3,
@@ -154,8 +154,8 @@
       "subscribersGained": 1
     },
     "hmuLwAFLd_U": {
-      "views": 1093,
-      "averageViewPercentage": 46.25,
+      "views": 1095,
+      "averageViewPercentage": 46.4,
       "averageViewDuration": 10,
       "likes": 2,
       "comments": 0,
@@ -330,8 +330,8 @@
       "subscribersGained": 0
     },
     "PhBuh_m8oO4": {
-      "views": 999,
-      "averageViewPercentage": 38.89,
+      "views": 1000,
+      "averageViewPercentage": 38.88,
       "averageViewDuration": 9,
       "likes": 7,
       "comments": 0,
@@ -393,6 +393,14 @@
       "comments": 1,
       "subscribersGained": 1
     },
+    "JIIXm7BsNAQ": {
+      "views": 980,
+      "averageViewPercentage": 44.34,
+      "averageViewDuration": 11,
+      "likes": 12,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "1KROQAC7tTY": {
       "views": 977,
       "averageViewPercentage": 55.57,
@@ -401,13 +409,13 @@
       "comments": 0,
       "subscribersGained": 1
     },
-    "JIIXm7BsNAQ": {
+    "HfcAaKlwQZg": {
       "views": 976,
-      "averageViewPercentage": 44.37,
+      "averageViewPercentage": 41.39,
       "averageViewDuration": 11,
-      "likes": 11,
+      "likes": 3,
       "comments": 0,
-      "subscribersGained": 1
+      "subscribersGained": 0
     },
     "P3yOUIGm0UU": {
       "views": 970,
@@ -827,19 +835,19 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 70672
+      "views": 71634
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 5088
+      "views": 5122
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 186
+      "views": 187
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 86
+      "views": 87
     },
     {
       "sorgente": "EXT_URL",
