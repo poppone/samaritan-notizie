@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1795164123,
+    "timestamp": 1795210511,
     "data": "2026-11-20",
-    "titolo": "MotoGP oggi in TV: GP Portogallo 2026 - orari prove libere",
+    "titolo": "Volvo: la cintura a tre punti regalata a tutti",
     "lingua": "it",
-    "slot": "12:00",
-    "uscita": 1795172400,
+    "slot": "14:00",
+    "uscita": 1795179600,
     "formato": "short",
-    "estratto_script": "MotoGP oggi in TV, GP Portogallo 2026: orari prove libere, streaming, programma Sky e TV8.",
+    "estratto_script": "Volvo ha regalato al mondo la cintura a tre punti. L’ingegnere Nils Bohlin l’ha progettata",
     "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle racing track",
-    "fonte": "MotoGP oggi, in tv, GP Portogallo 2026: orari prove libere, streaming, programma Sky e TV8 (OA Sport)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNZmp0Ql9mdzh6MmhSelZRWUpIcFRnMHY2cXg5aHFHR3NlTDRZcU1uc3kxNUUxaDhzOGxScl9kUms1dkFKckVuOUtwd1lpZE9XX0JrVUQxcE8xMGlpVUxxLTZLdS1BOGxEakZ3Q1FnNngwdnFNYWEtWkZXR20xWC1wS1dFc3E2OVZEZmJoeEFpbGlQTXcyQlN0bVBzMTJlaVJIbDdSRWphc055XzhXcEVFenBtX3kwdVdy0gG-AUFVX3lxTE5Yb2pMbUlNdkZoWWloalNnZ2lCbFZpa3dlajVyX2dHcG1OZU04MWlWemdfTWIzdVVGdUFHVm1VcGVzMmpPbHNzbHUzMmNBVW5wWDhVN2IwNHJzNnU2bDNGd3hyQjJGdDJIbmpya093WTdBQ2x2dmJqUDZ2Z2YwSGpEdkJ0NjNvdW44cjlLZE5KZUJKek1NT0ZLdVU2S1dnYlRMM0FLQ0NnX1kzNmgwTGsxQXVOYUREVWhZZFh1TEE?oc=5",
+    "gioco": "Volvo",
+    "query_video": "car safety belt",
+    "fonte": "La cintura a tre punti l'ha inventata Volvo e l'ha regalata a tutti (Wikipedia)",
+    "fonte_url": "https://it.wikipedia.org/wiki/Cintura_di_sicurezza",
     "video_id": null
   }
 ]
