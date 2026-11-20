@@ -396,3 +396,28 @@ class TestCuriositaVerificate:
             encoding="utf-8")
         assert brain.curiosita_da_usare(
             cronologia=[{"fonte": "Uno (W)"}], percorso=str(file)) is None
+
+
+class TestRiservaDel19Novembre:
+    """19/11/2026: seconda riserva saltata. Script corti scartati, una sola
+    curiosita' vietata dopo due invenzioni, e l'apertura suggerita 'Pochi lo
+    sanno' bocciata come ripetizione."""
+
+    def test_passa_tre_curiosita_diverse(self):
+        voci = brain.curiosita_per_riserva(3, cronologia=[])
+        assert len(voci) == 3
+        assert len({v["titolo"] for v in voci}) == 3
+        assert all(v["curiosita"] for v in voci)
+
+    def test_la_curiosita_corta_passa(self):
+        script = " ".join(["La cintura a tre punti l'ha inventata Volvo."] * 4)
+        n = len(script.split())
+        assert brain.MIN_PAROLE_CURIOSITA <= n < brain.MIN_PAROLE_SCRIPT
+        ok, motivo = brain.valida_script(
+            "Titolo", script, min_parole=brain.MIN_PAROLE_CURIOSITA)
+        assert "troppo corto" not in motivo
+
+    def test_il_prompt_non_suggerisce_un_apertura_fissa(self, tg):
+        voci = brain.curiosita_per_riserva(3, cronologia=[])
+        prompt = brain._costruisci_system_prompt("VIRAL_HOOK_NEWS", voci, [], [])
+        assert "Pochi lo sanno" not in prompt
