@@ -427,6 +427,15 @@ MAX_PAROLE_CERCATE = 2
 MEMORIA_PAROLE_TITOLI = 10
 
 MIN_PAROLE_SCRIPT = 45
+# Minimo per la curiosita' di riserva: il fatto e' verificato e breve, e il
+# 19/11/2026 la seconda riserva e' saltata con script di 29 e 43 parole
+# scartati perche' corti, e quelli piu' lunghi scartati perche' allungavano
+# inventando. Meglio uno Short da 15 secondi che un fatto aggiunto.
+MIN_PAROLE_CURIOSITA = 28
+# Quante curiosita' passare al modello: se ne inventa su una, quella si
+# vieta e ne restano altre (il 19/11 con una sola la riserva e' finita con
+# "usa la notizia [0], che non si puo' piu' usare").
+CURIOSITA_PER_RISERVA = 3
 
 # Tentativi di scrittura per ogni modello Groq: dispari lo schema vincolato,
 # pari il testo libero. Erano due: con due modelli, quattro tentativi in
@@ -1556,7 +1565,8 @@ def _script_troncato(script):
     return not nudo or nudo[-1] not in PUNTEGGIATURA_FINALE
 
 
-def valida_script(titolo, script, aperture_recenti=(), schemi_recenti=()):
+def valida_script(titolo, script, aperture_recenti=(), schemi_recenti=(),
+                  min_parole=MIN_PAROLE_SCRIPT):
     """Ritorna (True, "") se lo script e' pubblicabile, altrimenti (False, motivo)."""
     if not titolo or not script:
         return False, "titolo o script vuoti"
@@ -1586,7 +1596,7 @@ def valida_script(titolo, script, aperture_recenti=(), schemi_recenti=()):
         return False, f"lo script contiene il nome interno del formato ({formato})"
 
     n_parole = len(script.split())
-    if n_parole < MIN_PAROLE_SCRIPT:
+    if n_parole < min_parole:
         return False, f"script troppo corto ({n_parole} parole)"
     if n_parole > MAX_PAROLE_SCRIPT:
         return False, f"script troppo lungo ({n_parole} parole, lo Short sforerebbe)"
@@ -2255,12 +2265,14 @@ def _costruisci_system_prompt(formato, notizie, ultimi_titoli, hook_vincenti,
             # La curiosita' di riserva (genera_script_samaritan(curiosita=True)).
             blocco_tg += (
                 "CURIOSITA' AL POSTO DELLA NOTIZIA (vince sulle regole sopra): "
-                "la notizia [0] non e' di oggi, e' una curiosita' storica "
-                "verificata. Raccontala con lo stesso tono asciutto usando "
-                "SOLO quello che dicono titolo e sommario: nessun altro "
-                "fatto, data o cifra. Non nominare testate e non dire che e' "
-                "successo oggi. Apri con un'affermazione, per esempio 'Pochi "
-                "lo sanno, ma...'. In 'indice_notizia' metti 0.\n\n"
+                "le notizie elencate non sono di oggi, sono curiosita' "
+                "storiche verificate. Scegline UNA e raccontala con lo stesso "
+                "tono asciutto usando SOLO quello che dicono titolo e "
+                "sommario: nessun altro fatto, data, cifra o conseguenza. "
+                "Meglio uno Short corto (anche 30-40 parole) che una frase in "
+                f"piu'. Non nominare testate e non dire che e' successo oggi. "
+                "Apri con il fatto, detto come affermazione. In "
+                "'indice_notizia' metti l'indice della curiosita' scelta.\n\n"
             )
 
     return (
@@ -2580,6 +2592,19 @@ FILE_CURIOSITA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                               "curiosita.json")
 
 
+def curiosita_per_riserva(n, cronologia=None, percorso=None):
+    """Le prime `n` curiosita' verificate non ancora usate (lista, anche vuota)."""
+    scelte = []
+    usate = list(cronologia if cronologia is not None else carica_cronologia())
+    for _ in range(n):
+        voce = curiosita_da_usare(usate, percorso)
+        if not voce:
+            break
+        scelte.append(voce)
+        usate.append({"fonte": f"{voce['titolo']} ({voce['fonte']})"})
+    return scelte
+
+
 def curiosita_da_usare(cronologia=None, percorso=None):
     """La prima curiosita' verificata non ancora usata, come notizia.
 
@@ -2634,16 +2659,15 @@ def genera_script_samaritan(tema=None, curiosita=False):
     gioco_precedente = "" if tema else ultima_voce.get("gioco", "")
 
     if curiosita:
-        voce = curiosita_da_usare(cronologia)
-        if not voce:
+        notizie = curiosita_per_riserva(CURIOSITA_PER_RISERVA, cronologia)
+        if not notizie:
             raise VideoSaltato(
                 "Nessuna curiosita' verificata ancora da usare in "
                 "curiosita.json: salto il video invece di scriverne una a "
                 "memoria.")
-        notizie = [voce]
         formato = "VIRAL_HOOK_NEWS"
         print(f"[Samaritan Brain] Riserva: curiosita' verificata al posto "
-              f"della notizia: {voce['titolo']}")
+              f"della notizia: {', '.join(v['titolo'] for v in notizie)}")
     else:
         notizie = recupera_trend_gaming_online(
             tema=tema, gioco_da_evitare=gioco_precedente)
@@ -2846,6 +2870,8 @@ def genera_script_samaritan(tema=None, curiosita=False):
                     () if ultima_spiaggia else impronte_aperture,
                     () if ultima_spiaggia or scarti_per_schema >= 2
                     else schemi_recenti,
+                    min_parole=(MIN_PAROLE_CURIOSITA if curiosita
+                                else MIN_PAROLE_SCRIPT),
                 )
                 if not ok and motivo.startswith("apre con ") \
                         and motivo.endswith(", come i video recenti"):
