@@ -18,8 +18,8 @@
       "subscribersGained": 5
     },
     "SeZLq2sfS3M": {
-      "views": 2169,
-      "averageViewPercentage": 72.96,
+      "views": 2176,
+      "averageViewPercentage": 73.01,
       "averageViewDuration": 20,
       "likes": 5,
       "comments": 0,
@@ -34,8 +34,8 @@
       "subscribersGained": 3
     },
     "S5jW3dWWLqU": {
-      "views": 1688,
-      "averageViewPercentage": 63.23,
+      "views": 1689,
+      "averageViewPercentage": 63.43,
       "averageViewDuration": 17,
       "likes": 1,
       "comments": 0,
@@ -138,7 +138,7 @@
       "subscribersGained": 1
     },
     "SFaNHz7Mhzo": {
-      "views": 1107,
+      "views": 1108,
       "averageViewPercentage": 66.81,
       "averageViewDuration": 18,
       "likes": 3,
@@ -154,8 +154,8 @@
       "subscribersGained": 1
     },
     "hmuLwAFLd_U": {
-      "views": 1094,
-      "averageViewPercentage": 46.4,
+      "views": 1096,
+      "averageViewPercentage": 46.34,
       "averageViewDuration": 10,
       "likes": 2,
       "comments": 0,
@@ -265,6 +265,14 @@
       "comments": 0,
       "subscribersGained": 4
     },
+    "-KNsAUY6rq0": {
+      "views": 1031,
+      "averageViewPercentage": 121.6,
+      "averageViewDuration": 31,
+      "likes": 4,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "4gUdE7YplN8": {
       "views": 1027,
       "averageViewPercentage": 60.089999999999996,
@@ -282,7 +290,7 @@
       "subscribersGained": 0
     },
     "xa9PQv4w0Fw": {
-      "views": 1023,
+      "views": 1024,
       "averageViewPercentage": 48.41,
       "averageViewDuration": 14,
       "likes": 6,
@@ -334,6 +342,14 @@
       "averageViewPercentage": 38.88,
       "averageViewDuration": 9,
       "likes": 7,
+      "comments": 0,
+      "subscribersGained": 0
+    },
+    "HfcAaKlwQZg": {
+      "views": 1000,
+      "averageViewPercentage": 42.12,
+      "averageViewDuration": 11,
+      "likes": 3,
       "comments": 0,
       "subscribersGained": 0
     },
@@ -393,27 +409,19 @@
       "comments": 1,
       "subscribersGained": 1
     },
+    "JIIXm7BsNAQ": {
+      "views": 977,
+      "averageViewPercentage": 44.34,
+      "averageViewDuration": 11,
+      "likes": 12,
+      "comments": 0,
+      "subscribersGained": 1
+    },
     "1KROQAC7tTY": {
       "views": 977,
       "averageViewPercentage": 55.57,
       "averageViewDuration": 10,
       "likes": 11,
-      "comments": 0,
-      "subscribersGained": 1
-    },
-    "HfcAaKlwQZg": {
-      "views": 976,
-      "averageViewPercentage": 41.39,
-      "averageViewDuration": 11,
-      "likes": 3,
-      "comments": 0,
-      "subscribersGained": 0
-    },
-    "JIIXm7BsNAQ": {
-      "views": 975,
-      "averageViewPercentage": 44.34,
-      "averageViewDuration": 11,
-      "likes": 12,
       "comments": 0,
       "subscribersGained": 1
     },
@@ -448,6 +456,14 @@
       "likes": 4,
       "comments": 0,
       "subscribersGained": 1
+    },
+    "SKnOB0zjXX0": {
+      "views": 889,
+      "averageViewPercentage": 54.620000000000005,
+      "averageViewDuration": 14,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 4
     },
     "3Rgwvla2QKI": {
       "views": 806,
@@ -546,7 +562,7 @@
       "subscribersGained": 0
     },
     "s78yUFOZ5T4": {
-      "views": 440,
+      "views": 441,
       "averageViewPercentage": 46.3,
       "averageViewDuration": 11,
       "likes": 0,
@@ -618,8 +634,8 @@
       "subscribersGained": 0
     },
     "bRg-mjhYlBI": {
-      "views": 114,
-      "averageViewPercentage": 79.46,
+      "views": 115,
+      "averageViewPercentage": 77.56,
       "averageViewDuration": 19,
       "likes": 0,
       "comments": 0,
@@ -749,14 +765,18 @@
     },
     {
       "termine": "stellantis",
-      "views": 60
+      "views": 63
     },
     {
       "termine": "motogp oggi",
-      "views": 35
+      "views": 37
     },
     {
       "termine": "f1 mexico 2026",
+      "views": 21
+    },
+    {
+      "termine": "motogp",
       "views": 21
     },
     {
@@ -781,10 +801,6 @@
     },
     {
       "termine": "gran premio brasile 2026",
-      "views": 18
-    },
-    {
-      "termine": "motogp",
       "views": 18
     },
     {
@@ -835,19 +851,19 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 71634
+      "views": 73526
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 5122
+      "views": 5185
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 187
+      "views": 200
     },
     {
       "sorgente": "YT_CHANNEL",
-      "views": 87
+      "views": 86
     },
     {
       "sorgente": "EXT_URL",
