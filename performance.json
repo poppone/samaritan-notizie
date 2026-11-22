@@ -273,14 +273,6 @@
       "comments": 0,
       "subscribersGained": 1
     },
-    "HfcAaKlwQZg": {
-      "views": 1030,
-      "averageViewPercentage": 42.28,
-      "averageViewDuration": 11,
-      "likes": 3,
-      "comments": 0,
-      "subscribersGained": 0
-    },
     "MiGExnZpBoU": {
       "views": 1028,
       "averageViewPercentage": 55.65,
@@ -296,6 +288,14 @@
       "likes": 9,
       "comments": 0,
       "subscribersGained": 1
+    },
+    "HfcAaKlwQZg": {
+      "views": 1027,
+      "averageViewPercentage": 42.28,
+      "averageViewDuration": 11,
+      "likes": 3,
+      "comments": 0,
+      "subscribersGained": 0
     },
     "myb9Zy5qO-U": {
       "views": 1025,
@@ -859,15 +859,15 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 74656
+      "views": 74652
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 5230
+      "views": 5231
     },
     {
       "sorgente": "YT_OTHER_PAGE",
-      "views": 204
+      "views": 203
     },
     {
       "sorgente": "YT_CHANNEL",
