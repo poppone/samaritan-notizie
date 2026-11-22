@@ -122,6 +122,11 @@ def short_della_settimana(cronologia, adesso, giorni=GIORNI, lingua="it"):
     Solo Short (non video lunghi), solo nella lingua del riassunto, solo con
     un video_id, e solo quelli gia' pubblici: un'uscita programmata per oggi
     pomeriggio non si mette in un video che esce stamattina.
+
+    Restano fuori anche gli Short senza fonte (fonte_url vuoto) e quelli
+    segnati "ritirato": true in cronologia. Il 21/11/2026 il riassunto ha
+    rimesso in un video pubblico la curiosita' libera del 18/11, senza fonte
+    e con fatti sbagliati: uno Short che non regge non deve tornare online.
     """
     fine = int(adesso.timestamp())
     inizio = fine - giorni * 86400
@@ -135,6 +140,8 @@ def short_della_settimana(cronologia, adesso, giorni=GIORNI, lingua="it"):
         if (voce.get("formato") or "short") != "short":
             continue
         if (voce.get("lingua") or "it") != lingua:
+            continue
+        if voce.get("ritirato") or not (voce.get("fonte_url") or "").strip():
             continue
         quando = _istante(voce)
         if not (inizio < quando <= fine):
