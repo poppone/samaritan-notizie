@@ -1,18 +1,18 @@
 [
   {
-    "timestamp": 1795292270,
-    "data": "2026-11-21",
-    "titolo": "MotoGP: Bezzecchi pole da record al GP Portogallo",
+    "timestamp": 1795335025,
+    "data": "2026-11-22",
+    "titolo": "Verstappen: La gara più folle in F1 della carriera",
     "lingua": "it",
-    "slot": "14:00",
-    "uscita": 1795266000,
+    "slot": "12:00",
+    "uscita": 1795345200,
     "formato": "short",
-    "estratto_script": "Record: Marco Bezzecchi ha conquistato la pole position al Gran Premio del Portogallo, sta",
+    "estratto_script": "Verstappen ha dichiarato dopo la vittoria a Las Vegas di aver vissuto la gara più folle de",
     "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "MotoGP",
-    "query_video": "motorcycle racing track",
-    "fonte": "MotoGP, GP Portogallo, highlights qualifiche: pole da record di Bezzecchi (La Gazzetta dello Sport)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOc3JzcV9QeHE2a2Zoc0dRcTVWYVFUUXF1UmFScUgyZ0tYNVkySXhNRFFKN2JOVnl6UTRncFZweEEyUFZibTVrNUdiODNsVXlmTE5TX1NIQ3dSU0h3cFlzc1pGSDc3cDYybUhPTEU4ZThpUWdDUmdxbHhRck84RjY1dGxQRnJaSGJKb193VXBha1ByQW41ZVNRNy1jcHpsLWZpaWg2SkM3elNDTXhHVkUtYXlIMmlEZU9pVkFCdWozTFpSSEV3X3JOd1c5ZmhaeWd0UDJn0gHYAUFVX3lxTE9yME9vOVMzT3NZclpWelVEVUQwRUJSUzY1OV9yb1RlNW5uN1RfeU1TWmNrUkVvVnFSVTBaU05yMHR1QndDVWR6VkxFMkw2eE9LX3l4RGRIS3FrRDEweXViUWpRWWJOQ05rSEVLYWlqS2txSGJpeHFBYWlOTUlLaDlINTNoLVVXVk9tY283NE9tc2lvOWFEbWpkZTRnWkthVjdnaUpSbnlLN0ZaXzYxLThnQmpGMzZNZTRYSUZLWFQ1MEtXQnN2dEVlMTdVYzdsMnVJUVFuUTBZMQ?oc=5",
+    "gioco": "",
+    "query_video": "formula one race highlights",
+    "fonte": "Verstappen dopo la vittoria a Las Vegas: 'La gara più folle in F1 della carriera'. VIDEO (Sky Sport)",
+    "fonte_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOd0ZNZ2NPQW5aSWwzS2dTYV9DVlZucE9WV21DcVhwcE5OWUVTcmhxckhnWUNKLW9iSjN5SEhaMkdhOUNfZTJKdnFxOTI1ZlRXejRDZ2pCUnN0aktNSFR2aS0zanc2UHRuZktVaDctck1zMHdETTh1WFZEcy1sRTBpaDNHcjFlSnVaMncwbXB3?oc=5",
     "video_id": null
   }
 ]
