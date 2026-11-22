@@ -14,7 +14,8 @@ BASE = int(ADESSO.timestamp())
 
 def _voce(i, giorni_fa, **altro):
     voce = {"video_id": f"vid{i:08d}", "titolo": f"Notizia {i}: qualcosa di nuovo",
-            "fonte": f"Titolo {i} (Testata {i})", "formato": "short", "lingua": "it",
+            "fonte": f"Titolo {i} (Testata {i})",
+            "fonte_url": f"https://testata{i}.example/notizia", "formato": "short", "lingua": "it",
             "uscita": BASE - int(giorni_fa * 86400)}
     voce.update(altro)
     return voce
@@ -34,6 +35,27 @@ def test_prende_solo_gli_short_usciti_della_settimana():
     ]
     scelti = riassunto.short_della_settimana(cronologia, ADESSO)
     assert [v["video_id"] for v in scelti] == ["vid00000002", "vid00000007"]
+
+
+def test_lascia_fuori_gli_short_senza_fonte_e_quelli_ritirati():
+    # 21/11/2026: la curiosita' libera del 18/11 (senza fonte, fatti
+    # sbagliati) era finita nel riassunto pubblico del sabato.
+    cronologia = [
+        _voce(1, 2),
+        _voce(2, 2, fonte_url=""),                # curiosita' libera
+        _voce(3, 1, ritirato=True),               # tolto a mano
+        _voce(4, 1),
+    ]
+    scelti = riassunto.short_della_settimana(cronologia, ADESSO)
+    assert [v["video_id"] for v in scelti] == ["vid00000001", "vid00000004"]
+
+
+def test_la_curiosita_sbagliata_del_18_novembre_e_ritirata():
+    import json
+    with open("cronologia_trend.json", encoding="utf-8") as f:
+        cronologia = json.load(f)
+    voce = next(v for v in cronologia if v.get("video_id") == "-KNsAUY6rq0")
+    assert voce.get("ritirato") is True
 
 
 def test_senza_uscita_usa_il_timestamp():
