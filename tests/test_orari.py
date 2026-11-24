@@ -487,6 +487,22 @@ class TestUscitaGiaCoperta:
 
 class TestQualeUscitaRecuperare:
 
+    def test_la_riserva_dopo_mezzanotte_recupera_ancora_l_uscita_di_ieri(self):
+        """Il 23/11/2026 le riserve sono arrivate dopo mezzanotte, 12 ore e
+        13 minuti dopo l'uscita delle 14:00, e con la finestra di 12 ore non
+        l'hanno recuperata."""
+        giorno = datetime(2026, 11, 23, 12, 0, tzinfo=ROMA)
+        cronologia = [
+            _voce("18:00", giorno.replace(hour=19)),
+            _voce("20:00", giorno.replace(hour=20, minute=30)),
+            _voce("21:00", giorno.replace(hour=21, minute=30)),
+        ]
+        notte = datetime(2026, 11, 24, 2, 13, tzinfo=ROMA)
+        assert orari.slot_da_recuperare(cronologia, notte)[0] == "14:00"
+        # Dopo 16 ore la notizia e' vecchia: non si recupera piu'.
+        mattina = datetime(2026, 11, 24, 6, 30, tzinfo=ROMA)
+        assert orari.slot_da_recuperare(cronologia, mattina) is None
+
     def test_se_sono_tutte_a_posto_non_si_recupera_niente(self):
         cronologia = [
             _voce("14:00", ADESSO.replace(hour=15)),
@@ -553,20 +569,23 @@ class TestQualeUscitaRecuperare:
         """Recuperare alle 8 del mattino l'uscita delle 14:00 di ieri vuol
         dire pubblicare una notizia vecchia di un giorno."""
         mattina = ADESSO.replace(day=22, hour=8, minute=0)
-        # Alle 8 del 22 nessuna uscita del 22 e' ancora passata, e quelle del
-        # 21 sono tutte oltre le dodici ore tranne le 20:00 e le 21:00: si
-        # recupera la piu' vecchia delle due.
-        assert orari.slot_da_recuperare([], mattina) == ("20:00", "en", "short")
+        # Alle 8 del 22 nessuna uscita del 22 e' ancora passata; del 21 le
+        # 14:00 sono oltre le sedici ore, le 18:00, le 20:00 e le 21:00 no:
+        # si recupera la piu' vecchia delle tre.
+        assert orari.slot_da_recuperare([], mattina) == ("18:00", "it", "short")
 
     def test_la_riserva_non_confonde_un_uscita_di_ieri_con_quella_di_oggi(self):
         """La riserva guarda solo uscite passate. Se parte cosi' tardi che
         l'uscita delle 14:00 di oggi e' vicina, deve comunque giudicare quella
         di ieri sera per quello che e'."""
         mattina = ADESSO.replace(day=22, hour=8, minute=0)
-        coperte = [_voce("20:00", ADESSO.replace(hour=19, minute=50)),
+        coperte = [_voce("18:00", ADESSO.replace(hour=17, minute=50)),
+                   _voce("20:00", ADESSO.replace(hour=19, minute=50)),
                    _voce("21:00", ADESSO.replace(hour=20, minute=40))]
         assert orari.slot_da_recuperare(coperte, mattina) is None
 
     def test_a_meta_mattina_non_c_e_piu_niente_da_recuperare(self):
-        tardi = ADESSO.replace(day=22, hour=10, minute=0)
+        # Anche le 21:00 di ieri sono passate da piu' di sedici ore, e le
+        # 14:00 di oggi devono ancora arrivare.
+        tardi = ADESSO.replace(day=22, hour=13, minute=30)
         assert orari.slot_da_recuperare([], tardi) is None
