@@ -48,8 +48,12 @@ def slot_giornalieri():
 # sette ore, il 21 settembre 2026. Le uscite distano 24 ore, quindi la
 # finestra piu' larga qui sotto non arriva mai a toccare quella del giorno
 # prima.
+# Il 23/11/2026 le due riserve (cron 13:45 e 16:45 UTC) sono partite con
+# 11 ore e mezza di ritardo, dopo mezzanotte: l'uscita delle 14:00 era
+# passata da 12 ore e 13 minuti e non e' stata recuperata. Con 16 ore la
+# riserva arriva fino alle 6 del mattino dopo; 6 + 16 = 22 resta sotto le 24.
 ANTICIPO_MASSIMO_ORE = 6
-RITARDO_MASSIMO_ORE = 12
+RITARDO_MASSIMO_ORE = 16
 
 # Quanto prima della sua uscita puo' partire una lavorazione. Dal 29
 # settembre 2026 i cron partono di notte, dieci-tredici ore prima
