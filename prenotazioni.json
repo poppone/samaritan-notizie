@@ -1,34 +1,18 @@
 [
   {
-    "timestamp": 1795518461,
-    "data": "2026-11-24",
-    "titolo": "Formula 1: GP Qatar 2026 a Lusail dal 27 al 29 novembre",
+    "timestamp": 1795646988,
+    "data": "2026-11-25",
+    "titolo": "Benz Patent-Motorwagen: la prima auto a benzina",
     "lingua": "it",
     "slot": "12:00",
-    "uscita": 1795518000,
+    "uscita": 1795604400,
     "formato": "short",
-    "estratto_script": "Formula 1: GP Qatar 2026 a Lusail dal 27 al 29 novembre. La gara si terrà a Lusail, con pr",
+    "estratto_script": "Il 29 gennaio 1886 Carl Benz deposita il brevetto della Benz Patent‑Motorwagen, il primo v",
     "stile": "VIRAL_HOOK_NEWS",
-    "gioco": "Formula 1",
-    "query_video": "race track desert",
-    "fonte": "Formula 1, prossimo GP Qatar 2026 dal 27 al 29 novembre a Lusail: programma completo, orari italiani di prove libere, qualifiche e gara, diretta tv su Sky Sport e differita su TV8 (sport2u.tv)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMinwJBVV95cUxNN3JOZ3pRd000d0x1NEdGdHRmakpNVGc2NVZBeVJEVHl1dHV1Y2k4TGFNWUppVWNrNGVlejliRkZhQVFINjlZWXA4dE1vQ1hzMDI0QlU2Q2huUGh3bUNFeEwwMEJPTlNFU2h4RnNKVHQzYTRVb1NmYllydXVCZ2I0Z2Q2MmJhY2xUTDVReHI5N0RRSkpkWTJTR2w0TGZxRnpqMDJXZlhZMy1fZ29PTk81OTF4NVl4NV94cF9YVEdZTzc0eWltaWpzeGc0OFBuU0NjWmJIV2xyUHFZZklFWWhST2hnT0pVNzZmNHJJbGdZNFg3eGFCbmRfVm1Xb0ZhWVFWcGZwZndnZGVCSkRIMjktTXdoVzNyLVlMd3dGMjNiQQ?oc=5",
-    "video_id": null
-  },
-  {
-    "timestamp": 1795528322,
-    "data": "2026-11-24",
-    "titolo": "Ferrari: precedente podio al GP del Qatar",
-    "lingua": "it",
-    "slot": "14:00",
-    "uscita": 1795525200,
-    "formato": "short",
-    "estratto_script": "Ferrari ha conquistato un podio inaspettato al GP del Qatar. Lo riporta OA Sport. Per gli ",
-    "stile": "MYTH_BUSTING_VIRAL",
-    "gioco": "Ferrari",
-    "query_video": "formula 1 race",
-    "fonte": "F1, i precedenti della Ferrari nel GP di Qatar. Un estemporaneo podio e nulla più (OA Sport)",
-    "fonte_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQVGFtZkpoMGVDUTZsT3lWdWtfeUdWLUE4MjIyNzN2eUM5b1I5NlZnWDlmMXVVNEcyREhxYXB2SWRmeTlVNXlNcG4xcjIzRWwwNzgyaGw5QmRiTVRCM2V5b3EyRGVaa0plS2JsWkZOWHpzb0hOMDI0T3dWUjJabTM0WTc5RTdIbGRuWVZuYWY1QVpzblpoVlRTTWprajVJUXo0RzhVTU9ISVRjOFRpd0J0VtIBtgFBVV95cUxNdVRDUG83YVF5RGl1SDZybUhPSDVTN3lpREwxb1k3T0ZuUk5WSFBqYjVwNHMyZVhEV1I3TEpfTDdhSVhsVVZOOHpGT0FReE9Ec090NFBqcjNOSDl3elB0VElzVkpvOFl0QkdvaDRLOGExLXJRd04tdDcwZy01UjFyTUZpRndjaEN3TnMxYnI1ZEx0ams1Q1A2Q25Ld0h1SVozVzBROXp5S2FTTGFhTnV6UzhWTXROdw?oc=5",
+    "gioco": "Benz Patent-Motorwagen",
+    "query_video": "vintage automobile patent",
+    "fonte": "La prima automobile a benzina ha un brevetto del 1886 (Wikipedia)",
+    "fonte_url": "https://it.wikipedia.org/wiki/Benz_Patent-Motorwagen",
     "video_id": null
   }
 ]
