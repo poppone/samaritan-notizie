@@ -122,8 +122,8 @@
       "subscribersGained": 1
     },
     "qMgDeVybYTE": {
-      "views": 1163,
-      "averageViewPercentage": 77.92,
+      "views": 1160,
+      "averageViewPercentage": 78.04,
       "averageViewDuration": 20,
       "likes": 5,
       "comments": 0,
@@ -274,8 +274,8 @@
       "subscribersGained": 2
     },
     "7AFKPNd1hGI": {
-      "views": 1042,
-      "averageViewPercentage": 56.76,
+      "views": 1041,
+      "averageViewPercentage": 56.71000000000001,
       "averageViewDuration": 13,
       "likes": 14,
       "comments": 0,
@@ -586,8 +586,8 @@
       "subscribersGained": 0
     },
     "vkDvtBuuqNM": {
-      "views": 595,
-      "averageViewPercentage": 58.379999999999995,
+      "views": 596,
+      "averageViewPercentage": 58.13,
       "averageViewDuration": 11,
       "likes": 1,
       "comments": 0,
@@ -923,11 +923,11 @@
   "sorgenti": [
     {
       "sorgente": "SHORTS",
-      "views": 81122
+      "views": 81117
     },
     {
       "sorgente": "YT_SEARCH",
-      "views": 5905
+      "views": 5907
     },
     {
       "sorgente": "YT_OTHER_PAGE",
