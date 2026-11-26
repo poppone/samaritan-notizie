@@ -14,5 +14,21 @@
     "fonte": "La prima automobile a benzina ha un brevetto del 1886 (Wikipedia)",
     "fonte_url": "https://it.wikipedia.org/wiki/Benz_Patent-Motorwagen",
     "video_id": null
+  },
+  {
+    "timestamp": 1795653921,
+    "data": "2026-11-25",
+    "titolo": "FIAT: Fabbrica Italiana Automobili Torino",
+    "lingua": "it",
+    "slot": "14:00",
+    "uscita": 1795611600,
+    "formato": "short",
+    "estratto_script": "FIAT è una sigla: Fabbrica Italiana Automobili Torino. Questo chiarisce perché il marchio ",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "FIAT",
+    "query_video": "industrial building interior",
+    "fonte": "FIAT e' una sigla: Fabbrica Italiana Automobili Torino (Wikipedia)",
+    "fonte_url": "https://it.wikipedia.org/wiki/Fiat_Automobiles",
+    "video_id": null
   }
 ]
