@@ -14,5 +14,21 @@
     "fonte": "Il primo viaggio lungo in auto l'ha fatto una donna, Bertha Benz (Wikipedia)",
     "fonte_url": "https://it.wikipedia.org/wiki/Bertha_Benz",
     "video_id": null
+  },
+  {
+    "timestamp": 1795825170,
+    "data": "2026-11-27",
+    "titolo": "Ferrari: il cavallino nasce dall’aereo di un pilota",
+    "lingua": "it",
+    "slot": "14:00",
+    "uscita": 1795784400,
+    "formato": "short",
+    "estratto_script": "Il cavallino rampante, simbolo dell’aereo del pilota Francesco Baracca, è stato adottato d",
+    "stile": "VIRAL_HOOK_NEWS",
+    "gioco": "Ferrari",
+    "query_video": "historic airplane cockpit",
+    "fonte": "Il cavallino Ferrari arriva dall'aereo di un pilota della Grande Guerra (Wikipedia)",
+    "fonte_url": "https://it.wikipedia.org/wiki/Cavallino_rampante",
+    "video_id": null
   }
 ]
