@@ -1394,6 +1394,34 @@ def _accettabile(titolo):
     return titolo
 
 
+MAX_CARATTERI_PREFISSO_GIOCO = 20
+
+
+def titolo_con_gioco(titolo, gioco):
+    """Mette il nome davanti al titolo quando il modello l'ha dimenticato.
+
+    Il 26 e il 27 novembre 2026 le uscite delle 12 e delle 14 sono saltate
+    tutte e quattro perche' i titoli parlavano di Marquez e del GP senza
+    scrivere 'MotoGP': valida_titolo() li scartava e dopo tre tentativi il
+    video passava alla riserva della sera. Lo script era buono, mancava una
+    parola: la aggiungiamo noi ('MotoGP: ...') invece di buttare tutto.
+    Se il nome e' lungo o il titolo non ci sta nemmeno accorciato, si lascia
+    com'e' e decide valida_titolo().
+    """
+    if not titolo or not gioco or _gioco_nel_titolo(titolo, gioco):
+        return titolo
+    nome = gioco.strip()
+    if len(nome) > MAX_CARATTERI_PREFISSO_GIOCO:
+        return titolo
+    candidato = f"{nome}: {titolo}"
+    if len(candidato) <= MAX_CARATTERI_TITOLO:
+        return candidato
+    resto = accorcia_titolo(titolo, MAX_CARATTERI_TITOLO - len(nome) - 2)
+    if resto:
+        return f"{nome}: {resto}"
+    return titolo
+
+
 def valida_titolo(titolo, gioco=""):
     """Ritorna (True, "") se il titolo e' pubblicabile, altrimenti (False, motivo).
 
@@ -2850,6 +2878,11 @@ def genera_script_samaritan(tema=None, curiosita=False):
                 query_video = str(data.get("query_video", "gameplay")).strip()
                 descrizione = str(data.get("descrizione", "")).strip()
                 gioco = _pulisci_nome_gioco(str(data.get("gioco", "")))
+                con_gioco = titolo_con_gioco(titolo, gioco)
+                if con_gioco != titolo:
+                    print(f"[Samaritan Brain] Nome aggiunto al titolo: "
+                          f"'{titolo}' -> '{con_gioco}'")
+                    titolo = con_gioco
 
                 # La fonte serve gia' in validazione: uno script che parla di
                 # leak e conferme senza una notizia dietro va scartato prima di
